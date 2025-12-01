@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orange Falcon | Sales Pulse</title>
+    <link rel="icon" type="image/x-icon" href="/static/logoc1.jpg">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* --- APPLE DARK MODE THEME --- */
+        :root {
+            --bg-color: #000000;
+            --card-bg: #1C1C1E;
+            --text-main: #F5F5F7;
+            --text-secondary: #86868B;
+            --border-color: #333333;
+            
+            --accent-orange: #FF9F0A; /* Slightly lighter orange for dark mode */
+            --accent-gradient: linear-gradient(135deg, #FF9F0A 0%, #FF375F 100%);
+            
+            --shadow: 0 10px 40px rgba(0,0,0,0.4);
+            --radius: 24px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            background: #fff; /* Keep logo bg white so it pops */
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+            object-fit: contain;
+            padding: 5px;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.02em;
+            background: var(--accent-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* Buttons */
+        .btn-group { display: flex; gap: 10px; }
+        
+        .btn {
+            background: #2C2C2E;
+            color: white;
+            border: 1px solid #444;
+            padding: 10px 20px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover { background: #3A3A3C; border-color: #666; }
+        
+        .btn.primary {
+            background: var(--accent-orange);
+            color: black;
+            border: none;
+        }
+        .btn.primary:hover { opacity: 0.9; }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card.large { grid-column: span 2; }
+        .card.full { grid-column: span 3; }
+        
+        h2 { font-size: 20px; font-weight: 600; margin: 0 0 20px 0; color: var(--text-main); }
+        
+        /* Stats Styling */
+        .stat-group { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; height: 100%; }
+        .stat-box { flex: 1; }
+        .stat-huge { font-size: 56px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: white; }
+        .stat-label { font-size: 13px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        
+        .divider-vertical { width: 1px; background: #333; margin: 0 30px; height: 80%; align-self: center; }
+
+        /* Chart Area */
+        .chart-row {
+            display: flex;
+            gap: 20px;
+            height: 220px;
+            width: 100%;
+        }
+        .chart-container { flex: 1; position: relative; height: 100%; width: 100%; }
+
+        .insights-box { font-size: 16px; line-height: 1.6; color: #D1D1D6; }
+
+        /* Modal (Dark) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.active { display: flex; opacity: 1; }
+        
+        .modal-content {
+            background: #1C1C1E;
+            padding: 40px;
+            border-radius: 24px;
+            width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
+        .input-group input { 
+            width: 100%; padding: 12px; font-size: 16px; 
+            background: #2C2C2E; color: white; border: 1px solid #444; 
+            border-radius: 12px; box-sizing: border-box; outline: none; transition: border 0.2s;
+        }
+        .input-group input:focus { border-color: var(--accent-orange); }
+
+        /* --- PRINT OPTIMIZATION (Force White Mode) --- */
+        @media print {
+            body { background-color: white !important; color: black !important; padding: 0 !important; }
+            header { margin-bottom: 20px; }
+            .btn-group, .modal { display: none !important; }
+            
+            /* Reset Layout for A4 Paper */
+            .grid { 
+                display: grid; 
+                grid-template-columns: 1fr 1fr; 
+                gap: 15px; 
+                width: 100%; 
+            }
+            .card.full { grid-column: span 2; }
+            
+            /* Light Cards */
+            .card { 
+                background: white !important; 
+                border: 1px solid #ddd !important; 
+                box-shadow: none !important;
+                color: black !important;
+                page-break-inside: avoid;
+            }
+
+            /* Text Colors */
+            h1, h2, .stat-huge { color: black !important; -webkit-text-fill-color: black !important; }
+            .stat-label, .subtitle { color: #555 !important; }
+            .insights-box { color: #333 !important; }
+
+            /* Charts */
+            canvas { max-width: 100%; filter: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-container">
+            <img src="/static/OFL.png" alt="Company Logo" class="logo">
+            <div>
+                <h1>Orange Falcon</h1>
+                <div class="subtitle"><span id="disp-hotel">Loading...</span> &bull; <span id="disp-period">...</span></div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn" onclick="window.print()">Download PDF</button>
+            <button class="btn primary" onclick="openModal()">Update Data</button>
+        </div>
+    </header>
+
+    <div class="grid">
+        <!-- 1. Revenue & Rooms (Span 2) -->
+        <div class="card large">
+            <h2>Property Performance</h2>
+            <div class="stat-group">
+                <div class="stat-box">
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-huge" id="disp-revenue">$0</div>
+                </div>
+                <div class="divider-vertical"></div>
+                <div class="stat-box">
+                    <div class="stat-label">Rooms Booked</div>
+                    <div class="stat-huge" style="color: var(--accent-orange);" id="disp-rooms">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Pipeline (Span 1) -->
+        <div class="card">
+            <h2>Pipeline Pulse</h2>
+            <div style="margin-top: auto;">
+                <div style="font-size: 32px; font-weight: 700; color: white;" id="disp-proposals">0</div>
+                <div class="stat-label" style="font-size: 11px;">Active Proposals</div>
+                <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
+                <div style="font-size: 32px; font-weight: 700; color: white;" id="disp-signed">0</div>
+                <div class="stat-label" style="font-size: 11px;">Signed Contracts</div>
+            </div>
+        </div>
+
+        <!-- 3. Activity Segmentation (Span 2) -->
+        <div class="card large">
+            <h2>Activity: Corporate vs Construction</h2>
+            <div class="chart-row">
+                <div class="chart-container"><canvas id="barChart"></canvas></div>
+                <div class="chart-container"><canvas id="pieChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- 4. Insight (Span 1) -->
+        <div class="card" style="justify-content: center;">
+             <h2>Key Insight</h2>
+             <div class="insights-box" id="auto-insight">Loading...</div>
+        </div>
+
+        <!-- 5. NEW: RFP vs LNR (Span 3 / Full Width) -->
+        <div class="card full">
+            <h2>Business Source: RFP vs LNR</h2>
+            <div class="chart-row">
+                <div class="chart-container">
+                    <canvas id="rfpBarChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="rfpPieChart"></canvas>
+                </div>
+                <!-- Mini Stats for this section -->
+                <div style="width: 200px; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #333;">
+                    <div style="margin-bottom: 20px;">
+                        <div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div>
+                        <div class="stat-label">RFP Requests</div>
+                    </div>
+                    <div>
+                        <div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div>
+                        <div class="stat-label">LNR Contracts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Modal -->
+    <div class="modal" id="dataModal">
+        <div class="modal-content">
+            <h2 style="color: white; margin-bottom: 25px;">Update Report</h2>
+            
+            <div class="input-group"><label>Property Name</label><input type="text" id="inp-hotel"></div>
+            
+            <div class="input-group">
+                <label>Period</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="date" id="inp-start">
+                    <input type="date" id="inp-end">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group"><label>Revenue ($)</label><input type="number" id="inp-revenue"></div>
+                <div class="input-group"><label>Rooms Booked</label><input type="number" id="inp-rooms"></div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #333; margin: 10px 0 20px 0;">
+            
+            <!-- Activity Section -->
+            <label style="color: #FF9F0A; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px;">ACTIVITY LOG (Calls/Visits)</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group"><label>Corp Calls</label><input type="number" id="inp-lnr"></div>
+                <div class="input-group"><label>Const Calls</label><input type="number" id="inp-const"></div>
+            </div>
+
+            <!-- New Section -->
+            <label style="color: #FF9F0A; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px;">CONTRACT MIX</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group"><label>RFPs</label><input type="number" id="inp-rfps"></div>
+                <div class="input-group"><label>LNRs</label><input type="number" id="inp-lnrs"></div>
+            </div>
+
+            <!-- Pipeline -->
+            <label style="color: #FF9F0A; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px;">PIPELINE</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group"><label>Proposals</label><input type="number" id="inp-proposals"></div>
+                <div class="input-group"><label>Signed</label><input type="number" id="inp-signed"></div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="btn primary" style="width: 100%;" onclick="saveData()">Save Changes</button>
+                <button class="btn" style="width: 100%; margin-top: 10px; background: transparent; border: none;" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+
+        // Helper: Format YYYY-MM-DD
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr + 'T00:00:00'); 
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        async function loadData() {
+            const response = await fetch('/api/data');
+            const data = await response.json();
+            updateUI(data);
+        }
+
+        async function saveData() {
+            const payload = {
+                hotel_name: document.getElementById('inp-hotel').value,
+                start_date: document.getElementById('inp-start').value,
+                end_date: document.getElementById('inp-end').value,
+                revenue: document.getElementById('inp-revenue').value,
+                rooms: document.getElementById('inp-rooms').value,
+                
+                lnr_calls: document.getElementById('inp-lnr').value,
+                const_calls: document.getElementById('inp-const').value,
+                
+                rfps: document.getElementById('inp-rfps').value,
+                lnrs: document.getElementById('inp-lnrs').value,
+                
+                proposals: document.getElementById('inp-proposals').value,
+                signed: document.getElementById('inp-signed').value
+            };
+
+            await fetch('/api/data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            closeModal();
+            loadData();
+        }
+
+        function updateUI(data) {
+            // Text Updates
+            document.getElementById('disp-hotel').innerText = data.hotel_name;
+            
+            const start = formatDate(data.start_date);
+            const end = data.end_date ? new Date(data.end_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+            document.getElementById('disp-period').innerText = `${start} - ${end}`;
+
+            document.getElementById('disp-revenue').innerText = '$' + parseInt(data.revenue).toLocaleString();
+            document.getElementById('disp-rooms').innerText = parseInt(data.rooms).toLocaleString();
+            document.getElementById('disp-signed').innerText = data.signed;
+            document.getElementById('disp-proposals').innerText = data.proposals;
+            
+            // New Section Text
+            document.getElementById('disp-rfps').innerText = data.rfps;
+            document.getElementById('disp-lnrs').innerText = data.lnrs;
+
+            // Inputs
+            document.getElementById('inp-hotel').value = data.hotel_name;
+            document.getElementById('inp-start').value = data.start_date;
+            document.getElementById('inp-end').value = data.end_date;
+            document.getElementById('inp-revenue').value = data.revenue;
+            document.getElementById('inp-rooms').value = data.rooms;
+            document.getElementById('inp-lnr').value = data.lnr_calls;
+            document.getElementById('inp-const').value = data.const_calls;
+            document.getElementById('inp-rfps').value = data.rfps;
+            document.getElementById('inp-lnrs').value = data.lnrs;
+            document.getElementById('inp-proposals').value = data.proposals;
+            document.getElementById('inp-signed').value = data.signed;
+
+            // Insight Logic
+            const totalCalls = parseInt(data.lnr_calls) + parseInt(data.const_calls);
+            document.getElementById('auto-insight').innerHTML = `
+                <strong>${data.hotel_name}</strong> is seeing strong momentum with <strong>${data.rfps} new RFPs</strong> submitted. 
+                Sales activity remains high with <strong>${totalCalls} total interactions</strong>, converting into ${data.lnrs} finalized LNR agreements.
+            `;
+
+            renderCharts(data);
+        }
+
+        function renderCharts(data) {
+            const chartDefaults = {
+                color: '#86868B',
+                borderColor: '#333'
+            };
+            Chart.defaults.color = chartDefaults.color;
+            Chart.defaults.scale.grid.color = chartDefaults.borderColor;
+
+            // Destroy old charts
+            Object.values(charts).forEach(c => c.destroy());
+
+            // 1. Activity Bar
+            charts.actBar = new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Corp', 'Const'],
+                    datasets: [{
+                        label: 'Calls',
+                        data: [data.lnr_calls, data.const_calls],
+                        backgroundColor: ['#3A3A3C', '#FF9F0A'],
+                        borderRadius: 6,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, title: { display: true, text: 'Call Volume', color: '#fff' } },
+                    scales: { y: { beginAtZero: true, grid: { color: '#333' } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // 2. Activity Pie
+            charts.actPie = new Chart(document.getElementById('pieChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Corp', 'Const'],
+                    datasets: [{
+                        data: [data.lnr_calls, data.const_calls],
+                        backgroundColor: ['#3A3A3C', '#FF9F0A'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '65%',
+                    plugins: { legend: { position: 'right' }, title: { display: true, text: 'Activity Mix', color: '#fff' } }
+                }
+            });
+
+            // 3. NEW: RFP vs LNR Bar
+            charts.rfpBar = new Chart(document.getElementById('rfpBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['RFPs', 'LNRs'],
+                    datasets: [{
+                        label: 'Count',
+                        data: [data.rfps, data.lnrs],
+                        backgroundColor: ['#FF375F', '#30D158'],
+                        borderRadius: 6,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, title: { display: true, text: 'Source Volume', color: '#fff' } },
+                    scales: { y: { beginAtZero: true, grid: { color: '#333' } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // 4. NEW: RFP vs LNR Pie
+            charts.rfpPie = new Chart(document.getElementById('rfpPieChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['RFPs', 'LNRs'],
+                    datasets: [{
+                        data: [data.rfps, data.lnrs],
+                        backgroundColor: ['#FF375F', '#30D158'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '65%',
+                    plugins: { legend: { position: 'right' }, title: { display: true, text: 'Contract Mix', color: '#fff' } }
+                }
+            });
+        }
+
+        function openModal() { 
+            const m = document.getElementById('dataModal');
+            m.style.display = 'flex';
+            setTimeout(() => m.classList.add('active'), 10);
+        }
+        function closeModal() { 
+            const m = document.getElementById('dataModal');
+            m.classList.remove('active');
+            setTimeout(() => m.style.display = 'none', 300);
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
