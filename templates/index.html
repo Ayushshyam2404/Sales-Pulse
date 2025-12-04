@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Orange Falcon | Sales Pulse</title>
     <link rel="icon" type="image/x-icon" href="/static/logoc1.jpg">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,79 +26,163 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 40px;
+            padding: 20px; /* Reduced padding for mobile */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        header { width: 100%; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        .brand-container { display: flex; align-items: center; gap: 20px; }
-        .logo { width: 64px; height: 64px; background: #fff; border-radius: 16px; padding: 5px; object-fit: contain; }
-        h1 { font-size: 38px; font-weight: 700; margin: 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 4px; }
+        /* --- HEADER --- */
+        header { 
+            width: 100%; 
+            max-width: 1000px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+        }
+        .brand-container { display: flex; align-items: center; gap: 15px; }
+        .logo { width: 50px; height: 50px; background: #fff; border-radius: 12px; padding: 4px; object-fit: contain; }
         
-        .btn { background: #2C2C2E; color: white; border: 1px solid #444; padding: 10px 20px; border-radius: 99px; cursor: pointer; font-weight: 600; }
-        .btn.primary { background: var(--accent-orange); color: black; border: none; }
+        h1 { 
+            font-size: 28px; /* Slightly smaller for mobile safety */
+            font-weight: 700; 
+            margin: 0; 
+            background: var(--accent-gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
+        
         .btn-group { display: flex; gap: 10px; }
+        .btn { 
+            background: #2C2C2E; color: white; border: 1px solid #444; 
+            padding: 8px 16px; border-radius: 99px; cursor: pointer; font-weight: 600; font-size: 13px; 
+            white-space: nowrap;
+        }
+        .btn.primary { background: var(--accent-orange); color: black; border: none; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; width: 100%; max-width: 1000px; }
-        .card { background: var(--card-bg); border-radius: var(--radius); padding: 30px; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        /* --- GRID LAYOUT --- */
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; /* Default Desktop */
+            gap: 20px; 
+            width: 100%; 
+            max-width: 1000px; 
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: var(--radius); 
+            padding: 25px; 
+            border: 1px solid var(--border-color); 
+            display: flex; 
+            flex-direction: column; 
+            min-width: 0; /* Prevents flex overflow */
+        }
+        
+        /* Desktop Spans */
         .card.large { grid-column: span 2; }
         .card.full { grid-column: span 3; }
         
-        h2 { font-size: 20px; font-weight: 600; margin: 0 0 20px 0; color: var(--text-main); }
+        h2 { font-size: 18px; font-weight: 600; margin: 0 0 20px 0; color: var(--text-main); }
+        
+        /* Stats */
         .stat-group { display: flex; justify-content: space-between; align-items: flex-end; height: 100%; }
-        .stat-huge { font-size: 56px; font-weight: 700; color: white; }
-        .stat-label { font-size: 13px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; }
-        .chart-container { flex: 1; position: relative; height: 100%; width: 100%; }
+        .stat-huge { font-size: 42px; font-weight: 700; color: white; line-height: 1; }
+        .stat-label { font-size: 11px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; margin-top: 5px; }
+        
+        /* Charts */
         .chart-row { display: flex; gap: 20px; height: 220px; width: 100%; }
+        .chart-container { flex: 1; position: relative; height: 100%; width: 100%; min-width: 0; }
+        
+        /* Source Section Stats (Right Side) */
+        .source-stats { width: 200px; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #333; }
+
+        /* Financial Grid (Inside Card) */
+        .fin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 
         /* Tables */
-        .fin-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .fin-table th { text-align: left; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; padding-bottom: 15px; border-bottom: 1px solid #333; }
-        .fin-table td { padding: 15px 0; border-bottom: 1px solid #2C2C2E; font-size: 15px; color: #fff; }
-        .fin-val { text-align: right; font-weight: 600; }
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+        .fin-table { width: 100%; border-collapse: collapse; margin-top: 10px; min-width: 300px; }
+        .fin-table th { text-align: left; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; padding-bottom: 10px; border-bottom: 1px solid #333; }
+        .fin-table td { padding: 12px 0; border-bottom: 1px solid #2C2C2E; font-size: 14px; color: #fff; }
+        .fin-val { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 
-        /* LOGS TABLE */
-        .logs-wrapper { max-height: 400px; overflow-y: auto; margin-top: 10px; padding-right: 10px; }
-        .logs-wrapper::-webkit-scrollbar { width: 8px; }
-        .logs-wrapper::-webkit-scrollbar-track { background: #2C2C2E; border-radius: 4px; }
-        .logs-wrapper::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
-        
-        .log-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        .log-table th { position: sticky; top: 0; background: var(--card-bg); padding: 10px; text-align: left; color: var(--accent-orange); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #444; }
+        /* Logs Table */
+        .logs-wrapper { max-height: 400px; overflow-y: auto; margin-top: 10px; }
+        .log-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; /* Forces scroll on small screens */ }
+        .log-table th { position: sticky; top: 0; background: var(--card-bg); padding: 10px; text-align: left; color: var(--accent-orange); font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #444; }
         .log-table td { padding: 10px; border-bottom: 1px solid #333; color: #ddd; }
-        
-        .tag { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        /* Dynamic Tag Colors are handled in JS now */
+        .tag { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
 
         /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); justify-content: center; align-items: center; z-index: 100; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
         .modal.active { display: flex; }
-        .modal-content { background: #1C1C1E; padding: 40px; border-radius: 24px; width: 550px; max-height: 90vh; overflow-y: auto; border: 1px solid #333; }
+        .modal-content { background: #1C1C1E; padding: 30px; border-radius: 24px; width: 550px; max-height: 90vh; overflow-y: auto; border: 1px solid #333; }
+        
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 11px; color: var(--accent-orange); margin-bottom: 5px; font-weight: 600; text-transform: uppercase; }
-        .input-group input { width: 100%; padding: 10px; background: #2C2C2E; color: white; border: 1px solid #444; border-radius: 8px; outline: none; }
+        .input-group input { width: 100%; padding: 12px; background: #2C2C2E; color: white; border: 1px solid #444; border-radius: 10px; outline: none; font-size: 16px; /* Prevents zoom on iOS */ }
 
         /* Switches */
-        .switch-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 10px; background: #2C2C2E; border-radius: 8px; }
+        .switch-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 12px; background: #2C2C2E; border-radius: 10px; }
         .switch-label { font-size: 13px; font-weight: 600; color: white; }
-        .toggle-switch { position: relative; width: 40px; height: 24px; appearance: none; background: #444; border-radius: 12px; transition: .3s; cursor: pointer; }
+        .toggle-switch { position: relative; width: 44px; height: 26px; appearance: none; background: #444; border-radius: 13px; transition: .3s; }
         .toggle-switch:checked { background: var(--accent-orange); }
-        .toggle-switch::before { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; top: 2px; left: 2px; background: white; transition: .3s; }
-        .toggle-switch:checked::before { left: 18px; }
+        .toggle-switch::before { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; top: 2px; left: 2px; background: white; transition: .3s; }
+        .toggle-switch:checked::before { left: 20px; }
 
+        /* --- MOBILE RESPONSIVENESS (The Fix) --- */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            
+            /* Header Stack */
+            header { flex-direction: column; gap: 20px; align-items: center; text-align: center; }
+            .brand-container { flex-direction: column; gap: 10px; }
+            .btn-group { width: 100%; justify-content: center; }
+
+            /* Grid Collapse */
+            .grid { grid-template-columns: 1fr; gap: 15px; }
+            .card.large, .card.full { grid-column: span 1; }
+
+            /* Charts Stack */
+            .chart-row { flex-direction: column; height: auto; }
+            .chart-container { height: 250px; width: 100%; margin-bottom: 20px; }
+
+            /* Source Section Fix */
+            .source-stats { 
+                width: 100%; 
+                border-left: none; 
+                border-top: 1px solid #333; 
+                padding-left: 0; 
+                padding-top: 20px; 
+                flex-direction: row; 
+                justify-content: space-around; 
+            }
+
+            /* Financial Grid Stack */
+            .fin-grid { grid-template-columns: 1fr; gap: 20px; }
+
+            /* Modal Fix */
+            .modal-content { width: 90%; padding: 20px; }
+            
+            h1 { font-size: 24px; }
+            h2 { font-size: 16px; }
+            .stat-huge { font-size: 32px; }
+        }
+
+        /* Print Optimization */
         @media print {
-            body { background-color: white !important; color: black !important; padding: 0 !important; }
+            body { background: white !important; color: black !important; padding: 0 !important; }
+            .grid { display: block; }
+            .card { break-inside: avoid; border: 1px solid #ccc !important; margin-bottom: 20px; box-shadow: none !important; }
             .modal, .btn-group { display: none !important; }
-            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
-            .card.full { grid-column: span 2; }
-            .card { background: white !important; border: 1px solid #ddd !important; box-shadow: none !important; color: black !important; break-inside: avoid; }
-            h1, h2, .stat-huge { color: black !important; -webkit-text-fill-color: black !important; }
-            .fin-table td, .log-table td { color: black !important; border-bottom: 1px solid #ddd !important; }
-            .logs-wrapper { max-height: none; overflow: visible; }
+            /* Restore grid for print paper width */
+            .fin-grid { display: grid; grid-template-columns: 1fr 1fr; }
+            .chart-row { display: flex; height: 200px; }
+            h1, h2, .stat-huge, td, th { color: black !important; }
         }
     </style>
 </head>
@@ -124,19 +208,22 @@
             <h2>Property Performance</h2>
             <div class="stat-group">
                 <div class="stat-box"><div class="stat-label">Total Revenue</div><div class="stat-huge" id="disp-revenue">$0</div></div>
-                <div class="stat-box"><div class="stat-label">Rooms Booked</div><div class="stat-huge" style="color: var(--accent-orange);" id="disp-rooms">0</div></div>
+                <div class="stat-box" style="text-align: right;"><div class="stat-label">Rooms Booked</div><div class="stat-huge" style="color: var(--accent-orange);" id="disp-rooms">0</div></div>
             </div>
         </div>
 
         <!-- 2. Pipeline -->
         <div class="card" id="card-pipeline">
             <h2>Pipeline Pulse</h2>
-            <div style="margin-top: auto;">
-                <div style="font-size: 32px; font-weight: 700; color: white;" id="disp-proposals">0</div>
-                <div class="stat-label" style="font-size: 11px;">Active Proposals</div>
-                <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
-                <div style="font-size: 32px; font-weight: 700; color: white;" id="disp-signed">0</div>
-                <div class="stat-label" style="font-size: 11px;">Signed Contracts</div>
+            <div style="display: flex; flex-direction: column; justify-content: flex-end; height: 100%;">
+                <div style="margin-bottom: 15px;">
+                    <div class="stat-huge" style="font-size: 32px;" id="disp-proposals">0</div>
+                    <div class="stat-label">Active Proposals</div>
+                </div>
+                <div style="border-top: 1px solid #333; padding-top: 15px;">
+                    <div class="stat-huge" style="font-size: 32px;" id="disp-signed">0</div>
+                    <div class="stat-label">Signed Contracts</div>
+                </div>
             </div>
         </div>
 
@@ -152,7 +239,7 @@
         <!-- 4. Insight -->
         <div class="card" style="justify-content: center;" id="card-insight">
              <h2>Key Insight</h2>
-             <div class="insights-box" id="auto-insight">Loading...</div>
+             <div style="font-size: 15px; line-height: 1.5; color: #D1D1D6;" id="auto-insight">Loading...</div>
         </div>
 
         <!-- 5. Business Source -->
@@ -161,17 +248,23 @@
             <div class="chart-row">
                 <div class="chart-container"><canvas id="rfpBarChart"></canvas></div>
                 <div class="chart-container"><canvas id="rfpPieChart"></canvas></div>
-                <div style="width: 200px; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #333;">
-                    <div style="margin-bottom: 20px;"><div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div><div class="stat-label">RFP Requests</div></div>
-                    <div><div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div><div class="stat-label">LNR Contracts</div></div>
+                <div class="source-stats">
+                    <div style="margin-bottom: 20px;">
+                        <div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div>
+                        <div class="stat-label">RFP Requests</div>
+                    </div>
+                    <div>
+                        <div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div>
+                        <div class="stat-label">LNR Contracts</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 6. NEW: Call Logs Table (Auto Parsed) -->
+        <!-- 6. Logs Table -->
         <div class="card full" id="card-logs">
-            <h2>Detailed Call Activity Log (Auto-Detected)</h2>
-            <div class="logs-wrapper">
+            <h2>Detailed Call Activity Log</h2>
+            <div class="logs-wrapper table-wrap">
                 <table class="log-table">
                     <thead>
                         <tr>
@@ -189,29 +282,32 @@
         <!-- 7. Financial Report -->
         <div class="card full" id="card-financials">
             <h2>Sales & Marketing Financial Report</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                <table class="fin-table">
-                    <thead><tr><th>Category</th><th class="fin-val">Metric</th></tr></thead>
-                    <tbody>
-                        <tr><td>YTD Revenue</td><td class="fin-val" id="disp-ytd">$0</td></tr>
-                        <tr><td>Last Year YTD Revenue</td><td class="fin-val" id="disp-ly-ytd">$0</td></tr>
-                        <tr><td>MTD Revenue</td><td class="fin-val" id="disp-mtd">$0</td></tr>
-                        <tr><td>Last Year MTD Revenue</td><td class="fin-val" id="disp-ly-mtd">$0</td></tr>
-                        <tr><td style="color: var(--accent-orange);">MTD Forecast</td><td class="fin-val" style="color: var(--accent-orange);" id="disp-forecast">$0</td></tr>
-                    </tbody>
-                </table>
-                <table class="fin-table">
-                    <thead><tr><th>Sales Activity</th><th class="fin-val">Metric</th></tr></thead>
-                    <tbody>
-                        <tr><td>RFPs Submitted</td><td class="fin-val" id="disp-rfp-sub">0</td></tr>
-                        <tr><td>RFPs in Consideration</td><td class="fin-val" id="disp-rfp-con">0</td></tr>
-                        <tr><td>Rooms Booked (Sales)</td><td class="fin-val" id="disp-sales-rooms">0</td></tr>
-                        <tr><td style="color: var(--accent-orange);">Estimated Revenue</td><td class="fin-val" style="color: var(--accent-orange);" id="disp-est-rev">$0</td></tr>
-                    </tbody>
-                </table>
+            <div class="fin-grid">
+                <div class="table-wrap">
+                    <table class="fin-table">
+                        <thead><tr><th>Category</th><th class="fin-val">Metric</th></tr></thead>
+                        <tbody>
+                            <tr><td>YTD Revenue</td><td class="fin-val" id="disp-ytd">$0</td></tr>
+                            <tr><td>Last Year YTD</td><td class="fin-val" id="disp-ly-ytd">$0</td></tr>
+                            <tr><td>MTD Revenue</td><td class="fin-val" id="disp-mtd">$0</td></tr>
+                            <tr><td>Last Year MTD</td><td class="fin-val" id="disp-ly-mtd">$0</td></tr>
+                            <tr><td style="color: var(--accent-orange);">MTD Forecast</td><td class="fin-val" style="color: var(--accent-orange);" id="disp-forecast">$0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-wrap">
+                    <table class="fin-table">
+                        <thead><tr><th>Sales Activity</th><th class="fin-val">Metric</th></tr></thead>
+                        <tbody>
+                            <tr><td>RFPs Submitted</td><td class="fin-val" id="disp-rfp-sub">0</td></tr>
+                            <tr><td>RFPs in Consideration</td><td class="fin-val" id="disp-rfp-con">0</td></tr>
+                            <tr><td>Rooms Booked (Sales)</td><td class="fin-val" id="disp-sales-rooms">0</td></tr>
+                            <tr><td style="color: var(--accent-orange);">Estimated Revenue</td><td class="fin-val" style="color: var(--accent-orange);" id="disp-est-rev">$0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
     </div>
 
     <!-- Data Modal -->
@@ -219,25 +315,20 @@
         <div class="modal-content">
             <h2 style="color: white; margin-bottom: 20px;">Dashboard Configuration</h2>
             
-            <!-- SMART EXCEL UPLOAD -->
             <div style="background: #2C2C2E; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px dashed #555;">
-                <label style="color: var(--accent-orange); font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px;">SMART UPLOAD</label>
+                <label style="color: var(--accent-orange); font-size: 11px; font-weight: bold; display: block; margin-bottom: 10px;">SMART UPLOAD (EXCEL)</label>
                 <input type="file" id="inp-excel" accept=".xlsx, .xls" style="color: white; font-size: 14px;">
-                <div style="font-size: 11px; color: #888; margin-top: 10px; line-height: 1.4;">
-                    <strong>AI Parsing Active:</strong> Automatically detects sections like "Construction" or "Lead Gen" based on column layout. No configuration required.
-                </div>
             </div>
 
-            <!-- VISIBILITY -->
             <div style="margin-bottom: 25px; border: 1px solid #333; padding: 15px; border-radius: 12px;">
-                <div style="color: var(--accent-orange); font-size: 12px; font-weight: bold; margin-bottom: 10px;">SHOW / HIDE SECTIONS</div>
+                <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 10px;">VISIBILITY</div>
                 <div class="switch-row"><span class="switch-label">Property Performance</span><input type="checkbox" class="toggle-switch" id="vis-revenue"></div>
                 <div class="switch-row"><span class="switch-label">Pipeline Pulse</span><input type="checkbox" class="toggle-switch" id="vis-pipeline"></div>
                 <div class="switch-row"><span class="switch-label">Activity (Charts)</span><input type="checkbox" class="toggle-switch" id="vis-activity"></div>
                 <div class="switch-row"><span class="switch-label">Key Insight</span><input type="checkbox" class="toggle-switch" id="vis-insight"></div>
                 <div class="switch-row"><span class="switch-label">Business Source</span><input type="checkbox" class="toggle-switch" id="vis-source"></div>
                 <div class="switch-row"><span class="switch-label">Call Logs (Table)</span><input type="checkbox" class="toggle-switch" id="vis-logs"></div>
-                <div class="switch-row"><span class="switch-label">Financial Report (Detailed)</span><input type="checkbox" class="toggle-switch" id="vis-financials"></div>
+                <div class="switch-row"><span class="switch-label">Financial Report</span><input type="checkbox" class="toggle-switch" id="vis-financials"></div>
             </div>
 
             <div class="input-group"><label>Property Name</label><input type="text" id="inp-hotel"></div>
@@ -249,9 +340,9 @@
                 </div>
             </div>
 
-            <!-- MANUAL INPUTS -->
-            <hr style="border-top: 1px solid #333; margin: 15px 0;">
-            <div style="font-size: 14px; color: white; margin-bottom: 10px;">Manual Data Entry</div>
+            <div style="border-top: 1px solid #333; margin: 20px 0;"></div>
+            <div style="font-size: 12px; color: #888; margin-bottom: 10px; font-weight: bold;">MANUAL METRICS</div>
+            
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="input-group"><label>Revenue</label><input type="number" id="inp-revenue"></div>
                 <div class="input-group"><label>Rooms</label><input type="number" id="inp-rooms"></div>
@@ -331,7 +422,7 @@
             // Visibility
             const sections = ['revenue','pipeline','activity','insight','source','logs','financials'];
             sections.forEach(s => {
-                document.getElementById('card-'+s).style.display = data['visible_'+s] ? 'flex' : 'none';
+                document.getElementById('card-'+s).style.display = data['visible_'+s] ? (s === 'financials' || s === 'logs' || s === 'source' ? 'block' : 'flex') : 'none';
                 document.getElementById('vis-'+s).checked = data['visible_'+s];
             });
 
@@ -357,23 +448,19 @@
             document.getElementById('disp-rfp-con').innerText = num(data.rfps_consideration);
             document.getElementById('disp-est-rev').innerText = fmt(data.estimated_revenue);
 
-            // LOGS TABLE (AUTO COLOR BADGES)
+            // LOGS TABLE
             const tbody = document.getElementById('logs-body');
             tbody.innerHTML = ''; 
             if(data.logs && data.logs.length > 0) {
-                // Determine unique tags for color cycling
                 const uniqueTypes = [...new Set(data.logs.map(l => l.type))];
-                const colors = ['#FF9F0A', '#30D158', '#0A84FF', '#BF5AF2', '#FF375F']; // Orange, Green, Blue, Purple, Red
+                const colors = ['#FF9F0A', '#30D158', '#0A84FF', '#BF5AF2', '#FF375F'];
 
                 data.logs.forEach(log => {
                     const tr = document.createElement('tr');
-                    
-                    // Assign color based on type index
                     const typeIdx = uniqueTypes.indexOf(log.type) % colors.length;
                     const color = colors[typeIdx];
-                    const bg = color + '33'; // 20% opacity hex
+                    const bg = color + '33';
                     
-                    // Clean up type name (truncate if too long)
                     let displayType = log.type;
                     if(displayType.length > 20) displayType = displayType.substring(0, 18) + '..';
 
@@ -406,7 +493,7 @@
             document.getElementById('inp-rfp-con').value = data.rfps_consideration;
             document.getElementById('inp-est-rev').value = data.estimated_revenue;
 
-            // Auto Insight
+            // Insight
             const totalCalls = parseInt(data.lnr_calls) + parseInt(data.leisure_calls);
             document.getElementById('auto-insight').innerHTML = `
                 <strong>${data.hotel_name}</strong> is seeing momentum with <strong>${data.logs ? data.logs.length : 0} detailed activities</strong> logged. 
