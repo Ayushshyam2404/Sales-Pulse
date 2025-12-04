@@ -1,100 +1,254 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import os
-from datetime import datetime, timedelta
+import pandas as pd
+from datetime import datetime
 
 app = Flask(__name__)
 
-# Database Configuration
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Database Model
+# --- MODELS ---
 class ReportData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     hotel_name = db.Column(db.String(100), default="Grand Plaza Hotel")
-    
     start_date = db.Column(db.String(20), default="")
     end_date = db.Column(db.String(20), default="")
-    
+
+    # Visibility Flags
+    visible_revenue = db.Column(db.Boolean, default=True)
+    visible_pipeline = db.Column(db.Boolean, default=True)
+    visible_activity = db.Column(db.Boolean, default=True)
+    visible_insight = db.Column(db.Boolean, default=True)
+    visible_source = db.Column(db.Boolean, default=True)
+    visible_financials = db.Column(db.Boolean, default=True)
+    visible_logs = db.Column(db.Boolean, default=True)
+
+    # Data Fields
     revenue = db.Column(db.Integer, default=14500)
     rooms_booked = db.Column(db.Integer, default=120)
-    
-    # Activity Section (Updated to Leisure)
     lnr_calls = db.Column(db.Integer, default=42)
     leisure_calls = db.Column(db.Integer, default=18)
-    
-    # NEW: Business Source Section
     rfps = db.Column(db.Integer, default=5)
     lnrs = db.Column(db.Integer, default=12)
-    
-    # Pipeline Section
     proposals = db.Column(db.Integer, default=8)
     signed = db.Column(db.Integer, default=2)
+    ytd_revenue = db.Column(db.Integer, default=1056992)
+    last_year_ytd = db.Column(db.Integer, default=1315108)
+    mtd_revenue = db.Column(db.Integer, default=52829)
+    last_year_mtd = db.Column(db.Integer, default=69770)
+    mtd_forecast = db.Column(db.Integer, default=62247)
+    rfps_submitted = db.Column(db.Integer, default=701)
+    rfps_consideration = db.Column(db.Integer, default=16)
+    sales_rooms = db.Column(db.Integer, default=1500)
+    estimated_revenue = db.Column(db.Integer, default=139255)
     
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
-# Initialize DB with defaults
+class CallLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    log_type = db.Column(db.String(100)) # The Section Name (e.g., Construction)
+    date = db.Column(db.String(50))
+    name = db.Column(db.String(100))
+    status = db.Column(db.String(100))
+
 with app.app_context():
     db.create_all()
     if not ReportData.query.first():
         today = datetime.now()
-        two_weeks_ago = today - timedelta(days=14)
-        
-        db.session.add(ReportData(
-            start_date=two_weeks_ago.strftime('%Y-%m-%d'),
-            end_date=today.strftime('%Y-%m-%d')
-        ))
+        db.session.add(ReportData(start_date=today.strftime('%Y-%m-%d')))
         db.session.commit()
 
-# --- ROUTES ---
+# --- SMART PARSING LOGIC ---
+def smart_parse_excel(file_storage):
+    """
+    1. Finds the 'Header Row' (row with 'Date' or 'Status').
+    2. Identifies blocks of columns belonging to a section.
+    3. Extracts Section Title from the row above.
+    """
+    try:
+        # Load excel, no header initially to scan all rows
+        df = pd.read_excel(file_storage, header=None)
+        
+        # 1. FIND THE HEADER ROW
+        # We look for a row that contains "Date" AND "Name"
+        header_row_idx = -1
+        for r in range(min(10, len(df))): # Scan top 10 rows
+            row_values = [str(x).lower() for x in df.iloc[r].tolist()]
+            if any("date" in x for x in row_values) and any("name" in x for x in row_values):
+                header_row_idx = r
+                break
+        
+        if header_row_idx == -1: return [] # Couldn't find structure
 
+        # 2. SCAN COLUMNS TO FIND SECTIONS
+        # A section usually starts with a Date or Name column
+        logs = []
+        cols = len(df.columns)
+        
+        # We iterate columns to find "Date" columns. 
+        # When we find one, we look for its neighbors (Name, Status)
+        for c in range(cols):
+            col_header = str(df.iloc[header_row_idx, c]).lower()
+            
+            # Logic: If this column is a "Date" column, it's the anchor for a section
+            if "date" in col_header:
+                
+                # A. Determine Section Title (Row Above)
+                # Usually located in the same column or slightly left due to merge
+                title = str(df.iloc[header_row_idx - 1, c]).strip()
+                if title == "nan" or title == "":
+                    # Try checking one column to the left (merged cells often store val in top-left)
+                    if c > 0: title = str(df.iloc[header_row_idx - 1, c - 1]).strip()
+                
+                if title == "nan": title = "General Activity"
+
+                # B. Find Neighboring 'Name' and 'Status' columns
+                # We scan locally (e.g., next 3 columns)
+                name_col_idx = -1
+                status_col_idx = -1
+                
+                # Check current col + next 3
+                for offset in range(4): 
+                    if c + offset >= cols: break
+                    neighbor_header = str(df.iloc[header_row_idx, c + offset]).lower()
+                    
+                    if "name" in neighbor_header and "group" in neighbor_header: name_col_idx = c + offset
+                    elif "name" in neighbor_header and "guest" in neighbor_header: name_col_idx = c + offset
+                    elif "name" in neighbor_header and name_col_idx == -1: name_col_idx = c + offset # fallback
+                    
+                    if "status" in neighbor_header: status_col_idx = c + offset
+
+                # C. Extract Data
+                if name_col_idx != -1:
+                    start_data_row = header_row_idx + 1
+                    for r in range(start_data_row, len(df)):
+                        name_val = df.iloc[r, name_col_idx]
+                        
+                        # Stop if name is empty (end of list)
+                        if pd.isna(name_val) or str(name_val).strip() == "":
+                            # Check if next few rows are also empty (sometimes there's a single blank line)
+                            # simple heuristic: if name is empty, skip row.
+                            continue 
+                        
+                        date_val = df.iloc[r, c]
+                        status_val = df.iloc[r, status_col_idx] if status_col_idx != -1 else ""
+
+                        # Format Date
+                        date_str = str(date_val)
+                        if isinstance(date_val, datetime):
+                            date_str = date_val.strftime('%m/%d/%y')
+                        elif len(date_str) > 10: date_str = date_str[:10]
+
+                        logs.append(CallLog(
+                            log_type=title,
+                            date=date_str,
+                            name=str(name_val),
+                            status=str(status_val) if pd.notna(status_val) else ""
+                        ))
+        return logs
+
+    except Exception as e:
+        print(f"Parsing Error: {e}")
+        return []
+
+# --- ROUTES ---
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/api/data', methods=['GET', 'POST'])
-def handle_data():
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    record = ReportData.query.first()
+    logs = CallLog.query.all()
+    
+    log_list = [{
+        'type': l.log_type,
+        'date': l.date,
+        'name': l.name,
+        'status': l.status
+    } for l in logs]
+
+    return jsonify({
+        'hotel_name': record.hotel_name,
+        'start_date': record.start_date,
+        'end_date': record.end_date,
+        'visible_revenue': record.visible_revenue,
+        'visible_pipeline': record.visible_pipeline,
+        'visible_activity': record.visible_activity,
+        'visible_insight': record.visible_insight,
+        'visible_source': record.visible_source,
+        'visible_financials': record.visible_financials,
+        'visible_logs': record.visible_logs,
+        'revenue': record.revenue,
+        'rooms': record.rooms_booked,
+        'lnr_calls': record.lnr_calls,
+        'leisure_calls': record.leisure_calls,
+        'rfps': record.rfps,
+        'lnrs': record.lnrs,
+        'proposals': record.proposals,
+        'signed': record.signed,
+        'ytd_revenue': record.ytd_revenue,
+        'last_year_ytd': record.last_year_ytd,
+        'mtd_revenue': record.mtd_revenue,
+        'last_year_mtd': record.last_year_mtd,
+        'mtd_forecast': record.mtd_forecast,
+        'rfps_submitted': record.rfps_submitted,
+        'rfps_consideration': record.rfps_consideration,
+        'sales_rooms': record.sales_rooms,
+        'estimated_revenue': record.estimated_revenue,
+        'logs': log_list
+    })
+
+@app.route('/api/update', methods=['POST'])
+def update_data():
     record = ReportData.query.first()
     
-    if request.method == 'GET':
-        return jsonify({
-            'hotel_name': record.hotel_name,
-            'start_date': record.start_date,
-            'end_date': record.end_date,
-            'revenue': record.revenue,
-            'rooms': record.rooms_booked,
-            'lnr_calls': record.lnr_calls,
-            'leisure_calls': record.leisure_calls, # Updated
-            'rfps': record.rfps,
-            'lnrs': record.lnrs,
-            'proposals': record.proposals,
-            'signed': record.signed
-        })
+    # Text Data
+    record.hotel_name = request.form.get('hotel_name')
+    record.start_date = request.form.get('start_date')
+    record.end_date = request.form.get('end_date')
     
-    if request.method == 'POST':
-        data = request.json
-        record.hotel_name = data.get('hotel_name')
-        record.start_date = data.get('start_date')
-        record.end_date = data.get('end_date')
-        record.revenue = data.get('revenue')
-        record.rooms_booked = data.get('rooms')
-        
-        record.lnr_calls = data.get('lnr_calls')
-        record.leisure_calls = data.get('leisure_calls') # Updated
-        
-        record.rfps = data.get('rfps')
-        record.lnrs = data.get('lnrs')
-        
-        record.proposals = data.get('proposals')
-        record.signed = data.get('signed')
-        record.last_updated = datetime.utcnow()
-        
-        db.session.commit()
-        return jsonify({'message': 'Data saved successfully'})
+    # Visibility
+    record.visible_revenue = request.form.get('visible_revenue') == 'true'
+    record.visible_pipeline = request.form.get('visible_pipeline') == 'true'
+    record.visible_activity = request.form.get('visible_activity') == 'true'
+    record.visible_insight = request.form.get('visible_insight') == 'true'
+    record.visible_source = request.form.get('visible_source') == 'true'
+    record.visible_financials = request.form.get('visible_financials') == 'true'
+    record.visible_logs = request.form.get('visible_logs') == 'true'
+
+    # Metrics
+    record.revenue = request.form.get('revenue')
+    record.rooms_booked = request.form.get('rooms')
+    record.lnr_calls = request.form.get('lnr_calls')
+    record.leisure_calls = request.form.get('leisure_calls')
+    record.ytd_revenue = request.form.get('ytd_revenue')
+    record.last_year_ytd = request.form.get('last_year_ytd')
+    record.mtd_revenue = request.form.get('mtd_revenue')
+    record.last_year_mtd = request.form.get('last_year_mtd')
+    record.mtd_forecast = request.form.get('mtd_forecast')
+    record.rfps_submitted = request.form.get('rfps_submitted')
+    record.rfps_consideration = request.form.get('rfps_consideration')
+    record.sales_rooms = request.form.get('sales_rooms')
+    record.estimated_revenue = request.form.get('estimated_revenue')
+    
+    # SMART EXCEL PARSING
+    if 'excel_file' in request.files:
+        file = request.files['excel_file']
+        if file.filename != '':
+            logs = smart_parse_excel(file)
+            if logs:
+                db.session.query(CallLog).delete() # Clear old only if new ones found
+                db.session.add_all(logs)
+
+    record.last_updated = datetime.utcnow()
+    db.session.commit()
+    return jsonify({'message': 'Data updated'})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
