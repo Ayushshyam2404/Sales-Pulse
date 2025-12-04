@@ -15,7 +15,7 @@
             --text-secondary: #86868B;
             --border-color: #333333;
             
-            --accent-orange: #FF9F0A; /* Slightly lighter orange for dark mode */
+            --accent-orange: #FF9F0A; 
             --accent-gradient: linear-gradient(135deg, #FF9F0A 0%, #FF375F 100%);
             
             --shadow: 0 10px 40px rgba(0,0,0,0.4);
@@ -53,7 +53,7 @@
         .logo {
             width: 64px;
             height: 64px;
-            background: #fff; /* Keep logo bg white so it pops */
+            background: #fff; 
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(255,255,255,0.1);
             object-fit: contain;
@@ -177,36 +177,17 @@
         }
         .input-group input:focus { border-color: var(--accent-orange); }
 
-        /* --- PRINT OPTIMIZATION (Force White Mode) --- */
+        /* --- PRINT OPTIMIZATION --- */
         @media print {
             body { background-color: white !important; color: black !important; padding: 0 !important; }
             header { margin-bottom: 20px; }
             .btn-group, .modal { display: none !important; }
-            
-            /* Reset Layout for A4 Paper */
-            .grid { 
-                display: grid; 
-                grid-template-columns: 1fr 1fr; 
-                gap: 15px; 
-                width: 100%; 
-            }
+            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
             .card.full { grid-column: span 2; }
-            
-            /* Light Cards */
-            .card { 
-                background: white !important; 
-                border: 1px solid #ddd !important; 
-                box-shadow: none !important;
-                color: black !important;
-                page-break-inside: avoid;
-            }
-
-            /* Text Colors */
+            .card { background: white !important; border: 1px solid #ddd !important; box-shadow: none !important; color: black !important; page-break-inside: avoid; }
             h1, h2, .stat-huge { color: black !important; -webkit-text-fill-color: black !important; }
             .stat-label, .subtitle { color: #555 !important; }
             .insights-box { color: #333 !important; }
-
-            /* Charts */
             canvas { max-width: 100%; filter: none !important; }
         }
     </style>
@@ -258,7 +239,7 @@
 
         <!-- 3. Activity Segmentation (Span 2) -->
         <div class="card large">
-            <h2>Activity: Corporate vs Construction</h2>
+            <h2>Activity: Corporate vs Leisure</h2>
             <div class="chart-row">
                 <div class="chart-container"><canvas id="barChart"></canvas></div>
                 <div class="chart-container"><canvas id="pieChart"></canvas></div>
@@ -281,7 +262,7 @@
                 <div class="chart-container">
                     <canvas id="rfpPieChart"></canvas>
                 </div>
-                <!-- Mini Stats for this section -->
+                <!-- Mini Stats -->
                 <div style="width: 200px; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #333;">
                     <div style="margin-bottom: 20px;">
                         <div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div>
@@ -322,7 +303,7 @@
             <label style="color: #FF9F0A; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px;">ACTIVITY LOG (Calls/Visits)</label>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="input-group"><label>Corp Calls</label><input type="number" id="inp-lnr"></div>
-                <div class="input-group"><label>Const Calls</label><input type="number" id="inp-const"></div>
+                <div class="input-group"><label>Leisure Calls</label><input type="number" id="inp-leisure"></div>
             </div>
 
             <!-- New Section -->
@@ -371,7 +352,7 @@
                 rooms: document.getElementById('inp-rooms').value,
                 
                 lnr_calls: document.getElementById('inp-lnr').value,
-                const_calls: document.getElementById('inp-const').value,
+                leisure_calls: document.getElementById('inp-leisure').value, // Updated key
                 
                 rfps: document.getElementById('inp-rfps').value,
                 lnrs: document.getElementById('inp-lnrs').value,
@@ -403,7 +384,6 @@
             document.getElementById('disp-signed').innerText = data.signed;
             document.getElementById('disp-proposals').innerText = data.proposals;
             
-            // New Section Text
             document.getElementById('disp-rfps').innerText = data.rfps;
             document.getElementById('disp-lnrs').innerText = data.lnrs;
 
@@ -414,14 +394,14 @@
             document.getElementById('inp-revenue').value = data.revenue;
             document.getElementById('inp-rooms').value = data.rooms;
             document.getElementById('inp-lnr').value = data.lnr_calls;
-            document.getElementById('inp-const').value = data.const_calls;
+            document.getElementById('inp-leisure').value = data.leisure_calls; // Updated ID
             document.getElementById('inp-rfps').value = data.rfps;
             document.getElementById('inp-lnrs').value = data.lnrs;
             document.getElementById('inp-proposals').value = data.proposals;
             document.getElementById('inp-signed').value = data.signed;
 
             // Insight Logic
-            const totalCalls = parseInt(data.lnr_calls) + parseInt(data.const_calls);
+            const totalCalls = parseInt(data.lnr_calls) + parseInt(data.leisure_calls);
             document.getElementById('auto-insight').innerHTML = `
                 <strong>${data.hotel_name}</strong> is seeing strong momentum with <strong>${data.rfps} new RFPs</strong> submitted. 
                 Sales activity remains high with <strong>${totalCalls} total interactions</strong>, converting into ${data.lnrs} finalized LNR agreements.
@@ -441,14 +421,14 @@
             // Destroy old charts
             Object.values(charts).forEach(c => c.destroy());
 
-            // 1. Activity Bar
+            // 1. Activity Bar (Updated Labels)
             charts.actBar = new Chart(document.getElementById('barChart'), {
                 type: 'bar',
                 data: {
-                    labels: ['Corp', 'Const'],
+                    labels: ['Corp', 'Leisure'],
                     datasets: [{
                         label: 'Calls',
-                        data: [data.lnr_calls, data.const_calls],
+                        data: [data.lnr_calls, data.leisure_calls],
                         backgroundColor: ['#3A3A3C', '#FF9F0A'],
                         borderRadius: 6,
                         barThickness: 30
@@ -461,13 +441,13 @@
                 }
             });
 
-            // 2. Activity Pie
+            // 2. Activity Pie (Updated Labels)
             charts.actPie = new Chart(document.getElementById('pieChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['Corp', 'Const'],
+                    labels: ['Corp', 'Leisure'],
                     datasets: [{
-                        data: [data.lnr_calls, data.const_calls],
+                        data: [data.lnr_calls, data.leisure_calls],
                         backgroundColor: ['#3A3A3C', '#FF9F0A'],
                         borderWidth: 0
                     }]
@@ -478,7 +458,7 @@
                 }
             });
 
-            // 3. NEW: RFP vs LNR Bar
+            // 3. RFP vs LNR Bar
             charts.rfpBar = new Chart(document.getElementById('rfpBarChart'), {
                 type: 'bar',
                 data: {
@@ -498,7 +478,7 @@
                 }
             });
 
-            // 4. NEW: RFP vs LNR Pie
+            // 4. RFP vs LNR Pie
             charts.rfpPie = new Chart(document.getElementById('rfpPieChart'), {
                 type: 'doughnut',
                 data: {

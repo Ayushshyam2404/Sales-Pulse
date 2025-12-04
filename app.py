@@ -23,9 +23,9 @@ class ReportData(db.Model):
     revenue = db.Column(db.Integer, default=14500)
     rooms_booked = db.Column(db.Integer, default=120)
     
-    # Activity Section
+    # Activity Section (Updated to Leisure)
     lnr_calls = db.Column(db.Integer, default=42)
-    const_calls = db.Column(db.Integer, default=18)
+    leisure_calls = db.Column(db.Integer, default=18)
     
     # NEW: Business Source Section
     rfps = db.Column(db.Integer, default=5)
@@ -68,7 +68,7 @@ def handle_data():
             'revenue': record.revenue,
             'rooms': record.rooms_booked,
             'lnr_calls': record.lnr_calls,
-            'const_calls': record.const_calls,
+            'leisure_calls': record.leisure_calls, # Updated
             'rfps': record.rfps,
             'lnrs': record.lnrs,
             'proposals': record.proposals,
@@ -84,7 +84,7 @@ def handle_data():
         record.rooms_booked = data.get('rooms')
         
         record.lnr_calls = data.get('lnr_calls')
-        record.const_calls = data.get('const_calls')
+        record.leisure_calls = data.get('leisure_calls') # Updated
         
         record.rfps = data.get('rfps')
         record.lnrs = data.get('lnrs')
