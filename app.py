@@ -3,20 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import pandas as pd
 from datetime import datetime
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
 import base64
 import re
+import requests  # We use this to talk to SendGrid over HTTP (works on PythonAnywhere free tier)
 
 app = Flask(__name__)
 
-# --- EMAIL CONFIGURATION ---
-SMTP_EMAIL = "orangefalconrev@gmail.com"        # <--- PUT YOUR EMAIL HERE
-SMTP_PASSWORD = "zccc opry odun gpla"      # <--- PUT YOUR APP PASSWORD HERE
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
+# --- SENDGRID CONFIGURATION ---
+# I have inserted your key below. 
+# IMPORTANT: You must verify the SENDER_EMAIL in SendGrid Settings -> Sender Authentication
+SENDGRID_API_KEY = "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"
+SENDER_EMAIL = "orangefalconrev@gmail.com"  # <--- CHANGE THIS to your verified SendGrid sender email
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
@@ -218,6 +215,7 @@ def update_data():
     record.sales_rooms = request.form.get('sales_rooms')
     record.estimated_revenue = request.form.get('estimated_revenue')
 
+    # EXCEL PARSING RESTORED
     if 'excel_file' in request.files:
         file = request.files['excel_file']
         if file.filename != '':
@@ -230,6 +228,7 @@ def update_data():
     db.session.commit()
     return jsonify({'message': 'Data updated'})
 
+# --- SENDGRID EMAIL LOGIC (HTTP) ---
 @app.route('/api/share', methods=['POST'])
 def share_report():
     try:
@@ -240,43 +239,57 @@ def share_report():
         if not recipient or not image_data:
             return jsonify({'success': False, 'message': 'Missing data'}), 400
 
-        image_data = re.sub('^data:image/.+;base64,', '', image_data)
-        img_bytes = base64.b64decode(image_data)
+        # Clean base64 string
+        image_data_clean = re.sub('^data:image/.+;base64,', '', image_data)
 
-        msg = MIMEMultipart()
-        msg['Subject'] = "Orange Falcon Sales Pulse Report"
-        msg['From'] = SMTP_EMAIL
-        msg['To'] = recipient
+        # SendGrid API Endpoint (Works on Free Tier)
+        url = "https://api.sendgrid.com/v3/mail/send"
+        
+        headers = {
+            "Authorization": f"Bearer {SENDGRID_API_KEY}",
+            "Content-Type": "application/json"
+        }
 
-        # EMAIL BODY UPDATE
-        html_body = """
-        <html>
-          <body style="background-color: #000; color: #fff; font-family: sans-serif; padding: 20px;">
-            <h2 style="color: #FF9F0A;">Orange Falcon Sales Pulse Report</h2>
-            <p>Here are the key insights of your property</p>
-            <br>
-            <img src="cid:dashboard_image" style="width: 100%; max-width: 800px; border-radius: 12px; border: 1px solid #333;">
-            <br><br>
-            <p style="color: #888; font-size: 12px;">Orange Falcon (Formerly Known As Orange Technolab LLC) &copy; 2025</p>
-          </body>
-        </html>
-        """
-        msg.attach(MIMEText(html_body, 'html'))
+        # Construct JSON Payload
+        payload = {
+            "personalizations": [{"to": [{"email": recipient}]}],
+            "from": {"email": SENDER_EMAIL},
+            "subject": "Orange Falcon Sales Pulse Report",
+            "content": [{
+                "type": "text/html",
+                "value": """
+                    <div style="background-color: #000; color: #fff; font-family: sans-serif; padding: 20px;">
+                        <h2 style="color: #FF9F0A;">Orange Falcon Sales Pulse Report</h2>
+                        <p>Here are the key insights of your property</p>
+                        <br>
+                        <img src="cid:dashboard_image" style="width: 100%; max-width: 800px; border-radius: 12px; border: 1px solid #333;">
+                        <br><br>
+                        <p style="color: #888; font-size: 12px;">Orange Falcon (Formerly Known As Orange Technolab LLC) &copy; 2025</p>
+                    </div>
+                """
+            }],
+            "attachments": [{
+                "content": image_data_clean,
+                "type": "image/png",
+                "filename": "dashboard.png",
+                "disposition": "inline",
+                "content_id": "dashboard_image"
+            }]
+        }
 
-        image = MIMEImage(img_bytes, name="dashboard.png")
-        image.add_header('Content-ID', '<dashboard_image>')
-        image.add_header('Content-Disposition', 'inline', filename='dashboard.png')
-        msg.attach(image)
+        # Send POST request
+        response = requests.post(url, headers=headers, json=payload)
 
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_EMAIL, SMTP_PASSWORD)
-            server.send_message(msg)
-
-        return jsonify({'success': True, 'message': 'Email sent successfully'})
+        # Check response
+        if response.status_code in [200, 202]:
+            return jsonify({'success': True, 'message': 'Email sent successfully'})
+        else:
+            # Log exact error from SendGrid for debugging
+            print(f"SendGrid Error: {response.status_code} - {response.text}")
+            return jsonify({'success': False, 'message': f"SendGrid Error: {response.text}"}), 500
 
     except Exception as e:
-        print(f"Email Error: {e}")
+        print(f"System Error: {e}")
         return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
