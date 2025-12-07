@@ -17,6 +17,8 @@
             --accent-orange: #FF9F0A; 
             --accent-blue: #0A84FF;
             --accent-green: #30D158;
+            --accent-red: #FF375F;
+            --accent-purple: #BF5AF2;
             --accent-gradient: linear-gradient(135deg, #FF9F0A 0%, #FF375F 100%);
             --radius: 24px;
         }
@@ -26,7 +28,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 20px; /* Reduced padding for mobile */
+            padding: 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -46,7 +48,7 @@
         .logo { width: 50px; height: 50px; background: #fff; border-radius: 12px; padding: 4px; object-fit: contain; }
         
         h1 { 
-            font-size: 28px; /* Slightly smaller for mobile safety */
+            font-size: 28px; 
             font-weight: 700; 
             margin: 0; 
             background: var(--accent-gradient); 
@@ -66,7 +68,7 @@
         /* --- GRID LAYOUT --- */
         .grid { 
             display: grid; 
-            grid-template-columns: 1fr 1fr 1fr; /* Default Desktop */
+            grid-template-columns: 1fr 1fr 1fr; 
             gap: 20px; 
             width: 100%; 
             max-width: 1000px; 
@@ -79,7 +81,7 @@
             border: 1px solid var(--border-color); 
             display: flex; 
             flex-direction: column; 
-            min-width: 0; /* Prevents flex overflow */
+            min-width: 0; 
         }
         
         /* Desktop Spans */
@@ -97,22 +99,51 @@
         .chart-row { display: flex; gap: 20px; height: 220px; width: 100%; }
         .chart-container { flex: 1; position: relative; height: 100%; width: 100%; min-width: 0; }
         
-        /* Source Section Stats (Right Side) */
+        /* DIAL / GAUGE STYLES */
+        .dial-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .dial-container {
+            position: relative;
+            height: 140px;
+            width: 30%;
+            display: flex;
+            justify-content: center;
+        }
+        .dial-overlay {
+            position: absolute;
+            bottom: 25px; 
+            text-align: center;
+            width: 100%;
+        }
+        .dial-percent { font-size: 24px; font-weight: 700; color: white; }
+        .dial-sub { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; margin-top: 2px; }
+        
+        .fin-summary-row {
+            display: flex;
+            justify-content: space-between;
+            background: #2C2C2E;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .fin-item { text-align: center; flex: 1; min-width: 100px; }
+        .fin-item-val { font-size: 16px; font-weight: 700; color: #fff; display: block; }
+        .fin-item-lbl { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; margin-top: 4px; display: block;}
+
+
+        /* Source Section Stats */
         .source-stats { width: 200px; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #333; }
-
-        /* Financial Grid (Inside Card) */
-        .fin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-
-        /* Tables */
-        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
-        .fin-table { width: 100%; border-collapse: collapse; margin-top: 10px; min-width: 300px; }
-        .fin-table th { text-align: left; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; padding-bottom: 10px; border-bottom: 1px solid #333; }
-        .fin-table td { padding: 12px 0; border-bottom: 1px solid #2C2C2E; font-size: 14px; color: #fff; }
-        .fin-val { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 
         /* Logs Table */
         .logs-wrapper { max-height: 400px; overflow-y: auto; margin-top: 10px; }
-        .log-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; /* Forces scroll on small screens */ }
+        .log-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
         .log-table th { position: sticky; top: 0; background: var(--card-bg); padding: 10px; text-align: left; color: var(--accent-orange); font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #444; }
         .log-table td { padding: 10px; border-bottom: 1px solid #333; color: #ddd; }
         .tag { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
@@ -120,11 +151,14 @@
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
         .modal.active { display: flex; }
-        .modal-content { background: #1C1C1E; padding: 30px; border-radius: 24px; width: 550px; max-height: 90vh; overflow-y: auto; border: 1px solid #333; }
+        .modal-content { background: #1C1C1E; padding: 30px; border-radius: 24px; width: 600px; max-height: 90vh; overflow-y: auto; border: 1px solid #333; }
         
+        .modal-section-title { color: #fff; font-size: 13px; font-weight: 700; margin: 20px 0 10px 0; padding-bottom: 5px; border-bottom: 1px solid #444; text-transform: uppercase; letter-spacing: 0.5px; }
+
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 11px; color: var(--accent-orange); margin-bottom: 5px; font-weight: 600; text-transform: uppercase; }
-        .input-group input { width: 100%; padding: 12px; background: #2C2C2E; color: white; border: 1px solid #444; border-radius: 10px; outline: none; font-size: 16px; /* Prevents zoom on iOS */ }
+        .input-group input { width: 100%; padding: 12px; background: #2C2C2E; color: white; border: 1px solid #444; border-radius: 10px; outline: none; font-size: 15px; box-sizing: border-box; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         /* Switches */
         .switch-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 12px; background: #2C2C2E; border-radius: 10px; }
@@ -134,54 +168,31 @@
         .toggle-switch::before { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; top: 2px; left: 2px; background: white; transition: .3s; }
         .toggle-switch:checked::before { left: 20px; }
 
-        /* --- MOBILE RESPONSIVENESS (The Fix) --- */
+        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
             body { padding: 15px 10px; }
-            
-            /* Header Stack */
             header { flex-direction: column; gap: 20px; align-items: center; text-align: center; }
-            .brand-container { flex-direction: column; gap: 10px; }
-            .btn-group { width: 100%; justify-content: center; }
-
-            /* Grid Collapse */
             .grid { grid-template-columns: 1fr; gap: 15px; }
             .card.large, .card.full { grid-column: span 1; }
-
-            /* Charts Stack */
             .chart-row { flex-direction: column; height: auto; }
             .chart-container { height: 250px; width: 100%; margin-bottom: 20px; }
-
-            /* Source Section Fix */
-            .source-stats { 
-                width: 100%; 
-                border-left: none; 
-                border-top: 1px solid #333; 
-                padding-left: 0; 
-                padding-top: 20px; 
-                flex-direction: row; 
-                justify-content: space-around; 
-            }
-
-            /* Financial Grid Stack */
-            .fin-grid { grid-template-columns: 1fr; gap: 20px; }
-
-            /* Modal Fix */
-            .modal-content { width: 90%; padding: 20px; }
+            .source-stats { width: 100%; border-left: none; border-top: 1px solid #333; padding-left: 0; padding-top: 20px; flex-direction: row; justify-content: space-around; }
+            
+            .dial-row { flex-direction: column; align-items: center; }
+            .dial-container { width: 100%; height: 160px; margin-bottom: 10px; }
             
             h1 { font-size: 24px; }
             h2 { font-size: 16px; }
             .stat-huge { font-size: 32px; }
+            .input-grid { grid-template-columns: 1fr; }
+            .modal-content { width: 90%; padding: 20px; }
         }
 
-        /* Print Optimization */
         @media print {
             body { background: white !important; color: black !important; padding: 0 !important; }
             .grid { display: block; }
             .card { break-inside: avoid; border: 1px solid #ccc !important; margin-bottom: 20px; box-shadow: none !important; }
             .modal, .btn-group { display: none !important; }
-            /* Restore grid for print paper width */
-            .fin-grid { display: grid; grid-template-columns: 1fr 1fr; }
-            .chart-row { display: flex; height: 200px; }
             h1, h2, .stat-huge, td, th { color: black !important; }
         }
     </style>
@@ -203,7 +214,46 @@
     </header>
 
     <div class="grid">
-        <!-- 1. Revenue -->
+        
+        <!-- 1. TOP SECTION: Sales & Financial Dials -->
+        <div class="card full" id="card-financials">
+            <h2>Sales & Marketing Financial Report</h2>
+            <div class="dial-row">
+                <!-- Dial 1 -->
+                <div class="dial-container">
+                    <canvas id="dialYTD"></canvas>
+                    <div class="dial-overlay">
+                        <div class="dial-percent" id="lbl-ytd-pct">0%</div>
+                        <div class="dial-sub">YTD vs Last Year</div>
+                    </div>
+                </div>
+                <!-- Dial 2 -->
+                <div class="dial-container">
+                    <canvas id="dialMTD"></canvas>
+                    <div class="dial-overlay">
+                        <div class="dial-percent" id="lbl-mtd-pct">0%</div>
+                        <div class="dial-sub">MTD vs Forecast</div>
+                    </div>
+                </div>
+                <!-- Dial 3 -->
+                <div class="dial-container">
+                    <canvas id="dialRFP"></canvas>
+                    <div class="dial-overlay">
+                        <div class="dial-percent" id="lbl-rfp-pct">0%</div>
+                        <div class="dial-sub">RFP Consideration</div>
+                    </div>
+                </div>
+            </div>
+            <div class="fin-summary-row">
+                <div class="fin-item"><span class="fin-item-val" id="disp-ytd">$0</span><span class="fin-item-lbl">YTD Revenue</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-mtd">$0</span><span class="fin-item-lbl">MTD Revenue</span></div>
+                <div class="fin-item"><span class="fin-item-val" style="color: var(--accent-orange);" id="disp-est-rev">$0</span><span class="fin-item-lbl">Est. Revenue</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-sales-rooms">0</span><span class="fin-item-lbl">Sales Rooms</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-rfp-sub">0</span><span class="fin-item-lbl">RFPs Sent</span></div>
+            </div>
+        </div>
+
+        <!-- 2. Revenue -->
         <div class="card large" id="card-revenue">
             <h2>Property Performance</h2>
             <div class="stat-group">
@@ -212,7 +262,7 @@
             </div>
         </div>
 
-        <!-- 2. Pipeline -->
+        <!-- 3. Pipeline -->
         <div class="card" id="card-pipeline">
             <h2>Pipeline Pulse</h2>
             <div style="display: flex; flex-direction: column; justify-content: flex-end; height: 100%;">
@@ -227,7 +277,7 @@
             </div>
         </div>
 
-        <!-- 3. Activity -->
+        <!-- 4. Activity -->
         <div class="card large" id="card-activity">
             <h2>Activity: Corporate vs Leisure</h2>
             <div class="chart-row">
@@ -236,130 +286,99 @@
             </div>
         </div>
 
-        <!-- 4. Insight -->
+        <!-- 5. Insight -->
         <div class="card" style="justify-content: center;" id="card-insight">
              <h2>Key Insight</h2>
              <div style="font-size: 15px; line-height: 1.5; color: #D1D1D6;" id="auto-insight">Loading...</div>
         </div>
 
-        <!-- 5. Business Source -->
+        <!-- 6. Source -->
         <div class="card full" id="card-source">
             <h2>Business Source: RFP vs LNR</h2>
             <div class="chart-row">
                 <div class="chart-container"><canvas id="rfpBarChart"></canvas></div>
                 <div class="chart-container"><canvas id="rfpPieChart"></canvas></div>
                 <div class="source-stats">
-                    <div style="margin-bottom: 20px;">
-                        <div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div>
-                        <div class="stat-label">RFP Requests</div>
-                    </div>
-                    <div>
-                        <div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div>
-                        <div class="stat-label">LNR Contracts</div>
-                    </div>
+                    <div style="margin-bottom: 20px;"><div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div><div class="stat-label">RFP Requests</div></div>
+                    <div><div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div><div class="stat-label">LNR Contracts</div></div>
                 </div>
             </div>
         </div>
 
-        <!-- 6. Logs Table -->
+        <!-- 7. Logs -->
         <div class="card full" id="card-logs">
             <h2>Detailed Call Activity Log</h2>
             <div class="logs-wrapper table-wrap">
                 <table class="log-table">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Date</th>
-                            <th>Name / Group</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Category</th><th>Date</th><th>Name / Group</th><th>Status</th></tr></thead>
                     <tbody id="logs-body"></tbody>
                 </table>
             </div>
         </div>
-
-        <!-- 7. Financial Report -->
-        <div class="card full" id="card-financials">
-            <h2>Sales & Marketing Financial Report</h2>
-            <div class="fin-grid">
-                <div class="table-wrap">
-                    <table class="fin-table">
-                        <thead><tr><th>Category</th><th class="fin-val">Metric</th></tr></thead>
-                        <tbody>
-                            <tr><td>YTD Revenue</td><td class="fin-val" id="disp-ytd">$0</td></tr>
-                            <tr><td>Last Year YTD</td><td class="fin-val" id="disp-ly-ytd">$0</td></tr>
-                            <tr><td>MTD Revenue</td><td class="fin-val" id="disp-mtd">$0</td></tr>
-                            <tr><td>Last Year MTD</td><td class="fin-val" id="disp-ly-mtd">$0</td></tr>
-                            <tr><td style="color: var(--accent-orange);">MTD Forecast</td><td class="fin-val" style="color: var(--accent-orange);" id="disp-forecast">$0</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="table-wrap">
-                    <table class="fin-table">
-                        <thead><tr><th>Sales Activity</th><th class="fin-val">Metric</th></tr></thead>
-                        <tbody>
-                            <tr><td>RFPs Submitted</td><td class="fin-val" id="disp-rfp-sub">0</td></tr>
-                            <tr><td>RFPs in Consideration</td><td class="fin-val" id="disp-rfp-con">0</td></tr>
-                            <tr><td>Rooms Booked (Sales)</td><td class="fin-val" id="disp-sales-rooms">0</td></tr>
-                            <tr><td style="color: var(--accent-orange);">Estimated Revenue</td><td class="fin-val" style="color: var(--accent-orange);" id="disp-est-rev">$0</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <!-- Data Modal -->
+    <!-- UPDATE MODAL -->
     <div class="modal" id="dataModal">
         <div class="modal-content">
-            <h2 style="color: white; margin-bottom: 20px;">Dashboard Configuration</h2>
+            <h2 style="color: white; margin-bottom: 20px;">Update Dashboard Data</h2>
             
             <div style="background: #2C2C2E; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px dashed #555;">
                 <label style="color: var(--accent-orange); font-size: 11px; font-weight: bold; display: block; margin-bottom: 10px;">SMART UPLOAD (EXCEL)</label>
                 <input type="file" id="inp-excel" accept=".xlsx, .xls" style="color: white; font-size: 14px;">
             </div>
 
+            <!-- VISIBILITY SECTION -->
             <div style="margin-bottom: 25px; border: 1px solid #333; padding: 15px; border-radius: 12px;">
-                <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 10px;">VISIBILITY</div>
+                <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 10px;">SHOW / HIDE SECTIONS</div>
+                <div class="switch-row"><span class="switch-label">Financial & Sales (Top)</span><input type="checkbox" class="toggle-switch" id="vis-financials"></div>
                 <div class="switch-row"><span class="switch-label">Property Performance</span><input type="checkbox" class="toggle-switch" id="vis-revenue"></div>
                 <div class="switch-row"><span class="switch-label">Pipeline Pulse</span><input type="checkbox" class="toggle-switch" id="vis-pipeline"></div>
                 <div class="switch-row"><span class="switch-label">Activity (Charts)</span><input type="checkbox" class="toggle-switch" id="vis-activity"></div>
                 <div class="switch-row"><span class="switch-label">Key Insight</span><input type="checkbox" class="toggle-switch" id="vis-insight"></div>
                 <div class="switch-row"><span class="switch-label">Business Source</span><input type="checkbox" class="toggle-switch" id="vis-source"></div>
                 <div class="switch-row"><span class="switch-label">Call Logs (Table)</span><input type="checkbox" class="toggle-switch" id="vis-logs"></div>
-                <div class="switch-row"><span class="switch-label">Financial Report</span><input type="checkbox" class="toggle-switch" id="vis-financials"></div>
             </div>
 
             <div class="input-group"><label>Property Name</label><input type="text" id="inp-hotel"></div>
             <div class="input-group">
                 <label>Period</label>
                 <div style="display: flex; gap: 10px;">
-                    <input type="date" id="inp-start">
-                    <input type="date" id="inp-end">
+                    <input type="date" id="inp-start"><input type="date" id="inp-end">
                 </div>
             </div>
 
-            <div style="border-top: 1px solid #333; margin: 20px 0;"></div>
-            <div style="font-size: 12px; color: #888; margin-bottom: 10px; font-weight: bold;">MANUAL METRICS</div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div class="input-group"><label>Revenue</label><input type="number" id="inp-revenue"></div>
-                <div class="input-group"><label>Rooms</label><input type="number" id="inp-rooms"></div>
-                <div class="input-group"><label>YTD Rev</label><input type="number" id="inp-ytd"></div>
-                <div class="input-group"><label>MTD Rev</label><input type="number" id="inp-mtd"></div>
-                <div class="input-group"><label>Forecast</label><input type="number" id="inp-forecast"></div>
-                <div class="input-group"><label>Est Rev</label><input type="number" id="inp-est-rev"></div>
-                <div class="input-group"><label>Corp Calls</label><input type="number" id="inp-lnr"></div>
-                <div class="input-group"><label>Leisure Calls</label><input type="number" id="inp-leisure"></div>
-                <div class="input-group"><label>RFPs Sub</label><input type="number" id="inp-rfp-sub"></div>
-                <div class="input-group"><label>RFPs Con</label><input type="number" id="inp-rfp-con"></div>
-            </div>
-            
-            <input type="hidden" id="inp-ly-ytd"><input type="hidden" id="inp-ly-mtd">
+            <!-- FINANCIAL REPORT SECTION -->
+            <div class="modal-section-title">Financial Report Data (Top Card)</div>
+            <div class="input-grid">
+                <div class="input-group"><label>YTD Revenue</label><input type="number" id="inp-ytd"></div>
+                <div class="input-group"><label>Last Year YTD (Target)</label><input type="number" id="inp-ly-ytd"></div>
+                
+                <div class="input-group"><label>MTD Revenue</label><input type="number" id="inp-mtd"></div>
+                <div class="input-group"><label>MTD Forecast (Target)</label><input type="number" id="inp-forecast"></div>
 
-            <div style="margin-top: 20px;">
-                <button class="btn primary" style="width: 100%;" onclick="saveData()">Save & Upload</button>
+                <div class="input-group"><label>Sales Rooms</label><input type="number" id="inp-sales-rooms"></div>
+                <div class="input-group"><label>Estimated Revenue</label><input type="number" id="inp-est-rev"></div>
+
+                <div class="input-group"><label>RFPs Submitted</label><input type="number" id="inp-rfp-sub"></div>
+                <div class="input-group"><label>RFPs Consideration</label><input type="number" id="inp-rfp-con"></div>
+            </div>
+
+            <!-- PROPERTY PERFORMANCE SECTION -->
+            <div class="modal-section-title">Property Performance (2nd Card)</div>
+            <div class="input-grid">
+                <div class="input-group"><label>Total Hotel Revenue</label><input type="number" id="inp-revenue"></div>
+                <div class="input-group"><label>Total Rooms Booked</label><input type="number" id="inp-rooms"></div>
+            </div>
+
+            <!-- ACTIVITY SECTION -->
+            <div class="modal-section-title">Sales Activity Data</div>
+            <div class="input-grid">
+                <div class="input-group"><label>Corporate Calls</label><input type="number" id="inp-lnr"></div>
+                <div class="input-group"><label>Leisure Calls</label><input type="number" id="inp-leisure"></div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="btn primary" style="width: 100%; padding: 12px; font-size: 16px;" onclick="saveData()">Save & Upload</button>
                 <button class="btn" style="width: 100%; margin-top: 10px; background: transparent; border: none;" onclick="closeModal()">Cancel</button>
             </div>
         </div>
@@ -367,8 +386,8 @@
 
     <script>
         let charts = {};
-        const fmt = (n) => '$' + parseInt(n).toLocaleString();
-        const num = (n) => parseInt(n).toLocaleString();
+        const fmt = (n) => '$' + parseInt(n || 0).toLocaleString();
+        const num = (n) => parseInt(n || 0).toLocaleString();
 
         function formatDate(dateStr) {
             if (!dateStr) return '';
@@ -377,9 +396,11 @@
         }
 
         async function loadData() {
-            const response = await fetch('/api/data');
-            const data = await response.json();
-            updateUI(data);
+            try {
+                const response = await fetch('/api/data');
+                const data = await response.json();
+                updateUI(data);
+            } catch (e) { console.error(e); }
         }
 
         async function saveData() {
@@ -392,26 +413,29 @@
             formData.append('start_date', document.getElementById('inp-start').value);
             formData.append('end_date', document.getElementById('inp-end').value);
             
-            formData.append('visible_revenue', document.getElementById('vis-revenue').checked);
-            formData.append('visible_pipeline', document.getElementById('vis-pipeline').checked);
-            formData.append('visible_activity', document.getElementById('vis-activity').checked);
-            formData.append('visible_insight', document.getElementById('vis-insight').checked);
-            formData.append('visible_source', document.getElementById('vis-source').checked);
-            formData.append('visible_logs', document.getElementById('vis-logs').checked);
-            formData.append('visible_financials', document.getElementById('vis-financials').checked);
+            const checks = ['revenue','pipeline','activity','insight','source','logs','financials'];
+            checks.forEach(c => formData.append('visible_'+c, document.getElementById('vis-'+c).checked));
 
-            formData.append('revenue', document.getElementById('inp-revenue').value);
-            formData.append('rooms', document.getElementById('inp-rooms').value);
-            formData.append('lnr_calls', document.getElementById('inp-lnr').value);
-            formData.append('leisure_calls', document.getElementById('inp-leisure').value);
+            // -- FINANCIALS --
             formData.append('ytd_revenue', document.getElementById('inp-ytd').value);
+            formData.append('last_year_ytd', document.getElementById('inp-ly-ytd').value);
             formData.append('mtd_revenue', document.getElementById('inp-mtd').value);
             formData.append('mtd_forecast', document.getElementById('inp-forecast').value);
             formData.append('estimated_revenue', document.getElementById('inp-est-rev').value);
+            formData.append('sales_rooms', document.getElementById('inp-sales-rooms').value);
             formData.append('rfps_submitted', document.getElementById('inp-rfp-sub').value);
             formData.append('rfps_consideration', document.getElementById('inp-rfp-con').value);
-            formData.append('last_year_ytd', document.getElementById('inp-ly-ytd').value);
-            formData.append('last_year_mtd', document.getElementById('inp-ly-mtd').value);
+            
+            // -- PROPERTY --
+            formData.append('revenue', document.getElementById('inp-revenue').value);
+            formData.append('rooms', document.getElementById('inp-rooms').value); // FIXED KEY
+
+            // -- ACTIVITY --
+            formData.append('lnr_calls', document.getElementById('inp-lnr').value);
+            formData.append('leisure_calls', document.getElementById('inp-leisure').value);
+            
+            // Fallbacks for missing fields in API
+            formData.append('last_year_mtd', '0'); 
 
             await fetch('/api/update', { method: 'POST', body: formData });
             closeModal();
@@ -420,10 +444,12 @@
 
         function updateUI(data) {
             // Visibility
-            const sections = ['revenue','pipeline','activity','insight','source','logs','financials'];
+            const sections = ['financials','revenue','pipeline','activity','insight','source','logs'];
             sections.forEach(s => {
-                document.getElementById('card-'+s).style.display = data['visible_'+s] ? (s === 'financials' || s === 'logs' || s === 'source' ? 'block' : 'flex') : 'none';
-                document.getElementById('vis-'+s).checked = data['visible_'+s];
+                const el = document.getElementById('card-'+s);
+                if(el) el.style.display = data['visible_'+s] ? (s === 'financials' || s === 'logs' || s === 'source' ? 'block' : 'flex') : 'none';
+                const sw = document.getElementById('vis-'+s);
+                if(sw) sw.checked = data['visible_'+s];
             });
 
             // Basic Info
@@ -432,23 +458,43 @@
             const end = data.end_date ? new Date(data.end_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
             document.getElementById('disp-period').innerText = `${start} - ${end}`;
 
-            // Metrics
+            // Top Card: Financials
+            document.getElementById('disp-ytd').innerText = fmt(data.ytd_revenue);
+            document.getElementById('disp-mtd').innerText = fmt(data.mtd_revenue);
+            document.getElementById('disp-est-rev').innerText = fmt(data.estimated_revenue);
+            document.getElementById('disp-sales-rooms').innerText = num(data.sales_rooms);
+            document.getElementById('disp-rfp-sub').innerText = num(data.rfps_submitted);
+
+            // 2nd Card: Property
             document.getElementById('disp-revenue').innerText = fmt(data.revenue);
-            document.getElementById('disp-rooms').innerText = num(data.rooms);
+            document.getElementById('disp-rooms').innerText = num(data.rooms); 
+
+            // Other Stats
             document.getElementById('disp-signed').innerText = data.signed;
             document.getElementById('disp-proposals').innerText = data.proposals;
             document.getElementById('disp-rfps').innerText = data.rfps;
             document.getElementById('disp-lnrs').innerText = data.lnrs;
-            document.getElementById('disp-ytd').innerText = fmt(data.ytd_revenue);
-            document.getElementById('disp-ly-ytd').innerText = fmt(data.last_year_ytd);
-            document.getElementById('disp-mtd').innerText = fmt(data.mtd_revenue);
-            document.getElementById('disp-ly-mtd').innerText = fmt(data.last_year_mtd);
-            document.getElementById('disp-forecast').innerText = fmt(data.mtd_forecast);
-            document.getElementById('disp-rfp-sub').innerText = num(data.rfps_submitted);
-            document.getElementById('disp-rfp-con').innerText = num(data.rfps_consideration);
-            document.getElementById('disp-est-rev').innerText = fmt(data.estimated_revenue);
 
-            // LOGS TABLE
+            // Inputs Sync
+            document.getElementById('inp-hotel').value = data.hotel_name;
+            document.getElementById('inp-start').value = data.start_date;
+            document.getElementById('inp-end').value = data.end_date;
+            
+            document.getElementById('inp-ytd').value = data.ytd_revenue;
+            document.getElementById('inp-ly-ytd').value = data.last_year_ytd;
+            document.getElementById('inp-mtd').value = data.mtd_revenue;
+            document.getElementById('inp-forecast').value = data.mtd_forecast;
+            document.getElementById('inp-est-rev').value = data.estimated_revenue;
+            document.getElementById('inp-sales-rooms').value = data.sales_rooms;
+            document.getElementById('inp-rfp-sub').value = data.rfps_submitted;
+            document.getElementById('inp-rfp-con').value = data.rfps_consideration;
+
+            document.getElementById('inp-revenue').value = data.revenue;
+            document.getElementById('inp-rooms').value = data.rooms;
+            document.getElementById('inp-lnr').value = data.lnr_calls;
+            document.getElementById('inp-leisure').value = data.leisure_calls;
+
+            // Logs
             const tbody = document.getElementById('logs-body');
             tbody.innerHTML = ''; 
             if(data.logs && data.logs.length > 0) {
@@ -460,9 +506,7 @@
                     const typeIdx = uniqueTypes.indexOf(log.type) % colors.length;
                     const color = colors[typeIdx];
                     const bg = color + '33';
-                    
-                    let displayType = log.type;
-                    if(displayType.length > 20) displayType = displayType.substring(0, 18) + '..';
+                    let displayType = log.type.length > 20 ? log.type.substring(0, 18) + '..' : log.type;
 
                     tr.innerHTML = `
                         <td><span class="tag" style="background: ${bg}; color: ${color};">${displayType}</span></td>
@@ -476,25 +520,8 @@
                 tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: #666;">No valid logs found. Try uploading the report.</td></tr>';
             }
 
-            // Inputs Sync
-            document.getElementById('inp-hotel').value = data.hotel_name;
-            document.getElementById('inp-start').value = data.start_date;
-            document.getElementById('inp-end').value = data.end_date;
-            document.getElementById('inp-revenue').value = data.revenue;
-            document.getElementById('inp-rooms').value = data.rooms;
-            document.getElementById('inp-lnr').value = data.lnr_calls;
-            document.getElementById('inp-leisure').value = data.leisure_calls;
-            document.getElementById('inp-ytd').value = data.ytd_revenue;
-            document.getElementById('inp-ly-ytd').value = data.last_year_ytd;
-            document.getElementById('inp-mtd').value = data.mtd_revenue;
-            document.getElementById('inp-ly-mtd').value = data.last_year_mtd;
-            document.getElementById('inp-forecast').value = data.mtd_forecast;
-            document.getElementById('inp-rfp-sub').value = data.rfps_submitted;
-            document.getElementById('inp-rfp-con').value = data.rfps_consideration;
-            document.getElementById('inp-est-rev').value = data.estimated_revenue;
-
             // Insight
-            const totalCalls = parseInt(data.lnr_calls) + parseInt(data.leisure_calls);
+            const totalCalls = parseInt(data.lnr_calls || 0) + parseInt(data.leisure_calls || 0);
             document.getElementById('auto-insight').innerHTML = `
                 <strong>${data.hotel_name}</strong> is seeing momentum with <strong>${data.logs ? data.logs.length : 0} detailed activities</strong> logged. 
                 Sales activity remains high with <strong>${totalCalls} total interactions</strong> tracked in the charts. 
@@ -510,6 +537,37 @@
             Chart.defaults.scale.grid.color = chartDefaults.borderColor;
             Object.values(charts).forEach(c => c.destroy());
 
+            if(data.visible_financials) {
+                const createDial = (ctxId, val, max, color) => {
+                    val = parseInt(val || 0); max = parseInt(max || 0);
+                    const remaining = Math.max(0, max - val);
+                    return new Chart(document.getElementById(ctxId), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Achieved', 'Remaining'],
+                            datasets: [{ data: [val, remaining], backgroundColor: [color, '#2C2C2E'], borderWidth: 0, borderRadius: 5 }]
+                        },
+                        options: {
+                            responsive: true, maintainAspectRatio: false, circumference: 180, rotation: -90, cutout: '80%',      
+                            plugins: { legend: { display: false }, tooltip: { enabled: false } }
+                        }
+                    });
+                };
+
+                const ytdPct = data.last_year_ytd > 0 ? Math.round((data.ytd_revenue / data.last_year_ytd)*100) : 0;
+                document.getElementById('lbl-ytd-pct').innerText = ytdPct + "%";
+                document.getElementById('lbl-ytd-pct').style.color = ytdPct >= 100 ? '#30D158' : 'white';
+                charts.dialYTD = createDial('dialYTD', data.ytd_revenue, data.last_year_ytd, '#30D158');
+
+                const mtdPct = data.mtd_forecast > 0 ? Math.round((data.mtd_revenue / data.mtd_forecast)*100) : 0;
+                document.getElementById('lbl-mtd-pct').innerText = mtdPct + "%";
+                charts.dialMTD = createDial('dialMTD', data.mtd_revenue, data.mtd_forecast, '#0A84FF');
+
+                const rfpPct = data.rfps_submitted > 0 ? Math.round((data.rfps_consideration / data.rfps_submitted)*100) : 0;
+                document.getElementById('lbl-rfp-pct').innerText = rfpPct + "%";
+                charts.dialRFP = createDial('dialRFP', data.rfps_consideration, data.rfps_submitted, '#BF5AF2');
+            }
+
             if(data.visible_activity) {
                 charts.actBar = new Chart(document.getElementById('barChart'), {
                     type: 'bar',
@@ -522,6 +580,7 @@
                     options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' }, title: { display: true, text: 'Activity Mix', color: '#fff' } } }
                 });
             }
+
             if(data.visible_source) {
                 charts.rfpBar = new Chart(document.getElementById('rfpBarChart'), {
                     type: 'bar',
