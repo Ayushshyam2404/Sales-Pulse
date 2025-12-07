@@ -3,8 +3,20 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import pandas as pd
 from datetime import datetime
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+import base64
+import re
 
 app = Flask(__name__)
+
+# --- EMAIL CONFIGURATION ---
+SMTP_EMAIL = "orangefalconrev@gmail.com"        # <--- PUT YOUR EMAIL HERE
+SMTP_PASSWORD = "zccc opry odun gpla"      # <--- PUT YOUR APP PASSWORD HERE
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
@@ -19,7 +31,6 @@ class ReportData(db.Model):
     start_date = db.Column(db.String(20), default="")
     end_date = db.Column(db.String(20), default="")
 
-    # Visibility Flags
     visible_revenue = db.Column(db.Boolean, default=True)
     visible_pipeline = db.Column(db.Boolean, default=True)
     visible_activity = db.Column(db.Boolean, default=True)
@@ -28,7 +39,6 @@ class ReportData(db.Model):
     visible_financials = db.Column(db.Boolean, default=True)
     visible_logs = db.Column(db.Boolean, default=True)
 
-    # Data Fields
     revenue = db.Column(db.Integer, default=14500)
     rooms_booked = db.Column(db.Integer, default=120)
     lnr_calls = db.Column(db.Integer, default=42)
@@ -51,7 +61,7 @@ class ReportData(db.Model):
 
 class CallLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    log_type = db.Column(db.String(100)) # The Section Name (e.g., Construction)
+    log_type = db.Column(db.String(100)) 
     date = db.Column(db.String(50))
     name = db.Column(db.String(100))
     status = db.Column(db.String(100))
@@ -65,80 +75,57 @@ with app.app_context():
 
 # --- SMART PARSING LOGIC ---
 def smart_parse_excel(file_storage):
-    """
-    1. Finds the 'Header Row' (row with 'Date' or 'Status').
-    2. Identifies blocks of columns belonging to a section.
-    3. Extracts Section Title from the row above.
-    """
     try:
-        # Load excel, no header initially to scan all rows
         df = pd.read_excel(file_storage, header=None)
         
         # 1. FIND THE HEADER ROW
-        # We look for a row that contains "Date" AND "Name"
         header_row_idx = -1
-        for r in range(min(10, len(df))): # Scan top 10 rows
+        for r in range(min(10, len(df))): 
             row_values = [str(x).lower() for x in df.iloc[r].tolist()]
             if any("date" in x for x in row_values) and any("name" in x for x in row_values):
                 header_row_idx = r
                 break
         
-        if header_row_idx == -1: return [] # Couldn't find structure
+        if header_row_idx == -1: return [] 
 
-        # 2. SCAN COLUMNS TO FIND SECTIONS
-        # A section usually starts with a Date or Name column
+        # 2. SCAN COLUMNS
         logs = []
         cols = len(df.columns)
         
-        # We iterate columns to find "Date" columns. 
-        # When we find one, we look for its neighbors (Name, Status)
         for c in range(cols):
             col_header = str(df.iloc[header_row_idx, c]).lower()
             
-            # Logic: If this column is a "Date" column, it's the anchor for a section
             if "date" in col_header:
-                
-                # A. Determine Section Title (Row Above)
-                # Usually located in the same column or slightly left due to merge
+                # Determine Section Title
                 title = str(df.iloc[header_row_idx - 1, c]).strip()
                 if title == "nan" or title == "":
-                    # Try checking one column to the left (merged cells often store val in top-left)
                     if c > 0: title = str(df.iloc[header_row_idx - 1, c - 1]).strip()
-                
                 if title == "nan": title = "General Activity"
 
-                # B. Find Neighboring 'Name' and 'Status' columns
-                # We scan locally (e.g., next 3 columns)
+                # Find Neighbors
                 name_col_idx = -1
                 status_col_idx = -1
                 
-                # Check current col + next 3
                 for offset in range(4): 
                     if c + offset >= cols: break
                     neighbor_header = str(df.iloc[header_row_idx, c + offset]).lower()
                     
                     if "name" in neighbor_header and "group" in neighbor_header: name_col_idx = c + offset
                     elif "name" in neighbor_header and "guest" in neighbor_header: name_col_idx = c + offset
-                    elif "name" in neighbor_header and name_col_idx == -1: name_col_idx = c + offset # fallback
+                    elif "name" in neighbor_header and name_col_idx == -1: name_col_idx = c + offset 
                     
                     if "status" in neighbor_header: status_col_idx = c + offset
 
-                # C. Extract Data
+                # Extract Data
                 if name_col_idx != -1:
                     start_data_row = header_row_idx + 1
                     for r in range(start_data_row, len(df)):
                         name_val = df.iloc[r, name_col_idx]
-                        
-                        # Stop if name is empty (end of list)
-                        if pd.isna(name_val) or str(name_val).strip() == "":
-                            # Check if next few rows are also empty (sometimes there's a single blank line)
-                            # simple heuristic: if name is empty, skip row.
-                            continue 
+                        if pd.isna(name_val) or str(name_val).strip() == "": continue 
                         
                         date_val = df.iloc[r, c]
                         status_val = df.iloc[r, status_col_idx] if status_col_idx != -1 else ""
 
-                        # Format Date
                         date_str = str(date_val)
                         if isinstance(date_val, datetime):
                             date_str = date_val.strftime('%m/%d/%y')
@@ -167,10 +154,7 @@ def get_data():
     logs = CallLog.query.all()
     
     log_list = [{
-        'type': l.log_type,
-        'date': l.date,
-        'name': l.name,
-        'status': l.status
+        'type': l.log_type, 'date': l.date, 'name': l.name, 'status': l.status
     } for l in logs]
 
     return jsonify({
@@ -208,12 +192,10 @@ def get_data():
 def update_data():
     record = ReportData.query.first()
     
-    # Text Data
     record.hotel_name = request.form.get('hotel_name')
     record.start_date = request.form.get('start_date')
     record.end_date = request.form.get('end_date')
     
-    # Visibility
     record.visible_revenue = request.form.get('visible_revenue') == 'true'
     record.visible_pipeline = request.form.get('visible_pipeline') == 'true'
     record.visible_activity = request.form.get('visible_activity') == 'true'
@@ -222,7 +204,6 @@ def update_data():
     record.visible_financials = request.form.get('visible_financials') == 'true'
     record.visible_logs = request.form.get('visible_logs') == 'true'
 
-    # Metrics
     record.revenue = request.form.get('revenue')
     record.rooms_booked = request.form.get('rooms')
     record.lnr_calls = request.form.get('lnr_calls')
@@ -236,19 +217,67 @@ def update_data():
     record.rfps_consideration = request.form.get('rfps_consideration')
     record.sales_rooms = request.form.get('sales_rooms')
     record.estimated_revenue = request.form.get('estimated_revenue')
-    
-    # SMART EXCEL PARSING
+
     if 'excel_file' in request.files:
         file = request.files['excel_file']
         if file.filename != '':
             logs = smart_parse_excel(file)
             if logs:
-                db.session.query(CallLog).delete() # Clear old only if new ones found
+                db.session.query(CallLog).delete()
                 db.session.add_all(logs)
 
     record.last_updated = datetime.utcnow()
     db.session.commit()
     return jsonify({'message': 'Data updated'})
+
+@app.route('/api/share', methods=['POST'])
+def share_report():
+    try:
+        data = request.json
+        recipient = data.get('email')
+        image_data = data.get('image')
+
+        if not recipient or not image_data:
+            return jsonify({'success': False, 'message': 'Missing data'}), 400
+
+        image_data = re.sub('^data:image/.+;base64,', '', image_data)
+        img_bytes = base64.b64decode(image_data)
+
+        msg = MIMEMultipart()
+        msg['Subject'] = "Orange Falcon Sales Pulse Report"
+        msg['From'] = SMTP_EMAIL
+        msg['To'] = recipient
+
+        # EMAIL BODY UPDATE
+        html_body = """
+        <html>
+          <body style="background-color: #000; color: #fff; font-family: sans-serif; padding: 20px;">
+            <h2 style="color: #FF9F0A;">Orange Falcon Sales Pulse Report</h2>
+            <p>Here are the key insights of your property</p>
+            <br>
+            <img src="cid:dashboard_image" style="width: 100%; max-width: 800px; border-radius: 12px; border: 1px solid #333;">
+            <br><br>
+            <p style="color: #888; font-size: 12px;">Orange Falcon (Formerly Known As Orange Technolab LLC) &copy; 2025</p>
+          </body>
+        </html>
+        """
+        msg.attach(MIMEText(html_body, 'html'))
+
+        image = MIMEImage(img_bytes, name="dashboard.png")
+        image.add_header('Content-ID', '<dashboard_image>')
+        image.add_header('Content-Disposition', 'inline', filename='dashboard.png')
+        msg.attach(image)
+
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_EMAIL, SMTP_PASSWORD)
+            server.send_message(msg)
+
+        return jsonify({'success': True, 'message': 'Email sent successfully'})
+
+    except Exception as e:
+        print(f"Email Error: {e}")
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
