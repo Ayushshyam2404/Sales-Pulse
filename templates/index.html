@@ -565,6 +565,20 @@
                 <div class="stat-box"><div class="stat-label" id="lbl-total-revenue">Total Revenue</div><div class="stat-huge" id="disp-revenue">$0</div></div>
                 <div class="stat-box" style="text-align: right;"><div class="stat-label" id="lbl-rooms-booked">Rooms Booked</div><div class="stat-huge" style="color: var(--accent-orange);" id="disp-rooms">0</div></div>
             </div>
+            <div style="border-top: 1px solid #333; margin-top: 20px; padding-top: 20px; display: flex; gap: 30px;">
+                <div style="flex: 1;">
+                    <div class="stat-label" id="lbl-past-revenue" style="margin-bottom: 8px;">Past Stayed Revenue from Sales</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #30D158;" id="disp-past-revenue">$0</div>
+                    <div class="stat-label" id="lbl-past-rooms" style="margin-top: 6px;">Rooms</div>
+                    <div style="font-size: 16px; font-weight: 600; color: #fff;" id="disp-past-rooms">0</div>
+                </div>
+                <div style="flex: 1; text-align: right;">
+                    <div class="stat-label" id="lbl-upcoming-revenue" style="margin-bottom: 8px;">Upcoming Revenue OTB from Sales</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #0A84FF;" id="disp-upcoming-revenue">$0</div>
+                    <div class="stat-label" id="lbl-upcoming-rooms" style="margin-top: 6px;">Rooms</div>
+                    <div style="font-size: 16px; font-weight: 600; color: #fff;" id="disp-upcoming-rooms">0</div>
+                </div>
+            </div>
         </div>
 
         <!-- 3. Pipeline -->
@@ -738,6 +752,10 @@
             <div class="input-grid">
                 <div class="input-group"><label>Total Revenue Label</label><input type="text" id="inp-label-total-revenue"></div>
                 <div class="input-group"><label>Rooms Booked Label</label><input type="text" id="inp-label-rooms-booked"></div>
+                <div class="input-group"><label>Past Revenue Label</label><input type="text" id="inp-label-past-revenue"></div>
+                <div class="input-group"><label>Past Rooms Label</label><input type="text" id="inp-label-past-rooms"></div>
+                <div class="input-group"><label>Upcoming Revenue Label</label><input type="text" id="inp-label-upcoming-revenue"></div>
+                <div class="input-group"><label>Upcoming Rooms Label</label><input type="text" id="inp-label-upcoming-rooms"></div>
                 <div class="input-group"><label>Active Proposals Label</label><input type="text" id="inp-label-active-proposals"></div>
                 <div class="input-group"><label>Signed Contracts Label</label><input type="text" id="inp-label-signed-contracts"></div>
                 <div class="input-group"><label>YTD Revenue Label</label><input type="text" id="inp-label-ytd-rev"></div>
@@ -777,6 +795,10 @@
             <div class="input-grid">
                 <div class="input-group"><label>Total Hotel Revenue</label><input type="number" id="inp-revenue"></div>
                 <div class="input-group"><label>Total Rooms Booked</label><input type="number" id="inp-rooms"></div>
+                <div class="input-group"><label>Past Stayed Revenue</label><input type="number" id="inp-past-revenue"></div>
+                <div class="input-group"><label>Past Stayed Rooms</label><input type="number" id="inp-past-rooms"></div>
+                <div class="input-group"><label>Upcoming OTB Revenue</label><input type="number" id="inp-upcoming-revenue"></div>
+                <div class="input-group"><label>Upcoming OTB Rooms</label><input type="number" id="inp-upcoming-rooms"></div>
             </div>
 
             <!-- ACTIVITY SECTION -->
@@ -918,6 +940,10 @@
             // -- PROPERTY --
             formData.append('revenue', document.getElementById('inp-revenue').value);
             formData.append('rooms', document.getElementById('inp-rooms').value);
+            formData.append('past_revenue', document.getElementById('inp-past-revenue').value);
+            formData.append('past_rooms', document.getElementById('inp-past-rooms').value);
+            formData.append('upcoming_revenue', document.getElementById('inp-upcoming-revenue').value);
+            formData.append('upcoming_rooms', document.getElementById('inp-upcoming-rooms').value);
 
             // -- ACTIVITY --
             formData.append('lnr_calls', document.getElementById('inp-lnr').value);
@@ -947,6 +973,10 @@
             // -- STAT LABELS --
             formData.append('label_total_revenue', document.getElementById('inp-label-total-revenue').value);
             formData.append('label_rooms_booked', document.getElementById('inp-label-rooms-booked').value);
+            formData.append('label_past_revenue', document.getElementById('inp-label-past-revenue').value || 'Past Stayed Revenue from Sales');
+            formData.append('label_past_rooms', document.getElementById('inp-label-past-rooms').value || 'Rooms');
+            formData.append('label_upcoming_revenue', document.getElementById('inp-label-upcoming-revenue').value || 'Upcoming Revenue OTB from Sales');
+            formData.append('label_upcoming_rooms', document.getElementById('inp-label-upcoming-rooms').value || 'Rooms');
             formData.append('label_active_proposals', document.getElementById('inp-label-active-proposals').value);
             formData.append('label_signed_contracts', document.getElementById('inp-label-signed-contracts').value);
             formData.append('label_ytd_rev', document.getElementById('inp-label-ytd-rev').value);
@@ -1010,6 +1040,10 @@
             // Update all stat labels
             document.getElementById('lbl-total-revenue').innerText = data.label_total_revenue;
             document.getElementById('lbl-rooms-booked').innerText = data.label_rooms_booked;
+            document.getElementById('lbl-past-revenue').innerText = data.label_past_revenue;
+            document.getElementById('lbl-past-rooms').innerText = data.label_past_rooms;
+            document.getElementById('lbl-upcoming-revenue').innerText = data.label_upcoming_revenue;
+            document.getElementById('lbl-upcoming-rooms').innerText = data.label_upcoming_rooms;
             document.getElementById('lbl-active-proposals').innerText = data.label_active_proposals;
             document.getElementById('lbl-signed-contracts').innerText = data.label_signed_contracts;
             document.getElementById('lbl-ytd-rev').innerText = data.label_ytd_rev;
@@ -1027,7 +1061,11 @@
 
             // 2nd Card: Property
             document.getElementById('disp-revenue').innerText = fmt(data.revenue);
-            document.getElementById('disp-rooms').innerText = num(data.rooms); 
+            document.getElementById('disp-rooms').innerText = num(data.rooms);
+            document.getElementById('disp-past-revenue').innerText = fmt(data.past_revenue);
+            document.getElementById('disp-past-rooms').innerText = num(data.past_rooms);
+            document.getElementById('disp-upcoming-revenue').innerText = fmt(data.upcoming_revenue);
+            document.getElementById('disp-upcoming-rooms').innerText = num(data.upcoming_rooms);
 
             // Other Stats
             document.getElementById('disp-signed').innerText = data.signed;
@@ -1051,6 +1089,10 @@
 
             document.getElementById('inp-revenue').value = data.revenue;
             document.getElementById('inp-rooms').value = data.rooms;
+            document.getElementById('inp-past-revenue').value = data.past_revenue;
+            document.getElementById('inp-past-rooms').value = data.past_rooms;
+            document.getElementById('inp-upcoming-revenue').value = data.upcoming_revenue;
+            document.getElementById('inp-upcoming-rooms').value = data.upcoming_rooms;
             document.getElementById('inp-lnr').value = data.lnr_calls;
             document.getElementById('inp-leisure').value = data.leisure_calls;
 
@@ -1079,6 +1121,10 @@
             // Stat labels
             document.getElementById('inp-label-total-revenue').value = data.label_total_revenue;
             document.getElementById('inp-label-rooms-booked').value = data.label_rooms_booked;
+            document.getElementById('inp-label-past-revenue').value = data.label_past_revenue;
+            document.getElementById('inp-label-past-rooms').value = data.label_past_rooms;
+            document.getElementById('inp-label-upcoming-revenue').value = data.label_upcoming_revenue;
+            document.getElementById('inp-label-upcoming-rooms').value = data.label_upcoming_rooms;
             document.getElementById('inp-label-active-proposals').value = data.label_active_proposals;
             document.getElementById('inp-label-signed-contracts').value = data.label_signed_contracts;
             document.getElementById('inp-label-ytd-rev').value = data.label_ytd_rev;

@@ -39,6 +39,10 @@ class ReportData(db.Model):
 
     revenue = db.Column(db.Integer, default=14500)
     rooms_booked = db.Column(db.Integer, default=120)
+    past_revenue = db.Column(db.Integer, default=45000)
+    past_rooms = db.Column(db.Integer, default=85)
+    upcoming_revenue = db.Column(db.Integer, default=78500)
+    upcoming_rooms = db.Column(db.Integer, default=120)
     lnr_calls = db.Column(db.Integer, default=42)
     leisure_calls = db.Column(db.Integer, default=18)
     rfps = db.Column(db.Integer, default=5)
@@ -79,6 +83,10 @@ class ReportData(db.Model):
     # --- STAT LABELS ---
     label_total_revenue = db.Column(db.String(50), default="Total Revenue")
     label_rooms_booked = db.Column(db.String(50), default="Rooms Booked")
+    label_past_revenue = db.Column(db.String(80), default="Past Stayed Revenue from Sales")
+    label_past_rooms = db.Column(db.String(30), default="Rooms")
+    label_upcoming_revenue = db.Column(db.String(80), default="Upcoming Revenue OTB from Sales")
+    label_upcoming_rooms = db.Column(db.String(30), default="Rooms")
     label_active_proposals = db.Column(db.String(50), default="Active Proposals")
     label_signed_contracts = db.Column(db.String(50), default="Signed Contracts")
     label_ytd_rev = db.Column(db.String(50), default="YTD Revenue")
@@ -221,6 +229,10 @@ def get_data():
         'visible_companies': record.visible_companies,
         'revenue': record.revenue,
         'rooms': record.rooms_booked,
+        'past_revenue': record.past_revenue,
+        'past_rooms': record.past_rooms,
+        'upcoming_revenue': record.upcoming_revenue,
+        'upcoming_rooms': record.upcoming_rooms,
         'lnr_calls': record.lnr_calls,
         'leisure_calls': record.leisure_calls,
         'rfps': record.rfps,
@@ -253,6 +265,10 @@ def get_data():
         'card_logs_title': record.card_logs_title,
         'label_total_revenue': record.label_total_revenue,
         'label_rooms_booked': record.label_rooms_booked,
+        'label_past_revenue': record.label_past_revenue,
+        'label_past_rooms': record.label_past_rooms,
+        'label_upcoming_revenue': record.label_upcoming_revenue,
+        'label_upcoming_rooms': record.label_upcoming_rooms,
         'label_active_proposals': record.label_active_proposals,
         'label_signed_contracts': record.label_signed_contracts,
         'label_ytd_rev': record.label_ytd_rev,
@@ -298,6 +314,10 @@ def update_data():
 
     record.revenue = request.form.get('revenue')
     record.rooms_booked = request.form.get('rooms')
+    record.past_revenue = request.form.get('past_revenue')
+    record.past_rooms = request.form.get('past_rooms')
+    record.upcoming_revenue = request.form.get('upcoming_revenue')
+    record.upcoming_rooms = request.form.get('upcoming_rooms')
     record.lnr_calls = request.form.get('lnr_calls')
     record.leisure_calls = request.form.get('leisure_calls')
     record.ytd_revenue = request.form.get('ytd_revenue')
@@ -332,6 +352,10 @@ def update_data():
     # --- STAT LABELS ---
     record.label_total_revenue = request.form.get('label_total_revenue') or record.label_total_revenue
     record.label_rooms_booked = request.form.get('label_rooms_booked') or record.label_rooms_booked
+    record.label_past_revenue = request.form.get('label_past_revenue') or record.label_past_revenue
+    record.label_past_rooms = request.form.get('label_past_rooms') or record.label_past_rooms
+    record.label_upcoming_revenue = request.form.get('label_upcoming_revenue') or record.label_upcoming_revenue
+    record.label_upcoming_rooms = request.form.get('label_upcoming_rooms') or record.label_upcoming_rooms
     record.label_active_proposals = request.form.get('label_active_proposals') or record.label_active_proposals
     record.label_signed_contracts = request.form.get('label_signed_contracts') or record.label_signed_contracts
     record.label_ytd_rev = request.form.get('label_ytd_rev') or record.label_ytd_rev
