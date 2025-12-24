@@ -78,6 +78,9 @@
         }
         
         .btn:hover { 
+            transform: scale(1.08);
+            box-shadow: 0 10px 30px rgba(255, 159, 10, 0.3);
+        } 
             transform: scale(1.02);
             filter: brightness(1.1);
         }
@@ -110,6 +113,13 @@
             display: flex; 
             flex-direction: column; 
             min-width: 0; 
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-orange);
+            box-shadow: 0 20px 60px rgba(255, 159, 10, 0.15);
         }
         
         /* Desktop Spans */
@@ -141,6 +151,96 @@
             width: 30%;
             display: flex;
             justify-content: center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .dial-container:hover {
+            transform: scale(1.08);
+        }
+        
+        /* Company items styling */
+        .company-item {
+            padding: 12px 15px;
+            background: #2C2C2E;
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-orange);
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .company-item:hover {
+            background: #3C3C3E;
+            border-left-color: var(--accent-blue);
+            transform: translateX(8px);
+        }
+        
+        /* Company cards styling (new grid layout) */
+        .company-card {
+            background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
+            border: 1px solid #444;
+            border-radius: 14px;
+            padding: 20px 15px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 100px;
+        }
+        
+        .company-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 159, 10, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .company-card:hover::before {
+            left: 100%;
+        }
+        
+        .company-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(255, 159, 10, 0.2);
+        }
+        
+        .company-name {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.4;
+            word-break: break-word;
+            transition: all 0.3s ease;
+        }
+        
+        .company-name-1 { color: #FF9F0A; }
+        .company-name-2 { color: #0A84FF; }
+        .company-name-3 { color: #30D158; }
+        .company-name-4 { color: #BF5AF2; }
+        .company-name-5 { color: #FF375F; }
+        
+        .company-card:hover .company-name {
+            filter: brightness(1.3);
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         .dial-overlay {
             position: absolute;
@@ -152,18 +252,82 @@
         .dial-sub { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; margin-top: 2px; }
         
         .fin-summary-row {
-            display: flex;
-            justify-content: space-between;
-            background: #2C2C2E;
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-top: 10px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             gap: 15px;
+            margin-top: 10px;
         }
-        .fin-item { text-align: center; flex: 1; min-width: 100px; }
-        .fin-item-val { font-size: 16px; font-weight: 700; color: #fff; display: block; }
-        .fin-item-lbl { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; margin-top: 4px; display: block;}
+        
+        .fin-item { 
+            text-align: center; 
+            padding: 20px 15px;
+            background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
+            border: 1px solid #333;
+            border-radius: 14px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+        }
+        
+        .fin-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 159, 10, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .fin-item:hover::before {
+            left: 100%;
+        }
+        
+        .fin-item:hover {
+            transform: translateY(-10px) scale(1.08);
+            border-color: var(--accent-orange);
+            box-shadow: 0 20px 60px rgba(255, 159, 10, 0.2);
+            background: linear-gradient(135deg, #3C3C3E 0%, #2C2C2E 100%);
+        }
+        
+        .fin-item-val { 
+            font-size: 24px; 
+            font-weight: 700; 
+            color: #fff; 
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .fin-item:hover .fin-item-val {
+            font-size: 28px;
+            color: var(--accent-orange);
+            text-shadow: 0 0 10px rgba(255, 159, 10, 0.3);
+        }
+        
+        .fin-item-lbl { 
+            font-size: 10px; 
+            color: var(--text-secondary); 
+            text-transform: uppercase; 
+            margin-top: 8px; 
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .fin-item:hover .fin-item-lbl {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
 
         /* Source Section Stats */
         .source-stats { width: 200px; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #333; }
@@ -174,6 +338,55 @@
         .log-table th { position: sticky; top: 0; background: var(--card-bg); padding: 10px; text-align: left; color: var(--accent-orange); font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #444; }
         .log-table td { padding: 10px; border-bottom: 1px solid #333; color: #ddd; }
         .tag { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
+        
+        /* Status Tooltip */
+        .status-badge {
+            position: relative;
+            cursor: help;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .status-badge:hover {
+            background: rgba(255, 159, 10, 0.1);
+        }
+        
+        .status-tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 100;
+            background: var(--accent-orange);
+            color: black;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(255, 159, 10, 0.3);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .status-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: var(--accent-orange);
+        }
+        
+        .status-badge:hover .status-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
 
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
@@ -208,6 +421,9 @@
             .dial-row { flex-direction: column; align-items: center; }
             .dial-container { width: 100%; height: 160px; margin-bottom: 10px; }
             
+            .fin-summary-row { grid-template-columns: repeat(2, 1fr); }
+            .fin-item { min-height: 70px; }
+            
             h1 { font-size: 24px; }
             h2 { font-size: 16px; }
             .stat-huge { font-size: 32px; }
@@ -230,16 +446,47 @@
             .card { 
                 break-inside: avoid; 
                 border: 1px solid #ddd !important; 
-                margin-bottom: 20px; 
+                margin-bottom: 15px; 
                 box-shadow: none !important; 
                 background: white !important;
                 color: black !important;
                 page-break-inside: avoid;
+                padding: 15px !important;
             }
             
             h1, h2, .stat-huge, .stat-label, td, th, .fin-item-val, .dial-percent { color: black !important; }
             .fin-item-lbl, .dial-sub { color: #555 !important; }
-            .fin-summary-row { background: #f5f5f5 !important; border: 1px solid #ddd; }
+            
+            .fin-summary-row { 
+                background: white !important; 
+                border: none; 
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                margin-top: 10px;
+            }
+            
+            .fin-item {
+                background: #f9f9f9 !important;
+                border: 1px solid #ddd !important;
+                color: black !important;
+                padding: 12px !important;
+                min-height: auto !important;
+                border-radius: 8px !important;
+            }
+            
+            .fin-item-val {
+                color: black !important;
+                font-size: 18px !important;
+            }
+            
+            .fin-item-lbl {
+                color: #666 !important;
+                font-size: 9px !important;
+            }
+            
+            .stat-huge { font-size: 24px !important; }
+            .stat-label { font-size: 11px !important; }
             canvas { filter: contrast(1.2); }
         }
     </style>
@@ -275,14 +522,14 @@
         
         <!-- 1. TOP SECTION: Sales & Financial Dials -->
         <div class="card full" id="card-financials">
-            <h2>Sales & Marketing Financial Report</h2>
+            <h2 id="title-financials">Sales & Marketing Financial Report</h2>
             <div class="dial-row">
                 <!-- Dial 1 -->
                 <div class="dial-container">
                     <canvas id="dialYTD"></canvas>
                     <div class="dial-overlay">
                         <div class="dial-percent" id="lbl-ytd-pct">0%</div>
-                        <div class="dial-sub">YTD vs Last Year</div>
+                        <div class="dial-sub" id="lbl-dial-1">YTD vs Last Year</div>
                     </div>
                 </div>
                 <!-- Dial 2 -->
@@ -290,7 +537,7 @@
                     <canvas id="dialMTD"></canvas>
                     <div class="dial-overlay">
                         <div class="dial-percent" id="lbl-mtd-pct">0%</div>
-                        <div class="dial-sub">MTD vs Forecast</div>
+                        <div class="dial-sub" id="lbl-dial-2">MTD vs Forecast</div>
                     </div>
                 </div>
                 <!-- Dial 3 -->
@@ -298,46 +545,46 @@
                     <canvas id="dialRFP"></canvas>
                     <div class="dial-overlay">
                         <div class="dial-percent" id="lbl-rfp-pct">0%</div>
-                        <div class="dial-sub">RFP Consideration</div>
+                        <div class="dial-sub" id="lbl-dial-3">RFP Consideration</div>
                     </div>
                 </div>
             </div>
             <div class="fin-summary-row">
-                <div class="fin-item"><span class="fin-item-val" id="disp-ytd">$0</span><span class="fin-item-lbl">YTD Revenue</span></div>
-                <div class="fin-item"><span class="fin-item-val" id="disp-mtd">$0</span><span class="fin-item-lbl">MTD Revenue</span></div>
-                <div class="fin-item"><span class="fin-item-val" style="color: var(--accent-orange);" id="disp-est-rev">$0</span><span class="fin-item-lbl">Est. Revenue</span></div>
-                <div class="fin-item"><span class="fin-item-val" id="disp-sales-rooms">0</span><span class="fin-item-lbl">Sales Rooms</span></div>
-                <div class="fin-item"><span class="fin-item-val" id="disp-rfp-sub">0</span><span class="fin-item-lbl">RFPs Sent</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-ytd">$0</span><span class="fin-item-lbl" id="lbl-ytd-rev">YTD Revenue</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-mtd">$0</span><span class="fin-item-lbl" id="lbl-mtd-rev">MTD Revenue</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-est-rev">$0</span><span class="fin-item-lbl" id="lbl-est-rev">Est. Revenue</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-sales-rooms">0</span><span class="fin-item-lbl" id="lbl-sales-rooms">Sales Rooms</span></div>
+                <div class="fin-item"><span class="fin-item-val" id="disp-rfp-sub">0</span><span class="fin-item-lbl" id="lbl-rfps-sent">RFPs Sent</span></div>
             </div>
         </div>
 
         <!-- 2. Revenue -->
         <div class="card large" id="card-revenue">
-            <h2>Property Performance</h2>
+            <h2 id="title-revenue">Property Performance</h2>
             <div class="stat-group">
-                <div class="stat-box"><div class="stat-label">Total Revenue</div><div class="stat-huge" id="disp-revenue">$0</div></div>
-                <div class="stat-box" style="text-align: right;"><div class="stat-label">Rooms Booked</div><div class="stat-huge" style="color: var(--accent-orange);" id="disp-rooms">0</div></div>
+                <div class="stat-box"><div class="stat-label" id="lbl-total-revenue">Total Revenue</div><div class="stat-huge" id="disp-revenue">$0</div></div>
+                <div class="stat-box" style="text-align: right;"><div class="stat-label" id="lbl-rooms-booked">Rooms Booked</div><div class="stat-huge" style="color: var(--accent-orange);" id="disp-rooms">0</div></div>
             </div>
         </div>
 
         <!-- 3. Pipeline -->
         <div class="card" id="card-pipeline">
-            <h2>Pipeline Pulse</h2>
+            <h2 id="title-pipeline">Pipeline Pulse</h2>
             <div style="display: flex; flex-direction: column; justify-content: flex-end; height: 100%;">
                 <div style="margin-bottom: 15px;">
                     <div class="stat-huge" style="font-size: 32px;" id="disp-proposals">0</div>
-                    <div class="stat-label">Active Proposals</div>
+                    <div class="stat-label" id="lbl-active-proposals">Active Proposals</div>
                 </div>
                 <div style="border-top: 1px solid #333; padding-top: 15px;">
                     <div class="stat-huge" style="font-size: 32px;" id="disp-signed">0</div>
-                    <div class="stat-label">Signed Contracts</div>
+                    <div class="stat-label" id="lbl-signed-contracts">Signed Contracts</div>
                 </div>
             </div>
         </div>
 
         <!-- 4. Activity -->
         <div class="card large" id="card-activity">
-            <h2>Activity: Corporate vs Leisure</h2>
+            <h2 id="title-activity">Activity: Corporate vs Leisure</h2>
             <div class="chart-row">
                 <div class="chart-container"><canvas id="barChart"></canvas></div>
                 <div class="chart-container"><canvas id="pieChart"></canvas></div>
@@ -352,25 +599,47 @@
 
         <!-- 6. Source -->
         <div class="card full" id="card-source">
-            <h2>Business Source: RFP vs LNR</h2>
+            <h2 id="title-source">Business Source: RFP vs LNR</h2>
             <div class="chart-row">
                 <div class="chart-container"><canvas id="rfpBarChart"></canvas></div>
                 <div class="chart-container"><canvas id="rfpPieChart"></canvas></div>
                 <div class="source-stats">
-                    <div style="margin-bottom: 20px;"><div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div><div class="stat-label">RFP Requests</div></div>
-                    <div><div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div><div class="stat-label">LNR Contracts</div></div>
+                    <div style="margin-bottom: 20px;"><div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div><div class="stat-label" id="lbl-rfp-requests">RFP Requests</div></div>
+                    <div><div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div><div class="stat-label" id="lbl-lnr-contracts">LNR Contracts</div></div>
                 </div>
             </div>
         </div>
 
         <!-- 7. Logs -->
         <div class="card full" id="card-logs">
-            <h2>Detailed Call Activity Log</h2>
+            <h2 id="title-logs">Detailed Call Activity Log</h2>
             <div class="logs-wrapper table-wrap">
                 <table class="log-table">
-                    <thead><tr><th>Category</th><th>Date</th><th>Name / Group</th><th>Status</th></tr></thead>
+                    <thead><tr><th>Name / Group</th><th>Status</th><th>Category</th></tr></thead>
                     <tbody id="logs-body"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- 8. TOP COMPANIES -->
+        <div class="card full" id="card-companies" style="overflow: hidden;">
+            <h2 id="title-companies">Top Companies</h2>
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 15px;">
+                <div class="company-card" style="animation: slideIn 0.6s ease 0.1s both;">
+                    <div class="company-name company-name-1" id="disp-company-1">Marriott International</div>
+                </div>
+                <div class="company-card" style="animation: slideIn 0.6s ease 0.2s both;">
+                    <div class="company-name company-name-2" id="disp-company-2">Hilton Hotels</div>
+                </div>
+                <div class="company-card" style="animation: slideIn 0.6s ease 0.3s both;">
+                    <div class="company-name company-name-3" id="disp-company-3">IHG Hotels</div>
+                </div>
+                <div class="company-card" style="animation: slideIn 0.6s ease 0.4s both;">
+                    <div class="company-name company-name-4" id="disp-company-4">Hyatt Hotels</div>
+                </div>
+                <div class="company-card" style="animation: slideIn 0.6s ease 0.5s both;">
+                    <div class="company-name company-name-5" id="disp-company-5">Wyndham Hotels</div>
+                </div>
             </div>
         </div>
     </div>
@@ -395,6 +664,7 @@
                 <div class="switch-row"><span class="switch-label">Key Insight</span><input type="checkbox" class="toggle-switch" id="vis-insight"></div>
                 <div class="switch-row"><span class="switch-label">Business Source</span><input type="checkbox" class="toggle-switch" id="vis-source"></div>
                 <div class="switch-row"><span class="switch-label">Call Logs (Table)</span><input type="checkbox" class="toggle-switch" id="vis-logs"></div>
+                <div class="switch-row"><span class="switch-label">Top Companies</span><input type="checkbox" class="toggle-switch" id="vis-companies"></div>
             </div>
 
             <div class="input-group"><label>Property Name</label><input type="text" id="inp-hotel"></div>
@@ -416,6 +686,90 @@
                 <div class="input-group"><label>Estimated Revenue</label><input type="number" id="inp-est-rev"></div>
                 <div class="input-group"><label>RFPs Submitted</label><input type="number" id="inp-rfp-sub"></div>
                 <div class="input-group"><label>RFPs Consideration</label><input type="number" id="inp-rfp-con"></div>
+            </div>
+
+            <!-- DIALS CUSTOMIZATION SECTION -->
+            <div class="modal-section-title">Customize Dials (Left, Center, Right)</div>
+            
+            <!-- Dial 1 -->
+            <div style="margin-bottom: 20px; padding: 15px; background: #2C2C2E; border-radius: 10px;">
+                <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 10px;">DIAL 1 (LEFT - YTD)</div>
+                <div class="input-grid">
+                    <div class="input-group"><label>Label</label><input type="text" id="inp-dial-1-label"></div>
+                    <div class="input-group"><label>Value</label><input type="number" id="inp-dial-1-value"></div>
+                    <div class="input-group"><label>Target/Max</label><input type="number" id="inp-dial-1-max"></div>
+                </div>
+            </div>
+
+            <!-- Dial 2 -->
+            <div style="margin-bottom: 20px; padding: 15px; background: #2C2C2E; border-radius: 10px;">
+                <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 10px;">DIAL 2 (CENTER - MTD)</div>
+                <div class="input-grid">
+                    <div class="input-group"><label>Label</label><input type="text" id="inp-dial-2-label"></div>
+                    <div class="input-group"><label>Value</label><input type="number" id="inp-dial-2-value"></div>
+                    <div class="input-group"><label>Target/Max</label><input type="number" id="inp-dial-2-max"></div>
+                </div>
+            </div>
+
+            <!-- Dial 3 -->
+            <div style="margin-bottom: 20px; padding: 15px; background: #2C2C2E; border-radius: 10px;">
+                <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 10px;">DIAL 3 (RIGHT - RFP)</div>
+                <div class="input-grid">
+                    <div class="input-group"><label>Label</label><input type="text" id="inp-dial-3-label"></div>
+                    <div class="input-group"><label>Value</label><input type="number" id="inp-dial-3-value"></div>
+                    <div class="input-group"><label>Target/Max</label><input type="number" id="inp-dial-3-max"></div>
+                </div>
+            </div>
+
+            <!-- CARD TITLES CUSTOMIZATION -->
+            <div class="modal-section-title">Customize Card Titles</div>
+            <div class="input-grid">
+                <div class="input-group"><label>Financial Card Title</label><input type="text" id="inp-card-financials-title"></div>
+                <div class="input-group"><label>Property Card Title</label><input type="text" id="inp-card-revenue-title"></div>
+                <div class="input-group"><label>Pipeline Card Title</label><input type="text" id="inp-card-pipeline-title"></div>
+                <div class="input-group"><label>Activity Card Title</label><input type="text" id="inp-card-activity-title"></div>
+                <div class="input-group"><label>Source Card Title</label><input type="text" id="inp-card-source-title"></div>
+                <div class="input-group"><label>Logs Card Title</label><input type="text" id="inp-card-logs-title"></div>
+                <div class="input-group"><label>Companies Card Title</label><input type="text" id="inp-card-companies-title"></div>
+            </div>
+
+            <!-- STAT LABELS CUSTOMIZATION -->
+            <div class="modal-section-title">Customize Stat Labels</div>
+            <div class="input-grid">
+                <div class="input-group"><label>Total Revenue Label</label><input type="text" id="inp-label-total-revenue"></div>
+                <div class="input-group"><label>Rooms Booked Label</label><input type="text" id="inp-label-rooms-booked"></div>
+                <div class="input-group"><label>Active Proposals Label</label><input type="text" id="inp-label-active-proposals"></div>
+                <div class="input-group"><label>Signed Contracts Label</label><input type="text" id="inp-label-signed-contracts"></div>
+                <div class="input-group"><label>YTD Revenue Label</label><input type="text" id="inp-label-ytd-rev"></div>
+                <div class="input-group"><label>MTD Revenue Label</label><input type="text" id="inp-label-mtd-rev"></div>
+                <div class="input-group"><label>Est. Revenue Label</label><input type="text" id="inp-label-est-rev"></div>
+                <div class="input-group"><label>Sales Rooms Label</label><input type="text" id="inp-label-sales-rooms"></div>
+                <div class="input-group"><label>RFPs Sent Label</label><input type="text" id="inp-label-rfps-sent"></div>
+                <div class="input-group"><label>RFP Requests Label</label><input type="text" id="inp-label-rfp-requests"></div>
+                <div class="input-group"><label>LNR Contracts Label</label><input type="text" id="inp-label-lnr-contracts"></div>
+                <div class="input-group"><label>Corp Calls Label</label><input type="text" id="inp-label-corp-calls"></div>
+                <div class="input-group"><label>Leisure Calls Label</label><input type="text" id="inp-label-leisure-calls"></div>
+                <div class="input-group"><label>RFPs Source Label</label><input type="text" id="inp-label-rfps-source"></div>
+                <div class="input-group"><label>LNRs Source Label</label><input type="text" id="inp-label-lnrs-source"></div>
+            </div>
+
+            <!-- CHART TITLES CUSTOMIZATION -->
+            <div class="modal-section-title">Customize Chart Titles</div>
+            <div class="input-grid">
+                <div class="input-group"><label>Activity Chart Title</label><input type="text" id="inp-chart-activity-title"></div>
+                <div class="input-group"><label>Activity Mix Title</label><input type="text" id="inp-chart-activity-mix"></div>
+                <div class="input-group"><label>Source Chart Title</label><input type="text" id="inp-chart-source-title"></div>
+                <div class="input-group"><label>Source Mix Title</label><input type="text" id="inp-chart-source-mix"></div>
+            </div>
+
+            <!-- TOP 5 COMPANIES CUSTOMIZATION -->
+            <div class="modal-section-title">Top 5 Companies</div>
+            <div class="input-grid">
+                <div class="input-group"><label>Company 1</label><input type="text" id="inp-company-1"></div>
+                <div class="input-group"><label>Company 2</label><input type="text" id="inp-company-2"></div>
+                <div class="input-group"><label>Company 3</label><input type="text" id="inp-company-3"></div>
+                <div class="input-group"><label>Company 4</label><input type="text" id="inp-company-4"></div>
+                <div class="input-group"><label>Company 5</label><input type="text" id="inp-company-5"></div>
             </div>
 
             <!-- PROPERTY PERFORMANCE SECTION -->
@@ -548,7 +902,7 @@
             formData.append('start_date', document.getElementById('inp-start').value);
             formData.append('end_date', document.getElementById('inp-end').value);
             
-            const checks = ['revenue','pipeline','activity','insight','source','logs','financials'];
+            const checks = ['revenue','pipeline','activity','insight','source','logs','financials','companies'];
             checks.forEach(c => formData.append('visible_'+c, document.getElementById('vis-'+c).checked));
 
             // -- FINANCIALS --
@@ -568,6 +922,58 @@
             // -- ACTIVITY --
             formData.append('lnr_calls', document.getElementById('inp-lnr').value);
             formData.append('leisure_calls', document.getElementById('inp-leisure').value);
+
+            // -- DIAL CUSTOMIZATION --
+            formData.append('dial_1_label', document.getElementById('inp-dial-1-label').value);
+            formData.append('dial_1_value', document.getElementById('inp-dial-1-value').value);
+            formData.append('dial_1_max', document.getElementById('inp-dial-1-max').value);
+            
+            formData.append('dial_2_label', document.getElementById('inp-dial-2-label').value);
+            formData.append('dial_2_value', document.getElementById('inp-dial-2-value').value);
+            formData.append('dial_2_max', document.getElementById('inp-dial-2-max').value);
+            
+            formData.append('dial_3_label', document.getElementById('inp-dial-3-label').value);
+            formData.append('dial_3_value', document.getElementById('inp-dial-3-value').value);
+            formData.append('dial_3_max', document.getElementById('inp-dial-3-max').value);
+            
+            // -- CARD TITLES --
+            formData.append('card_financials_title', document.getElementById('inp-card-financials-title').value);
+            formData.append('card_revenue_title', document.getElementById('inp-card-revenue-title').value);
+            formData.append('card_pipeline_title', document.getElementById('inp-card-pipeline-title').value);
+            formData.append('card_activity_title', document.getElementById('inp-card-activity-title').value);
+            formData.append('card_source_title', document.getElementById('inp-card-source-title').value);
+            formData.append('card_logs_title', document.getElementById('inp-card-logs-title').value);
+            
+            // -- STAT LABELS --
+            formData.append('label_total_revenue', document.getElementById('inp-label-total-revenue').value);
+            formData.append('label_rooms_booked', document.getElementById('inp-label-rooms-booked').value);
+            formData.append('label_active_proposals', document.getElementById('inp-label-active-proposals').value);
+            formData.append('label_signed_contracts', document.getElementById('inp-label-signed-contracts').value);
+            formData.append('label_ytd_rev', document.getElementById('inp-label-ytd-rev').value);
+            formData.append('label_mtd_rev', document.getElementById('inp-label-mtd-rev').value);
+            formData.append('label_est_rev', document.getElementById('inp-label-est-rev').value);
+            formData.append('label_sales_rooms', document.getElementById('inp-label-sales-rooms').value);
+            formData.append('label_rfps_sent', document.getElementById('inp-label-rfps-sent').value);
+            formData.append('label_rfp_requests', document.getElementById('inp-label-rfp-requests').value);
+            formData.append('label_lnr_contracts', document.getElementById('inp-label-lnr-contracts').value);
+            formData.append('label_corp_calls', document.getElementById('inp-label-corp-calls').value);
+            formData.append('label_leisure_calls', document.getElementById('inp-label-leisure-calls').value);
+            formData.append('label_rfps_source', document.getElementById('inp-label-rfps-source').value);
+            formData.append('label_lnrs_source', document.getElementById('inp-label-lnrs-source').value);
+            
+            // -- CHART LABELS --
+            formData.append('chart_activity_title', document.getElementById('inp-chart-activity-title').value);
+            formData.append('chart_activity_mix', document.getElementById('inp-chart-activity-mix').value);
+            formData.append('chart_source_title', document.getElementById('inp-chart-source-title').value);
+            formData.append('chart_source_mix', document.getElementById('inp-chart-source-mix').value);
+            
+            // -- COMPANIES --
+            formData.append('company_1', document.getElementById('inp-company-1').value);
+            formData.append('company_2', document.getElementById('inp-company-2').value);
+            formData.append('company_3', document.getElementById('inp-company-3').value);
+            formData.append('company_4', document.getElementById('inp-company-4').value);
+            formData.append('company_5', document.getElementById('inp-company-5').value);
+            formData.append('card_companies_title', document.getElementById('inp-card-companies-title').value);
             
             formData.append('last_year_mtd', '0'); 
 
@@ -578,7 +984,7 @@
 
         function updateUI(data) {
             // Visibility logic
-            const sections = ['financials','revenue','pipeline','activity','insight','source','logs'];
+            const sections = ['financials','revenue','pipeline','activity','insight','source','logs','companies'];
             sections.forEach(s => {
                 const el = document.getElementById('card-'+s);
                 if(el) el.style.display = data['visible_'+s] ? (s === 'financials' || s === 'logs' || s === 'source' ? 'block' : 'flex') : 'none';
@@ -591,6 +997,26 @@
             const start = formatDate(data.start_date);
             const end = data.end_date ? new Date(data.end_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
             document.getElementById('disp-period').innerText = `${start} - ${end}`;
+
+            // Update all card titles
+            document.getElementById('title-financials').innerText = data.card_financials_title;
+            document.getElementById('title-revenue').innerText = data.card_revenue_title;
+            document.getElementById('title-pipeline').innerText = data.card_pipeline_title;
+            document.getElementById('title-activity').innerText = data.card_activity_title;
+            document.getElementById('title-source').innerText = data.card_source_title;
+            document.getElementById('title-logs').innerText = data.card_logs_title;
+            document.getElementById('title-companies').innerText = data.card_companies_title;
+
+            // Update all stat labels
+            document.getElementById('lbl-total-revenue').innerText = data.label_total_revenue;
+            document.getElementById('lbl-rooms-booked').innerText = data.label_rooms_booked;
+            document.getElementById('lbl-active-proposals').innerText = data.label_active_proposals;
+            document.getElementById('lbl-signed-contracts').innerText = data.label_signed_contracts;
+            document.getElementById('lbl-ytd-rev').innerText = data.label_ytd_rev;
+            document.getElementById('lbl-mtd-rev').innerText = data.label_mtd_rev;
+            document.getElementById('lbl-est-rev').innerText = data.label_est_rev;
+            document.getElementById('lbl-sales-rooms').innerText = data.label_sales_rooms;
+            document.getElementById('lbl-rfps-sent').innerText = data.label_rfps_sent;
 
             // Top Card: Financials
             document.getElementById('disp-ytd').innerText = fmt(data.ytd_revenue);
@@ -628,9 +1054,103 @@
             document.getElementById('inp-lnr').value = data.lnr_calls;
             document.getElementById('inp-leisure').value = data.leisure_calls;
 
+            // Dial customization inputs
+            document.getElementById('inp-dial-1-label').value = data.dial_1_label;
+            document.getElementById('inp-dial-1-value').value = data.dial_1_value;
+            document.getElementById('inp-dial-1-max').value = data.dial_1_max;
+            
+            document.getElementById('inp-dial-2-label').value = data.dial_2_label;
+            document.getElementById('inp-dial-2-value').value = data.dial_2_value;
+            document.getElementById('inp-dial-2-max').value = data.dial_2_max;
+            
+            document.getElementById('inp-dial-3-label').value = data.dial_3_label;
+            document.getElementById('inp-dial-3-value').value = data.dial_3_value;
+            document.getElementById('inp-dial-3-max').value = data.dial_3_max;
+
+            // Card titles
+            document.getElementById('inp-card-financials-title').value = data.card_financials_title;
+            document.getElementById('inp-card-revenue-title').value = data.card_revenue_title;
+            document.getElementById('inp-card-pipeline-title').value = data.card_pipeline_title;
+            document.getElementById('inp-card-activity-title').value = data.card_activity_title;
+            document.getElementById('inp-card-source-title').value = data.card_source_title;
+            document.getElementById('inp-card-logs-title').value = data.card_logs_title;
+            document.getElementById('inp-card-companies-title').value = data.card_companies_title;
+
+            // Stat labels
+            document.getElementById('inp-label-total-revenue').value = data.label_total_revenue;
+            document.getElementById('inp-label-rooms-booked').value = data.label_rooms_booked;
+            document.getElementById('inp-label-active-proposals').value = data.label_active_proposals;
+            document.getElementById('inp-label-signed-contracts').value = data.label_signed_contracts;
+            document.getElementById('inp-label-ytd-rev').value = data.label_ytd_rev;
+            document.getElementById('inp-label-mtd-rev').value = data.label_mtd_rev;
+            document.getElementById('inp-label-est-rev').value = data.label_est_rev;
+            document.getElementById('inp-label-sales-rooms').value = data.label_sales_rooms;
+            document.getElementById('inp-label-rfps-sent').value = data.label_rfps_sent;
+            document.getElementById('inp-label-rfp-requests').value = data.label_rfp_requests;
+            document.getElementById('inp-label-lnr-contracts').value = data.label_lnr_contracts;
+            document.getElementById('inp-label-corp-calls').value = data.label_corp_calls;
+            document.getElementById('inp-label-leisure-calls').value = data.label_leisure_calls;
+            document.getElementById('inp-label-rfps-source').value = data.label_rfps_source;
+            document.getElementById('inp-label-lnrs-source').value = data.label_lnrs_source;
+
+            // Chart titles
+            document.getElementById('inp-chart-activity-title').value = data.chart_activity_title;
+            document.getElementById('inp-chart-activity-mix').value = data.chart_activity_mix;
+            document.getElementById('inp-chart-source-title').value = data.chart_source_title;
+            document.getElementById('inp-chart-source-mix').value = data.chart_source_mix;
+
+            // Companies
+            document.getElementById('inp-company-1').value = data.company_1;
+            document.getElementById('inp-company-2').value = data.company_2;
+            document.getElementById('inp-company-3').value = data.company_3;
+            document.getElementById('inp-company-4').value = data.company_4;
+            document.getElementById('inp-company-5').value = data.company_5;
+            
+            // Display companies
+            document.getElementById('disp-company-1').innerText = data.company_1;
+            document.getElementById('disp-company-2').innerText = data.company_2;
+            document.getElementById('disp-company-3').innerText = data.company_3;
+            document.getElementById('disp-company-4').innerText = data.company_4;
+            document.getElementById('disp-company-5').innerText = data.company_5;
+
+            // --- UPDATE DISPLAY WITH CUSTOMIZABLE VALUES ---
+            // Card Titles
+            document.getElementById('title-financials').innerText = data.card_financials_title;
+            document.getElementById('title-revenue').innerText = data.card_revenue_title;
+            document.getElementById('title-pipeline').innerText = data.card_pipeline_title;
+            document.getElementById('title-activity').innerText = data.card_activity_title;
+            document.getElementById('title-source').innerText = data.card_source_title;
+            document.getElementById('title-logs').innerText = data.card_logs_title;
+
+            // Stat Labels
+            document.getElementById('lbl-total-revenue').innerText = data.label_total_revenue;
+            document.getElementById('lbl-rooms-booked').innerText = data.label_rooms_booked;
+            document.getElementById('lbl-active-proposals').innerText = data.label_active_proposals;
+            document.getElementById('lbl-signed-contracts').innerText = data.label_signed_contracts;
+            document.getElementById('lbl-ytd-rev').innerText = data.label_ytd_rev;
+            document.getElementById('lbl-mtd-rev').innerText = data.label_mtd_rev;
+            document.getElementById('lbl-est-rev').innerText = data.label_est_rev;
+            document.getElementById('lbl-sales-rooms').innerText = data.label_sales_rooms;
+            document.getElementById('lbl-rfps-sent').innerText = data.label_rfps_sent;
+            document.getElementById('lbl-rfp-requests').innerText = data.label_rfp_requests;
+            document.getElementById('lbl-lnr-contracts').innerText = data.label_lnr_contracts;
+
             // Logs
             const tbody = document.getElementById('logs-body');
             tbody.innerHTML = ''; 
+            
+            // Status code meanings
+            const statusMeanings = {
+                'RNR': 'Ringing No Response',
+                'ANS': 'Answered',
+                'DNC': 'Do Not Call',
+                'VM': 'Voicemail',
+                'CB': 'Call Back',
+                'NV': 'Not Valid',
+                'BUSY': 'Line Busy',
+                'NA': 'Not Answered'
+            };
+            
             if(data.logs && data.logs.length > 0) {
                 const uniqueTypes = [...new Set(data.logs.map(l => l.type))];
                 const colors = ['#FF9F0A', '#30D158', '#0A84FF', '#BF5AF2', '#FF375F'];
@@ -641,17 +1161,23 @@
                     const color = colors[typeIdx];
                     const bg = color + '33';
                     let displayType = log.type.length > 20 ? log.type.substring(0, 18) + '..' : log.type;
+                    
+                    const statusMeaning = statusMeanings[log.status] || log.status;
 
                     tr.innerHTML = `
-                        <td><span class="tag" style="background: ${bg}; color: ${color};">${displayType}</span></td>
-                        <td>${log.date}</td>
                         <td style="color: white; font-weight: 500;">${log.name}</td>
-                        <td>${log.status}</td>
+                        <td>
+                            <span class="status-badge" style="position: relative;">
+                                ${log.status}
+                                <div class="status-tooltip">${statusMeaning}</div>
+                            </span>
+                        </td>
+                        <td><span class="tag" style="background: ${bg}; color: ${color};">${displayType}</span></td>
                     `;
                     tbody.appendChild(tr);
                 });
             } else {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: #666;">No valid logs found. Try uploading the report.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: #666;">No valid logs found. Try uploading the report.</td></tr>';
             }
 
             // Insight
@@ -688,43 +1214,53 @@
                     });
                 };
 
-                const ytdPct = data.last_year_ytd > 0 ? Math.round((data.ytd_revenue / data.last_year_ytd)*100) : 0;
-                document.getElementById('lbl-ytd-pct').innerText = ytdPct + "%";
-                document.getElementById('lbl-ytd-pct').style.color = ytdPct >= 100 ? '#30D158' : 'white';
-                charts.dialYTD = createDial('dialYTD', data.ytd_revenue, data.last_year_ytd, '#30D158');
+                const ytdVal = data.dial_1_value || data.ytd_revenue;
+                const ytdMax = data.dial_1_max || data.last_year_ytd;
+                document.getElementById('lbl-ytd-pct').innerText = '$' + parseInt(ytdVal).toLocaleString();
+                document.getElementById('lbl-ytd-pct').style.color = 'white';
+                document.getElementById('lbl-dial-1').innerText = data.dial_1_label || 'YTD vs Last Year';
+                charts.dialYTD = createDial('dialYTD', ytdVal, ytdMax, '#30D158');
 
-                const mtdPct = data.mtd_forecast > 0 ? Math.round((data.mtd_revenue / data.mtd_forecast)*100) : 0;
-                document.getElementById('lbl-mtd-pct').innerText = mtdPct + "%";
-                charts.dialMTD = createDial('dialMTD', data.mtd_revenue, data.mtd_forecast, '#0A84FF');
+                const mtdVal = data.dial_2_value || data.mtd_revenue;
+                const mtdMax = data.dial_2_max || data.mtd_forecast;
+                document.getElementById('lbl-mtd-pct').innerText = '$' + parseInt(mtdVal).toLocaleString();
+                document.getElementById('lbl-dial-2').innerText = data.dial_2_label || 'MTD vs Forecast';
+                charts.dialMTD = createDial('dialMTD', mtdVal, mtdMax, '#0A84FF');
 
-                const rfpPct = data.rfps_submitted > 0 ? Math.round((data.rfps_consideration / data.rfps_submitted)*100) : 0;
-                document.getElementById('lbl-rfp-pct').innerText = rfpPct + "%";
-                charts.dialRFP = createDial('dialRFP', data.rfps_consideration, data.rfps_submitted, '#BF5AF2');
+                const rfpVal = data.dial_3_value || data.rfps_consideration;
+                const rfpMax = data.dial_3_max || data.rfps_submitted;
+                document.getElementById('lbl-rfp-pct').innerText = parseInt(rfpVal).toLocaleString();
+                document.getElementById('lbl-dial-3').innerText = data.dial_3_label || 'RFP Consideration';
+                charts.dialRFP = createDial('dialRFP', rfpVal, rfpMax, '#BF5AF2');
             }
 
             if(data.visible_activity) {
+                const corpLabel = data.label_corp_calls || 'Corp';
+                const leisureLabel = data.label_leisure_calls || 'Leisure';
                 charts.actBar = new Chart(document.getElementById('barChart'), {
                     type: 'bar',
-                    data: { labels: ['Corp', 'Leisure'], datasets: [{ label: 'Calls', data: [data.lnr_calls, data.leisure_calls], backgroundColor: ['#FF375F', '#FF9F0A'], borderRadius: 6, barThickness: 30 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Call Volume', color: '#fff' } }, scales: { y: { beginAtZero: true, grid: { color: '#333' } }, x: { grid: { display: false } } } }
+                    data: { labels: [corpLabel, leisureLabel], datasets: [{ label: 'Calls', data: [data.lnr_calls, data.leisure_calls], backgroundColor: ['#FF375F', '#FF9F0A'], borderRadius: 6, barThickness: 30 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: data.chart_activity_title || 'Call Volume', color: '#fff' } }, scales: { y: { beginAtZero: true, grid: { color: '#333' } }, x: { grid: { display: false } } } }
                 });
                 charts.actPie = new Chart(document.getElementById('pieChart'), {
                     type: 'doughnut',
-                    data: { labels: ['Corp', 'Leisure'], datasets: [{ data: [data.lnr_calls, data.leisure_calls], backgroundColor: ['#FF375F', '#FF9F0A'], borderWidth: 0 }] },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' }, title: { display: true, text: 'Activity Mix', color: '#fff' } } }
+                    data: { labels: [corpLabel, leisureLabel], datasets: [{ data: [data.lnr_calls, data.leisure_calls], backgroundColor: ['#FF375F', '#FF9F0A'], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' }, title: { display: true, text: data.chart_activity_mix || 'Activity Mix', color: '#fff' } } }
                 });
             }
 
             if(data.visible_source) {
+                const rfpsLabel = data.label_rfps_source || 'RFPs';
+                const lnrsLabel = data.label_lnrs_source || 'LNRs';
                 charts.rfpBar = new Chart(document.getElementById('rfpBarChart'), {
                     type: 'bar',
-                    data: { labels: ['RFPs', 'LNRs'], datasets: [{ label: 'Count', data: [data.rfps, data.lnrs], backgroundColor: ['#FF375F', '#30D158'], borderRadius: 6, barThickness: 30 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Source Volume', color: '#fff' } }, scales: { y: { beginAtZero: true, grid: { color: '#333' } }, x: { grid: { display: false } } } }
+                    data: { labels: [rfpsLabel, lnrsLabel], datasets: [{ label: 'Count', data: [data.rfps, data.lnrs], backgroundColor: ['#FF375F', '#30D158'], borderRadius: 6, barThickness: 30 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: data.chart_source_title || 'Source Volume', color: '#fff' } }, scales: { y: { beginAtZero: true, grid: { color: '#333' } }, x: { grid: { display: false } } } }
                 });
                 charts.rfpPie = new Chart(document.getElementById('rfpPieChart'), {
                     type: 'doughnut',
-                    data: { labels: ['RFPs', 'LNRs'], datasets: [{ data: [data.rfps, data.lnrs], backgroundColor: ['#FF375F', '#30D158'], borderWidth: 0 }] },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' }, title: { display: true, text: 'Contract Mix', color: '#fff' } } }
+                    data: { labels: [rfpsLabel, lnrsLabel], datasets: [{ data: [data.rfps, data.lnrs], backgroundColor: ['#FF375F', '#30D158'], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' }, title: { display: true, text: data.chart_source_mix || 'Contract Mix', color: '#fff' } } }
                 });
             }
         }

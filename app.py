@@ -35,6 +35,7 @@ class ReportData(db.Model):
     visible_source = db.Column(db.Boolean, default=True)
     visible_financials = db.Column(db.Boolean, default=True)
     visible_logs = db.Column(db.Boolean, default=True)
+    visible_companies = db.Column(db.Boolean, default=True)
 
     revenue = db.Column(db.Integer, default=14500)
     rooms_booked = db.Column(db.Integer, default=120)
@@ -53,6 +54,58 @@ class ReportData(db.Model):
     rfps_consideration = db.Column(db.Integer, default=16)
     sales_rooms = db.Column(db.Integer, default=1500)
     estimated_revenue = db.Column(db.Integer, default=139255)
+    
+    # --- DIAL CUSTOMIZATION ---
+    dial_1_label = db.Column(db.String(100), default="YTD vs Last Year")
+    dial_1_value = db.Column(db.Integer, default=0)
+    dial_1_max = db.Column(db.Integer, default=0)
+    
+    dial_2_label = db.Column(db.String(100), default="MTD vs Forecast")
+    dial_2_value = db.Column(db.Integer, default=0)
+    dial_2_max = db.Column(db.Integer, default=0)
+    
+    dial_3_label = db.Column(db.String(100), default="RFP Consideration")
+    dial_3_value = db.Column(db.Integer, default=0)
+    dial_3_max = db.Column(db.Integer, default=0)
+    
+    # --- CARD TITLES/LABELS ---
+    card_financials_title = db.Column(db.String(100), default="Sales & Marketing Financial Report")
+    card_revenue_title = db.Column(db.String(100), default="Property Performance")
+    card_pipeline_title = db.Column(db.String(100), default="Pipeline Pulse")
+    card_activity_title = db.Column(db.String(100), default="Activity: Corporate vs Leisure")
+    card_source_title = db.Column(db.String(100), default="Business Source: RFP vs LNR")
+    card_logs_title = db.Column(db.String(100), default="Detailed Call Activity Log")
+    
+    # --- STAT LABELS ---
+    label_total_revenue = db.Column(db.String(50), default="Total Revenue")
+    label_rooms_booked = db.Column(db.String(50), default="Rooms Booked")
+    label_active_proposals = db.Column(db.String(50), default="Active Proposals")
+    label_signed_contracts = db.Column(db.String(50), default="Signed Contracts")
+    label_ytd_rev = db.Column(db.String(50), default="YTD Revenue")
+    label_mtd_rev = db.Column(db.String(50), default="MTD Revenue")
+    label_est_rev = db.Column(db.String(50), default="Est. Revenue")
+    label_sales_rooms = db.Column(db.String(50), default="Sales Rooms")
+    label_rfps_sent = db.Column(db.String(50), default="RFPs Sent")
+    label_rfp_requests = db.Column(db.String(50), default="RFP Requests")
+    label_lnr_contracts = db.Column(db.String(50), default="LNR Contracts")
+    label_corp_calls = db.Column(db.String(50), default="Corp")
+    label_leisure_calls = db.Column(db.String(50), default="Leisure")
+    label_rfps_source = db.Column(db.String(50), default="RFPs")
+    label_lnrs_source = db.Column(db.String(50), default="LNRs")
+    
+    # --- CHART DATA LABELS ---
+    chart_activity_title = db.Column(db.String(50), default="Call Volume")
+    chart_activity_mix = db.Column(db.String(50), default="Activity Mix")
+    chart_source_title = db.Column(db.String(50), default="Source Volume")
+    chart_source_mix = db.Column(db.String(50), default="Contract Mix")
+    
+    # --- COMPANY NAMES (TOP 5) ---
+    company_1 = db.Column(db.String(100), default="Marriott International")
+    company_2 = db.Column(db.String(100), default="Hilton Hotels")
+    company_3 = db.Column(db.String(100), default="IHG Hotels")
+    company_4 = db.Column(db.String(100), default="Hyatt Hotels")
+    company_5 = db.Column(db.String(100), default="Wyndham Hotels")
+    card_companies_title = db.Column(db.String(100), default="Top Companies")
     
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -165,6 +218,7 @@ def get_data():
         'visible_source': record.visible_source,
         'visible_financials': record.visible_financials,
         'visible_logs': record.visible_logs,
+        'visible_companies': record.visible_companies,
         'revenue': record.revenue,
         'rooms': record.rooms_booked,
         'lnr_calls': record.lnr_calls,
@@ -182,6 +236,46 @@ def get_data():
         'rfps_consideration': record.rfps_consideration,
         'sales_rooms': record.sales_rooms,
         'estimated_revenue': record.estimated_revenue,
+        'dial_1_label': record.dial_1_label,
+        'dial_1_value': record.dial_1_value,
+        'dial_1_max': record.dial_1_max,
+        'dial_2_label': record.dial_2_label,
+        'dial_2_value': record.dial_2_value,
+        'dial_2_max': record.dial_2_max,
+        'dial_3_label': record.dial_3_label,
+        'dial_3_value': record.dial_3_value,
+        'dial_3_max': record.dial_3_max,
+        'card_financials_title': record.card_financials_title,
+        'card_revenue_title': record.card_revenue_title,
+        'card_pipeline_title': record.card_pipeline_title,
+        'card_activity_title': record.card_activity_title,
+        'card_source_title': record.card_source_title,
+        'card_logs_title': record.card_logs_title,
+        'label_total_revenue': record.label_total_revenue,
+        'label_rooms_booked': record.label_rooms_booked,
+        'label_active_proposals': record.label_active_proposals,
+        'label_signed_contracts': record.label_signed_contracts,
+        'label_ytd_rev': record.label_ytd_rev,
+        'label_mtd_rev': record.label_mtd_rev,
+        'label_est_rev': record.label_est_rev,
+        'label_sales_rooms': record.label_sales_rooms,
+        'label_rfps_sent': record.label_rfps_sent,
+        'label_rfp_requests': record.label_rfp_requests,
+        'label_lnr_contracts': record.label_lnr_contracts,
+        'label_corp_calls': record.label_corp_calls,
+        'label_leisure_calls': record.label_leisure_calls,
+        'label_rfps_source': record.label_rfps_source,
+        'label_lnrs_source': record.label_lnrs_source,
+        'chart_activity_title': record.chart_activity_title,
+        'chart_activity_mix': record.chart_activity_mix,
+        'chart_source_title': record.chart_source_title,
+        'chart_source_mix': record.chart_source_mix,
+        'company_1': record.company_1,
+        'company_2': record.company_2,
+        'company_3': record.company_3,
+        'company_4': record.company_4,
+        'company_5': record.company_5,
+        'card_companies_title': record.card_companies_title,
         'logs': log_list
     })
 
@@ -200,6 +294,7 @@ def update_data():
     record.visible_source = request.form.get('visible_source') == 'true'
     record.visible_financials = request.form.get('visible_financials') == 'true'
     record.visible_logs = request.form.get('visible_logs') == 'true'
+    record.visible_companies = request.form.get('visible_companies') == 'true'
 
     record.revenue = request.form.get('revenue')
     record.rooms_booked = request.form.get('rooms')
@@ -214,6 +309,56 @@ def update_data():
     record.rfps_consideration = request.form.get('rfps_consideration')
     record.sales_rooms = request.form.get('sales_rooms')
     record.estimated_revenue = request.form.get('estimated_revenue')
+    record.dial_1_label = request.form.get('dial_1_label', 'YTD vs Last Year')
+    record.dial_1_value = request.form.get('dial_1_value') or 0
+    record.dial_1_max = request.form.get('dial_1_max') or 0
+    
+    record.dial_2_label = request.form.get('dial_2_label', 'MTD vs Forecast')
+    record.dial_2_value = request.form.get('dial_2_value') or 0
+    record.dial_2_max = request.form.get('dial_2_max') or 0
+    
+    record.dial_3_label = request.form.get('dial_3_label', 'RFP Consideration')
+    record.dial_3_value = request.form.get('dial_3_value') or 0
+    record.dial_3_max = request.form.get('dial_3_max') or 0
+
+    # --- CARD TITLES ---
+    record.card_financials_title = request.form.get('card_financials_title') or record.card_financials_title
+    record.card_revenue_title = request.form.get('card_revenue_title') or record.card_revenue_title
+    record.card_pipeline_title = request.form.get('card_pipeline_title') or record.card_pipeline_title
+    record.card_activity_title = request.form.get('card_activity_title') or record.card_activity_title
+    record.card_source_title = request.form.get('card_source_title') or record.card_source_title
+    record.card_logs_title = request.form.get('card_logs_title') or record.card_logs_title
+    
+    # --- STAT LABELS ---
+    record.label_total_revenue = request.form.get('label_total_revenue') or record.label_total_revenue
+    record.label_rooms_booked = request.form.get('label_rooms_booked') or record.label_rooms_booked
+    record.label_active_proposals = request.form.get('label_active_proposals') or record.label_active_proposals
+    record.label_signed_contracts = request.form.get('label_signed_contracts') or record.label_signed_contracts
+    record.label_ytd_rev = request.form.get('label_ytd_rev') or record.label_ytd_rev
+    record.label_mtd_rev = request.form.get('label_mtd_rev') or record.label_mtd_rev
+    record.label_est_rev = request.form.get('label_est_rev') or record.label_est_rev
+    record.label_sales_rooms = request.form.get('label_sales_rooms') or record.label_sales_rooms
+    record.label_rfps_sent = request.form.get('label_rfps_sent') or record.label_rfps_sent
+    record.label_rfp_requests = request.form.get('label_rfp_requests') or record.label_rfp_requests
+    record.label_lnr_contracts = request.form.get('label_lnr_contracts') or record.label_lnr_contracts
+    record.label_corp_calls = request.form.get('label_corp_calls') or record.label_corp_calls
+    record.label_leisure_calls = request.form.get('label_leisure_calls') or record.label_leisure_calls
+    record.label_rfps_source = request.form.get('label_rfps_source') or record.label_rfps_source
+    record.label_lnrs_source = request.form.get('label_lnrs_source') or record.label_lnrs_source
+    
+    # --- CHART LABELS ---
+    record.chart_activity_title = request.form.get('chart_activity_title') or record.chart_activity_title
+    record.chart_activity_mix = request.form.get('chart_activity_mix') or record.chart_activity_mix
+    record.chart_source_title = request.form.get('chart_source_title') or record.chart_source_title
+    record.chart_source_mix = request.form.get('chart_source_mix') or record.chart_source_mix
+    
+    # --- COMPANY NAMES ---
+    record.company_1 = request.form.get('company_1') or record.company_1
+    record.company_2 = request.form.get('company_2') or record.company_2
+    record.company_3 = request.form.get('company_3') or record.company_3
+    record.company_4 = request.form.get('company_4') or record.company_4
+    record.company_5 = request.form.get('company_5') or record.company_5
+    record.card_companies_title = request.form.get('card_companies_title') or record.card_companies_title
 
     # EXCEL PARSING RESTORED
     if 'excel_file' in request.files:
@@ -293,4 +438,4 @@ def share_report():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='0.0.0.0', port=8000)
