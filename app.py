@@ -12,7 +12,7 @@ app = Flask(__name__)
 # --- SENDGRID CONFIGURATION ---
 # I have inserted your key below. 
 # IMPORTANT: You must verify the SENDER_EMAIL in SendGrid Settings -> Sender Authentication
-SENDGRID_API_KEY = "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"
+SENDGRID_API_KEY = "API KEY"
 SENDER_EMAIL = "orangefalconrev@gmail.com"  # <--- CHANGE THIS to your verified SendGrid sender email
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -320,6 +320,8 @@ def update_data():
     record.upcoming_rooms = request.form.get('upcoming_rooms')
     record.lnr_calls = request.form.get('lnr_calls')
     record.leisure_calls = request.form.get('leisure_calls')
+    record.rfps = request.form.get('rfps')
+    record.lnrs = request.form.get('lnrs')
     record.ytd_revenue = request.form.get('ytd_revenue')
     record.last_year_ytd = request.form.get('last_year_ytd')
     record.mtd_revenue = request.form.get('mtd_revenue')
