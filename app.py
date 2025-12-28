@@ -12,7 +12,7 @@ app = Flask(__name__)
 # --- SENDGRID CONFIGURATION ---
 # I have inserted your key below. 
 # IMPORTANT: You must verify the SENDER_EMAIL in SendGrid Settings -> Sender Authentication
-SENDGRID_API_KEY = "API KEY"
+SENDGRID_API_KEY = "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"
 SENDER_EMAIL = "orangefalconrev@gmail.com"  # <--- CHANGE THIS to your verified SendGrid sender email
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -25,6 +25,7 @@ db = SQLAlchemy(app)
 class ReportData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     hotel_name = db.Column(db.String(100), default="Grand Plaza Hotel")
+    hotel_logo = db.Column(db.LargeBinary, default=None)  # Store logo as binary data
     start_date = db.Column(db.String(20), default="")
     end_date = db.Column(db.String(20), default="")
 
@@ -36,6 +37,7 @@ class ReportData(db.Model):
     visible_financials = db.Column(db.Boolean, default=True)
     visible_logs = db.Column(db.Boolean, default=True)
     visible_companies = db.Column(db.Boolean, default=True)
+    visible_comparison = db.Column(db.Boolean, default=True)
 
     revenue = db.Column(db.Integer, default=14500)
     rooms_booked = db.Column(db.Integer, default=120)
@@ -114,6 +116,108 @@ class ReportData(db.Model):
     company_4 = db.Column(db.String(100), default="Hyatt Hotels")
     company_5 = db.Column(db.String(100), default="Wyndham Hotels")
     card_companies_title = db.Column(db.String(100), default="Top Companies")
+    
+    # --- COMPARISON CARD CUSTOMIZATION ---
+    card_comparison_title = db.Column(db.String(100), default="YTD & MTD Comparison")
+    label_ytd_this_year = db.Column(db.String(50), default="This Year")
+    label_ytd_last_year = db.Column(db.String(50), default="Last Year")
+    label_ytd_difference = db.Column(db.String(50), default="Difference")
+    label_mtd_this_month = db.Column(db.String(50), default="This Month")
+    label_mtd_last_month = db.Column(db.String(50), default="Last Month")
+    label_mtd_difference = db.Column(db.String(50), default="Difference")
+    ytd_this_year_value = db.Column(db.String(100), default="")
+    ytd_last_year_value = db.Column(db.String(100), default="")
+    ytd_difference_value = db.Column(db.String(100), default="")
+    mtd_this_month_value = db.Column(db.String(100), default="")
+    mtd_last_month_value = db.Column(db.String(100), default="")
+    mtd_difference_value = db.Column(db.String(100), default="")
+    
+    # --- LAST YEAR YTD & MTD CARD LABELS ---
+    label_ly_ytd_total = db.Column(db.String(50), default="Total Revenue")
+    label_ly_ytd_avg = db.Column(db.String(50), default="Average")
+    label_ly_mtd_total = db.Column(db.String(50), default="Total Revenue")
+    label_ly_mtd_avg = db.Column(db.String(50), default="Average")
+    
+    # --- LAST YEAR YTD & MTD CARD VALUES ---
+    ly_ytd_total_value = db.Column(db.String(100), default="")
+    ly_ytd_avg_value = db.Column(db.String(100), default="")
+    ly_mtd_total_value = db.Column(db.String(100), default="")
+    ly_mtd_avg_value = db.Column(db.String(100), default="")
+    
+    # --- CURRENT ACTIVITY SECTION LABELS & VALUES ---
+    title_current_activity = db.Column(db.String(100), default="Current Activity")
+    label_customers_called = db.Column(db.String(50), default="Customers Called")
+    label_customers_called_desc = db.Column(db.String(50), default="MTD (15 days)")
+    label_past_clients_called = db.Column(db.String(50), default="Past Clients Called")
+    label_past_clients_called_desc = db.Column(db.String(50), default="Last Year Corporates")
+    label_rfps_filled = db.Column(db.String(50), default="RFPs Filled")
+    label_rfps_filled_desc = db.Column(db.String(50), default="Current Month")
+    label_prospects = db.Column(db.String(50), default="Prospects")
+    label_prospects_desc = db.Column(db.String(50), default="In Pipeline")
+    label_potential_revenue = db.Column(db.String(50), default="Potential Revenue")
+    label_potential_revenue_desc = db.Column(db.String(50), default="From Prospects")
+    label_secured_future = db.Column(db.String(50), default="Secured Future")
+    label_secured_future_desc = db.Column(db.String(50), default="This Month")
+    label_mtd_forecast = db.Column(db.String(50), default="MTD Forecast")
+    label_mtd_forecast_desc = db.Column(db.String(50), default="Current Report")
+    label_mtd_forecast_last = db.Column(db.String(50), default="Last Report")
+    label_mtd_forecast_last_desc = db.Column(db.String(50), default="MTD Forecast")
+    label_otb_increase = db.Column(db.String(50), default="OTB Increase")
+    label_otb_increase_desc = db.Column(db.String(50), default="vs Last Report")
+    
+    # --- CURRENT ACTIVITY SECTION VALUES ---
+    value_customers_called = db.Column(db.String(100), default="")
+    value_past_clients_called = db.Column(db.String(100), default="")
+    value_rfps_filled = db.Column(db.String(100), default="")
+    value_prospects = db.Column(db.String(100), default="")
+    value_potential_revenue = db.Column(db.String(100), default="")
+    value_secured_future = db.Column(db.String(100), default="")
+    value_mtd_forecast = db.Column(db.String(100), default="")
+    value_mtd_forecast_last = db.Column(db.String(100), default="")
+    value_otb_increase = db.Column(db.String(100), default="")
+    
+    # --- STRATEGIC CONTINUOUS PLAN SECTION ---
+    card_future_activity_title = db.Column(db.String(100), default="Strategic Continuous Plan")
+    label_email_campaign = db.Column(db.String(100), default="Email Campaigning")
+    desc_email_campaign = db.Column(db.String(200), default="Targeting corporates within a 30-mile radius of the hotel")
+    label_social_media = db.Column(db.String(100), default="Social Media Presence")
+    desc_social_media = db.Column(db.String(200), default="Facebook page and other social media platforms")
+    label_comp_strategy = db.Column(db.String(100), default="Comp Set Strategy")
+    desc_comp_strategy = db.Column(db.String(200), default="Targeting customers of nearby competitive hotels")
+    label_target_calls = db.Column(db.String(100), default="Target Calls")
+    desc_target_calls = db.Column(db.String(100), default="Outbound Calls Target")
+    value_target_calls = db.Column(db.String(100), default="")
+    label_rfp_excellence = db.Column(db.String(100), default="PROFESSIONAL RFP EXCELLENCE")
+    desc_rfp_excellence = db.Column(db.String(200), default="Responding to all RFPs with Unmatched Professionalism & Strategic Excellence")
+    label_rfp_expansion = db.Column(db.String(100), default="RFP Source Expansion")
+    desc_rfp_expansion = db.Column(db.String(200), default="Expanding RFP sources through new prospective platforms")
+    label_competitive_intel = db.Column(db.String(100), default="Competitive Intelligence")
+    desc_competitive_intel = db.Column(db.String(200), default="Staff gathering competitive intelligence - photos, insights & local market data")
+    label_ota_promotions = db.Column(db.String(100), default="OTA Platform Promotions")
+    desc_ota_promotions = db.Column(db.String(200), default="Managing and activating promotions to maximize transient revenue")
+    label_rfp_platform = db.Column(db.String(100), default="RFP Platform Strategy")
+    desc_rfp_platform = db.Column(db.String(200), default="Identify key RFP platforms for revenue optimization (Tentative)")
+    
+    # --- REVENUE SEGMENTS (4-PART BREAKDOWN) ---
+    segment_1_name = db.Column(db.String(50), default="Corporate")
+    segment_1_label = db.Column(db.String(50), default="Business Meetings")
+    segment_1_value = db.Column(db.Integer, default=0)
+    segment_1_color = db.Column(db.String(20), default="blue")
+    
+    segment_2_name = db.Column(db.String(50), default="Groups & Events")
+    segment_2_label = db.Column(db.String(50), default="Church/Reunions")
+    segment_2_value = db.Column(db.Integer, default=0)
+    segment_2_color = db.Column(db.String(20), default="purple")
+    
+    segment_3_name = db.Column(db.String(50), default="Leisure/Transient")
+    segment_3_label = db.Column(db.String(50), default="OTA & Direct")
+    segment_3_value = db.Column(db.Integer, default=0)
+    segment_3_color = db.Column(db.String(20), default="green")
+    
+    segment_4_name = db.Column(db.String(50), default="Other Revenue")
+    segment_4_label = db.Column(db.String(50), default="Misc Sources")
+    segment_4_value = db.Column(db.Integer, default=0)
+    segment_4_color = db.Column(db.String(20), default="orange")
     
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -217,6 +321,7 @@ def get_data():
 
     return jsonify({
         'hotel_name': record.hotel_name,
+        'hotel_logo': base64.b64encode(record.hotel_logo).decode('utf-8') if record.hotel_logo else None,
         'start_date': record.start_date,
         'end_date': record.end_date,
         'visible_revenue': record.visible_revenue,
@@ -227,6 +332,7 @@ def get_data():
         'visible_financials': record.visible_financials,
         'visible_logs': record.visible_logs,
         'visible_companies': record.visible_companies,
+        'visible_comparison': record.visible_comparison,
         'revenue': record.revenue,
         'rooms': record.rooms_booked,
         'past_revenue': record.past_revenue,
@@ -292,6 +398,94 @@ def get_data():
         'company_4': record.company_4,
         'company_5': record.company_5,
         'card_companies_title': record.card_companies_title,
+        'card_comparison_title': record.card_comparison_title,
+        'label_ytd_this_year': record.label_ytd_this_year,
+        'label_ytd_last_year': record.label_ytd_last_year,
+        'label_ytd_difference': record.label_ytd_difference,
+        'label_mtd_this_month': record.label_mtd_this_month,
+        'label_mtd_last_month': record.label_mtd_last_month,
+        'label_mtd_difference': record.label_mtd_difference,
+        'ytd_this_year_value': record.ytd_this_year_value,
+        'ytd_last_year_value': record.ytd_last_year_value,
+        'ytd_difference_value': record.ytd_difference_value,
+        'mtd_this_month_value': record.mtd_this_month_value,
+        'mtd_last_month_value': record.mtd_last_month_value,
+        'mtd_difference_value': record.mtd_difference_value,
+        'label_ly_ytd_total': record.label_ly_ytd_total,
+        'label_ly_ytd_avg': record.label_ly_ytd_avg,
+        'label_ly_mtd_total': record.label_ly_mtd_total,
+        'label_ly_mtd_avg': record.label_ly_mtd_avg,
+        'ly_ytd_total_value': record.ly_ytd_total_value,
+        'ly_ytd_avg_value': record.ly_ytd_avg_value,
+        'ly_mtd_total_value': record.ly_mtd_total_value,
+        'ly_mtd_avg_value': record.ly_mtd_avg_value,
+        
+        # --- CURRENT ACTIVITY SECTION ---
+        'title_current_activity': record.title_current_activity,
+        'label_customers_called': record.label_customers_called,
+        'label_customers_called_desc': record.label_customers_called_desc,
+        'value_customers_called': record.value_customers_called,
+        'label_past_clients_called': record.label_past_clients_called,
+        'label_past_clients_called_desc': record.label_past_clients_called_desc,
+        'value_past_clients_called': record.value_past_clients_called,
+        'label_rfps_filled': record.label_rfps_filled,
+        'label_rfps_filled_desc': record.label_rfps_filled_desc,
+        'value_rfps_filled': record.value_rfps_filled,
+        'label_prospects': record.label_prospects,
+        'label_prospects_desc': record.label_prospects_desc,
+        'value_prospects': record.value_prospects,
+        'label_potential_revenue': record.label_potential_revenue,
+        'label_potential_revenue_desc': record.label_potential_revenue_desc,
+        'value_potential_revenue': record.value_potential_revenue,
+        'label_secured_future': record.label_secured_future,
+        'label_secured_future_desc': record.label_secured_future_desc,
+        'value_secured_future': record.value_secured_future,
+        'label_mtd_forecast': record.label_mtd_forecast,
+        'label_mtd_forecast_desc': record.label_mtd_forecast_desc,
+        'value_mtd_forecast': record.value_mtd_forecast,
+        'label_mtd_forecast_last': record.label_mtd_forecast_last,
+        'label_mtd_forecast_last_desc': record.label_mtd_forecast_last_desc,
+        'value_mtd_forecast_last': record.value_mtd_forecast_last,
+        'label_otb_increase': record.label_otb_increase,
+        'label_otb_increase_desc': record.label_otb_increase_desc,
+        'value_otb_increase': record.value_otb_increase,
+        
+        # --- STRATEGIC CONTINUOUS PLAN SECTION ---
+        'card_future_activity_title': record.card_future_activity_title,
+        'label_email_campaign': record.label_email_campaign,
+        'desc_email_campaign': record.desc_email_campaign,
+        'label_social_media': record.label_social_media,
+        'desc_social_media': record.desc_social_media,
+        'label_comp_strategy': record.label_comp_strategy,
+        'desc_comp_strategy': record.desc_comp_strategy,
+        'label_target_calls': record.label_target_calls,
+        'desc_target_calls': record.desc_target_calls,
+        'value_target_calls': record.value_target_calls,
+        'label_rfp_excellence': record.label_rfp_excellence,
+        'desc_rfp_excellence': record.desc_rfp_excellence,
+        'label_rfp_expansion': record.label_rfp_expansion,
+        'desc_rfp_expansion': record.desc_rfp_expansion,
+        'label_competitive_intel': record.label_competitive_intel,
+        'desc_competitive_intel': record.desc_competitive_intel,
+        'label_ota_promotions': record.label_ota_promotions,
+        'desc_ota_promotions': record.desc_ota_promotions,
+        'label_rfp_platform': record.label_rfp_platform,
+        'desc_rfp_platform': record.desc_rfp_platform,
+        
+        # --- REVENUE SEGMENTS ---
+        'segment_1_name': record.segment_1_name,
+        'segment_1_label': record.segment_1_label,
+        'segment_1_value': record.segment_1_value,
+        'segment_2_name': record.segment_2_name,
+        'segment_2_label': record.segment_2_label,
+        'segment_2_value': record.segment_2_value,
+        'segment_3_name': record.segment_3_name,
+        'segment_3_label': record.segment_3_label,
+        'segment_3_value': record.segment_3_value,
+        'segment_4_name': record.segment_4_name,
+        'segment_4_label': record.segment_4_label,
+        'segment_4_value': record.segment_4_value,
+        
         'logs': log_list
     })
 
@@ -300,6 +494,13 @@ def update_data():
     record = ReportData.query.first()
     
     record.hotel_name = request.form.get('hotel_name')
+    
+    # Handle hotel logo upload
+    if 'hotel_logo' in request.files:
+        logo_file = request.files['hotel_logo']
+        if logo_file.filename != '':
+            record.hotel_logo = logo_file.read()
+    
     record.start_date = request.form.get('start_date')
     record.end_date = request.form.get('end_date')
     
@@ -311,6 +512,7 @@ def update_data():
     record.visible_financials = request.form.get('visible_financials') == 'true'
     record.visible_logs = request.form.get('visible_logs') == 'true'
     record.visible_companies = request.form.get('visible_companies') == 'true'
+    record.visible_comparison = request.form.get('visible_comparison') == 'true'
 
     record.revenue = request.form.get('revenue')
     record.rooms_booked = request.form.get('rooms')
@@ -378,6 +580,90 @@ def update_data():
     record.chart_source_title = request.form.get('chart_source_title') or record.chart_source_title
     record.chart_source_mix = request.form.get('chart_source_mix') or record.chart_source_mix
     
+    # --- COMPARISON CARD CUSTOMIZATION ---
+    record.card_comparison_title = request.form.get('card_comparison_title') or record.card_comparison_title
+    record.label_ytd_this_year = request.form.get('label_ytd_this_year') or record.label_ytd_this_year
+    record.label_ytd_last_year = request.form.get('label_ytd_last_year') or record.label_ytd_last_year
+    record.label_ytd_difference = request.form.get('label_ytd_difference') or record.label_ytd_difference
+    record.label_mtd_this_month = request.form.get('label_mtd_this_month') or record.label_mtd_this_month
+    record.label_mtd_last_month = request.form.get('label_mtd_last_month') or record.label_mtd_last_month
+    record.label_mtd_difference = request.form.get('label_mtd_difference') or record.label_mtd_difference
+    record.ytd_this_year_value = request.form.get('ytd_this_year_value') or ""
+    record.ytd_last_year_value = request.form.get('ytd_last_year_value') or ""
+    record.ytd_difference_value = request.form.get('ytd_difference_value') or ""
+    record.mtd_this_month_value = request.form.get('mtd_this_month_value') or ""
+    record.mtd_last_month_value = request.form.get('mtd_last_month_value') or ""
+    record.mtd_difference_value = request.form.get('mtd_difference_value') or ""
+    record.label_ly_ytd_total = request.form.get('label_ly_ytd_total') or record.label_ly_ytd_total
+    record.label_ly_ytd_avg = request.form.get('label_ly_ytd_avg') or record.label_ly_ytd_avg
+    record.label_ly_mtd_total = request.form.get('label_ly_mtd_total') or record.label_ly_mtd_total
+    record.label_ly_mtd_avg = request.form.get('label_ly_mtd_avg') or record.label_ly_mtd_avg
+    record.ly_ytd_total_value = request.form.get('ly_ytd_total_value') or ""
+    record.ly_ytd_avg_value = request.form.get('ly_ytd_avg_value') or ""
+    record.ly_mtd_total_value = request.form.get('ly_mtd_total_value') or ""
+    record.ly_mtd_avg_value = request.form.get('ly_mtd_avg_value') or ""
+    
+    # --- CURRENT ACTIVITY CUSTOMIZATION ---
+    record.title_current_activity = request.form.get('title_current_activity') or record.title_current_activity
+    record.label_customers_called = request.form.get('label_customers_called') or record.label_customers_called
+    record.label_customers_called_desc = request.form.get('label_customers_called_desc') or record.label_customers_called_desc
+    record.value_customers_called = request.form.get('value_customers_called') or ""
+    record.label_past_clients_called = request.form.get('label_past_clients_called') or record.label_past_clients_called
+    record.label_past_clients_called_desc = request.form.get('label_past_clients_called_desc') or record.label_past_clients_called_desc
+    record.value_past_clients_called = request.form.get('value_past_clients_called') or ""
+    record.label_rfps_filled = request.form.get('label_rfps_filled') or record.label_rfps_filled
+    record.label_rfps_filled_desc = request.form.get('label_rfps_filled_desc') or record.label_rfps_filled_desc
+    record.value_rfps_filled = request.form.get('value_rfps_filled') or ""
+    record.label_prospects = request.form.get('label_prospects') or record.label_prospects
+    record.label_prospects_desc = request.form.get('label_prospects_desc') or record.label_prospects_desc
+    record.value_prospects = request.form.get('value_prospects') or ""
+    record.label_potential_revenue = request.form.get('label_potential_revenue') or record.label_potential_revenue
+    record.label_potential_revenue_desc = request.form.get('label_potential_revenue_desc') or record.label_potential_revenue_desc
+    record.value_potential_revenue = request.form.get('value_potential_revenue') or ""
+    record.label_secured_future = request.form.get('label_secured_future') or record.label_secured_future
+    record.label_secured_future_desc = request.form.get('label_secured_future_desc') or record.label_secured_future_desc
+    record.value_secured_future = request.form.get('value_secured_future') or ""
+    record.label_mtd_forecast = request.form.get('label_mtd_forecast') or record.label_mtd_forecast
+    record.label_mtd_forecast_desc = request.form.get('label_mtd_forecast_desc') or record.label_mtd_forecast_desc
+    record.value_mtd_forecast = request.form.get('value_mtd_forecast') or ""
+    record.label_mtd_forecast_last = request.form.get('label_mtd_forecast_last') or record.label_mtd_forecast_last
+    record.label_mtd_forecast_last_desc = request.form.get('label_mtd_forecast_last_desc') or record.label_mtd_forecast_last_desc
+    record.value_mtd_forecast_last = request.form.get('value_mtd_forecast_last') or ""
+    record.label_otb_increase = request.form.get('label_otb_increase') or record.label_otb_increase
+    record.label_otb_increase_desc = request.form.get('label_otb_increase_desc') or record.label_otb_increase_desc
+    record.value_otb_increase = request.form.get('value_otb_increase') or ""
+    
+    # --- STRATEGIC CONTINUOUS PLAN CUSTOMIZATION ---
+    record.card_future_activity_title = request.form.get('card_future_activity_title') or record.card_future_activity_title
+    record.label_email_campaign = request.form.get('label_email_campaign') or record.label_email_campaign
+    record.desc_email_campaign = request.form.get('desc_email_campaign') or record.desc_email_campaign
+    record.label_social_media = request.form.get('label_social_media') or record.label_social_media
+    record.desc_social_media = request.form.get('desc_social_media') or record.desc_social_media
+    record.label_comp_strategy = request.form.get('label_comp_strategy') or record.label_comp_strategy
+    record.desc_comp_strategy = request.form.get('desc_comp_strategy') or record.desc_comp_strategy
+    record.label_target_calls = request.form.get('label_target_calls') or record.label_target_calls
+    record.desc_target_calls = request.form.get('desc_target_calls') or record.desc_target_calls
+    record.value_target_calls = request.form.get('value_target_calls') or ""
+    record.label_rfp_excellence = request.form.get('label_rfp_excellence') or record.label_rfp_excellence
+    record.desc_rfp_excellence = request.form.get('desc_rfp_excellence') or record.desc_rfp_excellence
+    record.label_rfp_expansion = request.form.get('label_rfp_expansion') or record.label_rfp_expansion
+    record.desc_rfp_expansion = request.form.get('desc_rfp_expansion') or record.desc_rfp_expansion
+    record.label_competitive_intel = request.form.get('label_competitive_intel') or record.label_competitive_intel
+    record.desc_competitive_intel = request.form.get('desc_competitive_intel') or record.desc_competitive_intel
+    record.label_ota_promotions = request.form.get('label_ota_promotions') or record.label_ota_promotions
+    record.desc_ota_promotions = request.form.get('desc_ota_promotions') or record.desc_ota_promotions
+    record.label_rfp_platform = request.form.get('label_rfp_platform') or record.label_rfp_platform
+    record.desc_rfp_platform = request.form.get('desc_rfp_platform') or record.desc_rfp_platform
+    
+    record.label_ly_ytd_total = request.form.get('label_ly_ytd_total') or record.label_ly_ytd_total
+    record.label_ly_ytd_avg = request.form.get('label_ly_ytd_avg') or record.label_ly_ytd_avg
+    record.label_ly_mtd_total = request.form.get('label_ly_mtd_total') or record.label_ly_mtd_total
+    record.label_ly_mtd_avg = request.form.get('label_ly_mtd_avg') or record.label_ly_mtd_avg
+    record.ly_ytd_total_value = request.form.get('ly_ytd_total_value') or ""
+    record.ly_ytd_avg_value = request.form.get('ly_ytd_avg_value') or ""
+    record.ly_mtd_total_value = request.form.get('ly_mtd_total_value') or ""
+    record.ly_mtd_avg_value = request.form.get('ly_mtd_avg_value') or ""
+    
     # --- COMPANY NAMES ---
     record.company_1 = request.form.get('company_1') or record.company_1
     record.company_2 = request.form.get('company_2') or record.company_2
@@ -385,6 +671,23 @@ def update_data():
     record.company_4 = request.form.get('company_4') or record.company_4
     record.company_5 = request.form.get('company_5') or record.company_5
     record.card_companies_title = request.form.get('card_companies_title') or record.card_companies_title
+    
+    # --- REVENUE SEGMENTS CUSTOMIZATION ---
+    record.segment_1_name = request.form.get('segment_1_name') or record.segment_1_name
+    record.segment_1_label = request.form.get('segment_1_label') or record.segment_1_label
+    record.segment_1_value = request.form.get('segment_1_value') or 0
+    
+    record.segment_2_name = request.form.get('segment_2_name') or record.segment_2_name
+    record.segment_2_label = request.form.get('segment_2_label') or record.segment_2_label
+    record.segment_2_value = request.form.get('segment_2_value') or 0
+    
+    record.segment_3_name = request.form.get('segment_3_name') or record.segment_3_name
+    record.segment_3_label = request.form.get('segment_3_label') or record.segment_3_label
+    record.segment_3_value = request.form.get('segment_3_value') or 0
+    
+    record.segment_4_name = request.form.get('segment_4_name') or record.segment_4_name
+    record.segment_4_label = request.form.get('segment_4_label') or record.segment_4_label
+    record.segment_4_value = request.form.get('segment_4_value') or 0
 
     # EXCEL PARSING RESTORED
     if 'excel_file' in request.files:
@@ -464,4 +767,4 @@ def share_report():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    app.run(debug=True, host='0.0.0.0', port=1200)
