@@ -10,9 +10,8 @@ import requests  # We use this to talk to SendGrid over HTTP (works on PythonAny
 app = Flask(__name__)
 
 # --- SENDGRID CONFIGURATION ---
-# I have inserted your key below. 
-# IMPORTANT: You must verify the SENDER_EMAIL in SendGrid Settings -> Sender Authentication
-SENDGRID_API_KEY = "API-Key"
+# Load API key from environment variable for security
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '')
 SENDER_EMAIL = "orangefalconrev@gmail.com"  # <--- CHANGE THIS to your verified SendGrid sender email
 
 basedir = os.path.abspath(os.path.dirname(__file__))
