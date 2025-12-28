@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 # --- SENDGRID CONFIGURATION ---
 # Load API key from environment variable for security
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '')
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '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')
 SENDER_EMAIL = "orangefalconrev@gmail.com"  # <--- CHANGE THIS to your verified SendGrid sender email
 
 basedir = os.path.abspath(os.path.dirname(__file__))
