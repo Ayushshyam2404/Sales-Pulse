@@ -244,6 +244,47 @@
             text-shadow: 0 0 10px currentColor;
         }
         
+        /* Hotel Statistics Metric Cards */
+        .metric-card {
+            padding: 16px;
+            background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
+            border-radius: 14px;
+            border: 1px solid #333;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 159, 10, 0.15), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-6px) scale(1.05);
+            border-color: var(--accent-orange);
+            box-shadow: 0 12px 35px rgba(255, 159, 10, 0.2);
+        }
+        
+        .metric-card:hover::before {
+            left: 100%;
+        }
+        
+        .metric-card:hover .metric-value {
+            filter: brightness(1.3);
+        }
+        
+        .metric-value {
+            transition: all 0.3s ease;
+        }
+        
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -732,6 +773,120 @@
             </div>
         </div>
 
+        <!-- Hotel Statistics Card -->
+        <div class="card large" id="card-hotel-stats">
+            <h2 id="title-hotel-stats">Hotel Statistics</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px;">
+                <!-- YTD Business LY Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-ytd-business-ly" style="margin-bottom: 8px; font-size: 12px;">YTD Business LY</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: var(--accent-blue);" id="disp-ytd-business-ly">$0</div>
+                </div>
+                
+                <!-- YTD Business Current Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-ytd-business-current" style="margin-bottom: 8px; font-size: 12px;">YTD Business Current</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: #30D158;" id="disp-ytd-business-current">$0</div>
+                </div>
+                
+                <!-- MTD Business LY Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-mtd-business-ly" style="margin-bottom: 8px; font-size: 12px;">MTD Business LY</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: #888;" id="disp-mtd-business-ly">$0</div>
+                </div>
+                
+                <!-- MTD Business Current Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-mtd-business-current" style="margin-bottom: 8px; font-size: 12px;">MTD Business Current</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: white;" id="disp-mtd-business-current">$0</div>
+                </div>
+                
+                <!-- Future MTD Forecast Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-future-mtd-forecast" style="margin-bottom: 8px; font-size: 12px;">Future MTD Forecast OTB</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: var(--accent-orange);" id="disp-future-mtd-forecast">$0</div>
+                </div>
+                
+                <!-- Total Rooms Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-total-rooms" style="margin-bottom: 8px; font-size: 12px;">Total Rooms</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: var(--accent-blue);" id="disp-total-rooms">0</div>
+                </div>
+                
+                <!-- Group Rooms Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-group-rooms" style="margin-bottom: 8px; font-size: 12px;">Group Rooms</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: #30D158;" id="disp-group-rooms">0</div>
+                </div>
+                
+                <!-- Transient Rooms Card -->
+                <div class="metric-card">
+                    <div class="stat-label" id="lbl-transient-rooms" style="margin-bottom: 8px; font-size: 12px;">Transient Rooms</div>
+                    <div class="metric-value" style="font-size: 24px; font-weight: 700; color: var(--accent-orange);" id="disp-transient-rooms">0</div>
+                </div>
+            </div>
+            
+            <!-- Room Statistics Chart -->
+            <div style="margin-top: 30px; height: 250px;">
+                <canvas id="chartRooms" style="max-height: 250px;"></canvas>
+            </div>
+        </div>
+
+        <!-- Business Source: RFP vs LNR -->
+        <div class="card full" id="card-source">
+            <h2 id="title-source">Business Source: RFP vs LNR</h2>
+            <div class="chart-row">
+                <div class="chart-container"><canvas id="rfpBarChart"></canvas></div>
+                <div class="chart-container"><canvas id="rfpPieChart"></canvas></div>
+                <div class="source-stats">
+                    <div style="margin-bottom: 20px;"><div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div><div class="stat-label" id="lbl-rfp-requests">RFP Requests</div></div>
+                    <div><div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div><div class="stat-label" id="lbl-lnr-contracts">LNR Contracts</div></div>
+                </div>
+            </div>
+            
+            <!-- Revenue Segments Breakdown -->
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                <h3 style="font-size: 14px; font-weight: 700; color: var(--accent-orange); margin-bottom: 15px; text-transform: uppercase;">Revenue Breakdown by Segment</h3>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                    <!-- Segment 1 -->
+                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg1-name">Corporate</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-blue); margin-bottom: 3px;" id="disp-revenue-corporate">$0</div>
+                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg1-label">Business Meetings</div>
+                        </div>
+                    </div>
+
+                    <!-- Segment 2 -->
+                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg2-name">Groups & Events</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-purple); margin-bottom: 3px;" id="disp-revenue-groups">$0</div>
+                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg2-label">Church/Reunions</div>
+                        </div>
+                    </div>
+
+                    <!-- Segment 3 -->
+                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg3-name">Leisure/Transient</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-green); margin-bottom: 3px;" id="disp-revenue-leisure">$0</div>
+                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg3-label">OTA & Direct</div>
+                        </div>
+                    </div>
+
+                    <!-- Segment 4 -->
+                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg4-name">Other Revenue</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-orange); margin-bottom: 3px;" id="disp-revenue-other">$0</div>
+                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg4-label">Misc Sources</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Comparison Matrix: YTD & MTD vs Last Year -->
         <div class="card large" id="card-comparison">
             <h2 id="title-comparison">YTD & MTD Comparison</h2>
@@ -897,6 +1052,66 @@
             </div>
         </div>
 
+        <!-- RFP Pipeline Section -->
+        <div class="card full" id="card-rfp-pipeline">
+            <h2 id="title-rfp-pipeline">RFP Pipeline</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+                <!-- Left Side: RFP Metrics -->
+                <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 15px;">
+                    <!-- Total RFP Pursuits -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-pursuits">Total RFP Pursuits</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px;" id="disp-rfp-pursuits">0</div>
+                    </div>
+
+                    <!-- Total RFP Won -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-won">Total RFP Won</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-green); margin-bottom: 4px;" id="disp-rfp-won">0</div>
+                    </div>
+
+                    <!-- RFP Prospects -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-prospects">RFP Prospects</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-orange); margin-bottom: 4px;" id="disp-rfp-prospects">0</div>
+                    </div>
+
+                    <!-- RFP Lost -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-lost">RFP Lost</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-red); margin-bottom: 4px;" id="disp-rfp-lost">0</div>
+                    </div>
+
+                    <!-- Upcoming RFP Volume -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-upcoming">Upcoming RFP Volume</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-purple); margin-bottom: 4px;" id="disp-rfp-upcoming">0</div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Event Status -->
+                <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 15px;">
+                    <!-- RFP Win Event -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-win">RFP Win</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-green); margin-bottom: 4px;" id="disp-event-win">0</div>
+                    </div>
+
+                    <!-- In Process Event -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-in-process">In Process</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px;" id="disp-event-in-process">0</div>
+                    </div>
+
+                    <!-- RFP Loss Event -->
+                    <div class="metric-card">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-loss">RFP Loss</div>
+                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-red); margin-bottom: 4px;" id="disp-event-loss">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Future Activity Section -->
         <div class="card full" id="card-future-activity">
             <h2 id="title-future-activity">Strategic Continuous Plan</h2>
@@ -974,6 +1189,17 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Progress Bar Section -->
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;" id="disp-label-plan-progress">Overall Progress</div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--accent-blue);" id="disp-plan-progress-percent">0%</div>
+                </div>
+                <div style="height: 8px; background: #333; border-radius: 4px; overflow: hidden;">
+                    <div id="disp-plan-progress-bar" style="height: 100%; background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-green) 100%); width: 0%; transition: width 0.3s ease; border-radius: 4px;"></div>
+                </div>
+            </div>
         </div>
 
         <!-- 2. Revenue -->
@@ -1027,61 +1253,6 @@
         <div class="card" style="justify-content: center;" id="card-insight">
              <h2>Key Insight</h2>
              <div style="font-size: 15px; line-height: 1.5; color: #D1D1D6;" id="auto-insight">Loading...</div>
-        </div>
-
-        <!-- 6. Source -->
-        <div class="card full" id="card-source">
-            <h2 id="title-source">Business Source: RFP vs LNR</h2>
-            <div class="chart-row">
-                <div class="chart-container"><canvas id="rfpBarChart"></canvas></div>
-                <div class="chart-container"><canvas id="rfpPieChart"></canvas></div>
-                <div class="source-stats">
-                    <div style="margin-bottom: 20px;"><div class="stat-huge" style="font-size: 32px;" id="disp-rfps">0</div><div class="stat-label" id="lbl-rfp-requests">RFP Requests</div></div>
-                    <div><div class="stat-huge" style="font-size: 32px; color: var(--accent-orange);" id="disp-lnrs">0</div><div class="stat-label" id="lbl-lnr-contracts">LNR Contracts</div></div>
-                </div>
-            </div>
-            
-            <!-- Revenue Segments Breakdown -->
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
-                <h3 style="font-size: 14px; font-weight: 700; color: var(--accent-orange); margin-bottom: 15px; text-transform: uppercase;">Revenue Breakdown by Segment</h3>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-                    <!-- Segment 1 -->
-                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg1-name">Corporate</div>
-                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-blue); margin-bottom: 3px;" id="disp-revenue-corporate">$0</div>
-                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg1-label">Business Meetings</div>
-                        </div>
-                    </div>
-
-                    <!-- Segment 2 -->
-                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg2-name">Groups & Events</div>
-                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-purple); margin-bottom: 3px;" id="disp-revenue-groups">$0</div>
-                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg2-label">Church/Reunions</div>
-                        </div>
-                    </div>
-
-                    <!-- Segment 3 -->
-                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg3-name">Leisure/Transient</div>
-                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-green); margin-bottom: 3px;" id="disp-revenue-leisure">$0</div>
-                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg3-label">OTA & Direct</div>
-                        </div>
-                    </div>
-
-                    <!-- Segment 4 -->
-                    <div class="comparison-card" style="padding: 12px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 12px; border: 1px solid #333;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="seg4-name">Other Revenue</div>
-                            <div style="font-size: 20px; font-weight: 700; color: var(--accent-orange); margin-bottom: 3px;" id="disp-revenue-other">$0</div>
-                            <div style="font-size: 8px; color: var(--text-secondary);" id="seg4-label">Misc Sources</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- 7. Logs -->
@@ -1144,6 +1315,7 @@
                     <div class="switch-row"><span class="switch-label">Business Source</span><input type="checkbox" class="toggle-switch" id="vis-source"></div>
                     <div class="switch-row"><span class="switch-label">Call Logs (Table)</span><input type="checkbox" class="toggle-switch" id="vis-logs"></div>
                     <div class="switch-row"><span class="switch-label">Top Companies</span><input type="checkbox" class="toggle-switch" id="vis-companies"></div>
+                    <div class="switch-row"><span class="switch-label">Hotel Statistics</span><input type="checkbox" class="toggle-switch" id="vis-hotel-stats"></div>
                 </div>
             </div>
 
@@ -1378,6 +1550,106 @@
                 </div>
             </div>
 
+            <!-- HOTEL STATISTICS SECTION -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h3>Hotel Statistics</h3>
+                    <span class="collapsible-toggle">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="color: var(--accent-blue); font-size: 11px; font-weight: bold; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #444;">Card Settings</div>
+                    <div class="input-group"><label>Card Title</label><input type="text" id="inp-card-hotel-stats-title" placeholder="e.g., Hotel Statistics"></div>
+                    
+                    <div style="color: var(--accent-blue); font-size: 11px; font-weight: bold; margin-top: 20px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #444;">Business Metrics</div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>YTD Business LY Label</label><input type="text" id="inp-label-ytd-business-ly"></div>
+                        <div class="input-group"><label>YTD Business LY Value</label><input type="number" id="inp-value-ytd-business-ly"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>YTD Business Current Label</label><input type="text" id="inp-label-ytd-business-current"></div>
+                        <div class="input-group"><label>YTD Business Current Value</label><input type="number" id="inp-value-ytd-business-current"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>MTD Business LY Label</label><input type="text" id="inp-label-mtd-business-ly"></div>
+                        <div class="input-group"><label>MTD Business LY Value</label><input type="number" id="inp-value-mtd-business-ly"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>MTD Business Current Label</label><input type="text" id="inp-label-mtd-business-current"></div>
+                        <div class="input-group"><label>MTD Business Current Value</label><input type="number" id="inp-value-mtd-business-current"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>Future MTD Forecast OTB Label</label><input type="text" id="inp-label-future-mtd-forecast"></div>
+                        <div class="input-group"><label>Future MTD Forecast OTB Value</label><input type="number" id="inp-value-future-mtd-forecast"></div>
+                    </div>
+                    
+                    <div style="color: var(--accent-blue); font-size: 11px; font-weight: bold; margin-top: 20px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #444;">Room Statistics</div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>Total Rooms Label</label><input type="text" id="inp-label-total-rooms"></div>
+                        <div class="input-group"><label>Total Rooms Value</label><input type="number" id="inp-value-total-rooms"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>Group Rooms Label</label><input type="text" id="inp-label-group-rooms"></div>
+                        <div class="input-group"><label>Group Rooms Value</label><input type="number" id="inp-value-group-rooms"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>Transient Rooms Label</label><input type="text" id="inp-label-transient-rooms"></div>
+                        <div class="input-group"><label>Transient Rooms Value</label><input type="number" id="inp-value-transient-rooms"></div>
+                    </div>
+                    <div class="input-group"><label>Room Chart Title</label><input type="text" id="inp-chart-rooms-title" placeholder="e.g., Room Statistics"></div>
+                </div>
+            </div>
+
+            <!-- RFP PIPELINE SECTION -->
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h3>RFP Pipeline</h3>
+                    <span class="collapsible-toggle">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px; cursor: pointer;">
+                        <input type="checkbox" id="vis-rfp-pipeline"> Show RFP Pipeline Card
+                    </label>
+                    
+                    <div class="input-group"><label>Card Title</label><input type="text" id="inp-card-rfp-pipeline-title" placeholder="e.g., RFP Pipeline"></div>
+                    
+                    <div style="color: var(--accent-blue); font-size: 11px; font-weight: bold; margin-top: 20px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #444;">Left Metrics</div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>RFP Pursuits Label</label><input type="text" id="inp-label-rfp-pursuits"></div>
+                        <div class="input-group"><label>RFP Pursuits Value</label><input type="number" id="inp-value-rfp-pursuits"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>RFP Won Label</label><input type="text" id="inp-label-rfp-won"></div>
+                        <div class="input-group"><label>RFP Won Value</label><input type="number" id="inp-value-rfp-won"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>RFP Prospects Label</label><input type="text" id="inp-label-rfp-prospects"></div>
+                        <div class="input-group"><label>RFP Prospects Value</label><input type="number" id="inp-value-rfp-prospects"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>RFP Lost Label</label><input type="text" id="inp-label-rfp-lost"></div>
+                        <div class="input-group"><label>RFP Lost Value</label><input type="number" id="inp-value-rfp-lost"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>Upcoming RFP Label</label><input type="text" id="inp-label-rfp-upcoming"></div>
+                        <div class="input-group"><label>Upcoming RFP Value</label><input type="number" id="inp-value-rfp-upcoming"></div>
+                    </div>
+                    
+                    <div style="color: var(--accent-blue); font-size: 11px; font-weight: bold; margin-top: 20px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #444;">Right Event Status</div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>RFP Win Label</label><input type="text" id="inp-label-event-win"></div>
+                        <div class="input-group"><label>RFP Win Value</label><input type="number" id="inp-value-event-win"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>In Process Label</label><input type="text" id="inp-label-event-in-process"></div>
+                        <div class="input-group"><label>In Process Value</label><input type="number" id="inp-value-event-in-process"></div>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>RFP Loss Label</label><input type="text" id="inp-label-event-loss"></div>
+                        <div class="input-group"><label>RFP Loss Value</label><input type="number" id="inp-value-event-loss"></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- REVENUE SEGMENTS SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
@@ -1491,6 +1763,13 @@
                     <div class="input-grid">
                         <div class="input-group"><label>Title</label><input type="text" id="inp-label-rfp-platform" placeholder="e.g., RFP Platform Strategy"></div>
                         <div class="input-group"><label>Description</label><input type="text" id="inp-desc-rfp-platform" placeholder="Enter description"></div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div style="color: var(--accent-blue); font-size: 11px; font-weight: bold; margin-top: 20px; margin-bottom: 12px; padding-top: 10px; padding-bottom: 10px; border-top: 1px solid #444; border-bottom: 1px solid #444;">Progress Bar</div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>Progress Label</label><input type="text" id="inp-label-plan-progress" placeholder="e.g., Overall Progress"></div>
+                        <div class="input-group"><label>Progress Value (%)</label><input type="number" id="inp-value-plan-progress" min="0" max="100" placeholder="0"></div>
                     </div>
                 </div>
             </div>
@@ -1837,6 +2116,47 @@
             formData.append('company_5', document.getElementById('inp-company-5').value);
             formData.append('card_companies_title', document.getElementById('inp-card-companies-title').value);
             
+            // -- HOTEL STATISTICS --
+            formData.append('visible_hotel_stats', document.getElementById('vis-hotel-stats').checked);
+            formData.append('card_hotel_stats_title', document.getElementById('inp-card-hotel-stats-title').value);
+            formData.append('label_ytd_business_ly', document.getElementById('inp-label-ytd-business-ly').value);
+            formData.append('value_ytd_business_ly', document.getElementById('inp-value-ytd-business-ly').value);
+            formData.append('label_ytd_business_current', document.getElementById('inp-label-ytd-business-current').value);
+            formData.append('value_ytd_business_current', document.getElementById('inp-value-ytd-business-current').value);
+            formData.append('label_mtd_business_ly', document.getElementById('inp-label-mtd-business-ly').value);
+            formData.append('value_mtd_business_ly', document.getElementById('inp-value-mtd-business-ly').value);
+            formData.append('label_mtd_business_current', document.getElementById('inp-label-mtd-business-current').value);
+            formData.append('value_mtd_business_current', document.getElementById('inp-value-mtd-business-current').value);
+            formData.append('label_future_mtd_forecast', document.getElementById('inp-label-future-mtd-forecast').value);
+            formData.append('value_future_mtd_forecast', document.getElementById('inp-value-future-mtd-forecast').value);
+            formData.append('label_total_rooms', document.getElementById('inp-label-total-rooms').value);
+            formData.append('value_total_rooms', document.getElementById('inp-value-total-rooms').value);
+            formData.append('label_group_rooms', document.getElementById('inp-label-group-rooms').value);
+            formData.append('value_group_rooms', document.getElementById('inp-value-group-rooms').value);
+            formData.append('label_transient_rooms', document.getElementById('inp-label-transient-rooms').value);
+            formData.append('value_transient_rooms', document.getElementById('inp-value-transient-rooms').value);
+            formData.append('chart_rooms_title', document.getElementById('inp-chart-rooms-title').value);
+            
+            // -- RFP PIPELINE --
+            formData.append('visible_rfp_pipeline', document.getElementById('vis-rfp-pipeline').checked);
+            formData.append('card_rfp_pipeline_title', document.getElementById('inp-card-rfp-pipeline-title').value);
+            formData.append('label_rfp_pursuits', document.getElementById('inp-label-rfp-pursuits').value);
+            formData.append('value_rfp_pursuits', document.getElementById('inp-value-rfp-pursuits').value);
+            formData.append('label_rfp_won', document.getElementById('inp-label-rfp-won').value);
+            formData.append('value_rfp_won', document.getElementById('inp-value-rfp-won').value);
+            formData.append('label_rfp_prospects', document.getElementById('inp-label-rfp-prospects').value);
+            formData.append('value_rfp_prospects', document.getElementById('inp-value-rfp-prospects').value);
+            formData.append('label_rfp_lost', document.getElementById('inp-label-rfp-lost').value);
+            formData.append('value_rfp_lost', document.getElementById('inp-value-rfp-lost').value);
+            formData.append('label_rfp_upcoming', document.getElementById('inp-label-rfp-upcoming').value);
+            formData.append('value_rfp_upcoming', document.getElementById('inp-value-rfp-upcoming').value);
+            formData.append('label_event_win', document.getElementById('inp-label-event-win').value);
+            formData.append('value_event_win', document.getElementById('inp-value-event-win').value);
+            formData.append('label_event_in_process', document.getElementById('inp-label-event-in-process').value);
+            formData.append('value_event_in_process', document.getElementById('inp-value-event-in-process').value);
+            formData.append('label_event_loss', document.getElementById('inp-label-event-loss').value);
+            formData.append('value_event_loss', document.getElementById('inp-value-event-loss').value);
+            
             // -- REVENUE SEGMENTS --
             formData.append('segment_1_name', document.getElementById('inp-segment-1-name').value);
             formData.append('segment_1_label', document.getElementById('inp-segment-1-label').value);
@@ -1901,7 +2221,9 @@
             formData.append('label_ota_promotions', document.getElementById('inp-label-ota-promotions').value);
             formData.append('desc_ota_promotions', document.getElementById('inp-desc-ota-promotions').value);
             formData.append('label_rfp_platform', document.getElementById('inp-label-rfp-platform').value);
-            formData.append('desc_rfp_platform', document.getElementById('inp-desc-rfp-platform').value); 
+            formData.append('desc_rfp_platform', document.getElementById('inp-desc-rfp-platform').value);
+            formData.append('label_plan_progress', document.getElementById('inp-label-plan-progress').value);
+            formData.append('value_plan_progress', document.getElementById('inp-value-plan-progress').value);
 
             await fetch('/api/update', { method: 'POST', body: formData });
             closeModal();
@@ -2034,6 +2356,50 @@
             document.getElementById('ly-mtd-total').innerText = lyMtdTotalVal;
             document.getElementById('ly-mtd-avg').innerText = lyMtdAvgVal;
 
+            // --- HOTEL STATISTICS SECTION ---
+            document.getElementById('card-hotel-stats').style.display = data.visible_hotel_stats ? 'block' : 'none';
+            document.getElementById('title-hotel-stats').innerText = data.card_hotel_stats_title || 'Hotel Statistics';
+            
+            document.getElementById('lbl-ytd-business-ly').innerText = data.label_ytd_business_ly;
+            document.getElementById('disp-ytd-business-ly').innerText = fmt(data.value_ytd_business_ly);
+            document.getElementById('lbl-ytd-business-current').innerText = data.label_ytd_business_current;
+            document.getElementById('disp-ytd-business-current').innerText = fmt(data.value_ytd_business_current);
+            document.getElementById('lbl-mtd-business-ly').innerText = data.label_mtd_business_ly;
+            document.getElementById('disp-mtd-business-ly').innerText = fmt(data.value_mtd_business_ly);
+            document.getElementById('lbl-mtd-business-current').innerText = data.label_mtd_business_current;
+            document.getElementById('disp-mtd-business-current').innerText = fmt(data.value_mtd_business_current);
+            document.getElementById('lbl-future-mtd-forecast').innerText = data.label_future_mtd_forecast;
+            document.getElementById('disp-future-mtd-forecast').innerText = fmt(data.value_future_mtd_forecast);
+            
+            document.getElementById('lbl-total-rooms').innerText = data.label_total_rooms;
+            document.getElementById('disp-total-rooms').innerText = num(data.value_total_rooms);
+            document.getElementById('lbl-group-rooms').innerText = data.label_group_rooms;
+            document.getElementById('disp-group-rooms').innerText = num(data.value_group_rooms);
+            document.getElementById('lbl-transient-rooms').innerText = data.label_transient_rooms;
+            document.getElementById('disp-transient-rooms').innerText = num(data.value_transient_rooms);
+
+            // --- RFP PIPELINE SECTION ---
+            document.getElementById('card-rfp-pipeline').style.display = data.visible_rfp_pipeline ? 'block' : 'none';
+            document.getElementById('title-rfp-pipeline').innerText = data.card_rfp_pipeline_title || 'RFP Pipeline';
+            
+            document.getElementById('lbl-rfp-pursuits').innerText = data.label_rfp_pursuits;
+            document.getElementById('disp-rfp-pursuits').innerText = num(data.value_rfp_pursuits);
+            document.getElementById('lbl-rfp-won').innerText = data.label_rfp_won;
+            document.getElementById('disp-rfp-won').innerText = num(data.value_rfp_won);
+            document.getElementById('lbl-rfp-prospects').innerText = data.label_rfp_prospects;
+            document.getElementById('disp-rfp-prospects').innerText = num(data.value_rfp_prospects);
+            document.getElementById('lbl-rfp-lost').innerText = data.label_rfp_lost;
+            document.getElementById('disp-rfp-lost').innerText = num(data.value_rfp_lost);
+            document.getElementById('lbl-rfp-upcoming').innerText = data.label_rfp_upcoming;
+            document.getElementById('disp-rfp-upcoming').innerText = num(data.value_rfp_upcoming);
+            
+            document.getElementById('lbl-event-win').innerText = data.label_event_win;
+            document.getElementById('disp-event-win').innerText = num(data.value_event_win);
+            document.getElementById('lbl-event-in-process').innerText = data.label_event_in_process;
+            document.getElementById('disp-event-in-process').innerText = num(data.value_event_in_process);
+            document.getElementById('lbl-event-loss').innerText = data.label_event_loss;
+            document.getElementById('disp-event-loss').innerText = num(data.value_event_loss);
+
             // --- CURRENT ACTIVITY SECTION ---
             document.getElementById('title-current-activity').innerText = data.title_current_activity || 'Current Activity';
             
@@ -2136,6 +2502,11 @@
             // Card 9: RFP Platform
             document.getElementById('disp-label-rfp-platform').innerText = data.label_rfp_platform || 'RFP Platform Strategy';
             document.getElementById('disp-desc-rfp-platform').innerText = data.desc_rfp_platform || 'Identify key RFP platforms for revenue optimization (Tentative)';
+            
+            // Progress Bar
+            document.getElementById('disp-label-plan-progress').innerText = data.label_plan_progress || 'Overall Progress';
+            document.getElementById('disp-plan-progress-percent').innerText = data.value_plan_progress + '%';
+            document.getElementById('disp-plan-progress-bar').style.width = data.value_plan_progress + '%';
 
             // Inputs Sync
             document.getElementById('inp-hotel').value = data.hotel_name;
@@ -2287,6 +2658,8 @@
             document.getElementById('inp-desc-ota-promotions').value = data.desc_ota_promotions;
             document.getElementById('inp-label-rfp-platform').value = data.label_rfp_platform;
             document.getElementById('inp-desc-rfp-platform').value = data.desc_rfp_platform;
+            document.getElementById('inp-label-plan-progress').value = data.label_plan_progress;
+            document.getElementById('inp-value-plan-progress').value = data.value_plan_progress;
 
             document.getElementById('inp-company-1').value = data.company_1;
             document.getElementById('inp-company-2').value = data.company_2;
@@ -2300,6 +2673,47 @@
             document.getElementById('disp-company-3').innerText = data.company_3;
             document.getElementById('disp-company-4').innerText = data.company_4;
             document.getElementById('disp-company-5').innerText = data.company_5;
+            
+            // Hotel Statistics inputs
+            document.getElementById('vis-hotel-stats').checked = data.visible_hotel_stats;
+            document.getElementById('inp-card-hotel-stats-title').value = data.card_hotel_stats_title;
+            document.getElementById('inp-label-ytd-business-ly').value = data.label_ytd_business_ly;
+            document.getElementById('inp-value-ytd-business-ly').value = data.value_ytd_business_ly;
+            document.getElementById('inp-label-ytd-business-current').value = data.label_ytd_business_current;
+            document.getElementById('inp-value-ytd-business-current').value = data.value_ytd_business_current;
+            document.getElementById('inp-label-mtd-business-ly').value = data.label_mtd_business_ly;
+            document.getElementById('inp-value-mtd-business-ly').value = data.value_mtd_business_ly;
+            document.getElementById('inp-label-mtd-business-current').value = data.label_mtd_business_current;
+            document.getElementById('inp-value-mtd-business-current').value = data.value_mtd_business_current;
+            document.getElementById('inp-label-future-mtd-forecast').value = data.label_future_mtd_forecast;
+            document.getElementById('inp-value-future-mtd-forecast').value = data.value_future_mtd_forecast;
+            document.getElementById('inp-label-total-rooms').value = data.label_total_rooms;
+            document.getElementById('inp-value-total-rooms').value = data.value_total_rooms;
+            document.getElementById('inp-label-group-rooms').value = data.label_group_rooms;
+            document.getElementById('inp-value-group-rooms').value = data.value_group_rooms;
+            document.getElementById('inp-label-transient-rooms').value = data.label_transient_rooms;
+            document.getElementById('inp-value-transient-rooms').value = data.value_transient_rooms;
+            document.getElementById('inp-chart-rooms-title').value = data.chart_rooms_title;
+            
+            // RFP Pipeline inputs
+            document.getElementById('vis-rfp-pipeline').checked = data.visible_rfp_pipeline;
+            document.getElementById('inp-card-rfp-pipeline-title').value = data.card_rfp_pipeline_title;
+            document.getElementById('inp-label-rfp-pursuits').value = data.label_rfp_pursuits;
+            document.getElementById('inp-value-rfp-pursuits').value = data.value_rfp_pursuits;
+            document.getElementById('inp-label-rfp-won').value = data.label_rfp_won;
+            document.getElementById('inp-value-rfp-won').value = data.value_rfp_won;
+            document.getElementById('inp-label-rfp-prospects').value = data.label_rfp_prospects;
+            document.getElementById('inp-value-rfp-prospects').value = data.value_rfp_prospects;
+            document.getElementById('inp-label-rfp-lost').value = data.label_rfp_lost;
+            document.getElementById('inp-value-rfp-lost').value = data.value_rfp_lost;
+            document.getElementById('inp-label-rfp-upcoming').value = data.label_rfp_upcoming;
+            document.getElementById('inp-value-rfp-upcoming').value = data.value_rfp_upcoming;
+            document.getElementById('inp-label-event-win').value = data.label_event_win;
+            document.getElementById('inp-value-event-win').value = data.value_event_win;
+            document.getElementById('inp-label-event-in-process').value = data.label_event_in_process;
+            document.getElementById('inp-value-event-in-process').value = data.value_event_in_process;
+            document.getElementById('inp-label-event-loss').value = data.label_event_loss;
+            document.getElementById('inp-value-event-loss').value = data.value_event_loss;
             
             // Segment inputs
             document.getElementById('inp-segment-1-name').value = data.segment_1_name;
@@ -2482,6 +2896,36 @@
                         }] 
                     },
                     options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' }, title: { display: true, text: data.chart_source_mix || 'Contract Mix', color: '#fff' } } }
+                });
+            }
+
+            // Hotel Statistics Room Chart
+            if(data.visible_hotel_stats) {
+                const roomLabels = [data.label_group_rooms || 'Group Rooms', data.label_transient_rooms || 'Transient Rooms'];
+                charts.roomsChart = new Chart(document.getElementById('chartRooms'), {
+                    type: 'bar',
+                    data: {
+                        labels: roomLabels,
+                        datasets: [{
+                            label: 'Rooms',
+                            data: [data.value_group_rooms || 0, data.value_transient_rooms || 0],
+                            backgroundColor: ['#30D158', '#FF9F0A'],
+                            borderRadius: 6,
+                            barThickness: 40
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: data.chart_rooms_title || 'Room Statistics', color: '#fff' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: '#333' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
                 });
             }
         }

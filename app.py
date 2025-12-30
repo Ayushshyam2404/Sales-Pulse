@@ -218,6 +218,59 @@ class ReportData(db.Model):
     segment_4_value = db.Column(db.Integer, default=0)
     segment_4_color = db.Column(db.String(20), default="orange")
     
+    # --- HOTEL STATISTICS CARD ---
+    visible_hotel_stats = db.Column(db.Boolean, default=True)
+    card_hotel_stats_title = db.Column(db.String(100), default="Hotel Statistics")
+    
+    # Business metrics
+    label_ytd_business_ly = db.Column(db.String(50), default="YTD Business LY")
+    value_ytd_business_ly = db.Column(db.Integer, default=850000)
+    label_ytd_business_current = db.Column(db.String(50), default="YTD Business Current")
+    value_ytd_business_current = db.Column(db.Integer, default=920000)
+    label_mtd_business_ly = db.Column(db.String(50), default="MTD Business LY")
+    value_mtd_business_ly = db.Column(db.Integer, default=75000)
+    label_mtd_business_current = db.Column(db.String(50), default="MTD Business Current")
+    value_mtd_business_current = db.Column(db.Integer, default=82000)
+    label_future_mtd_forecast = db.Column(db.String(50), default="Future MTD Forecast OTB")
+    value_future_mtd_forecast = db.Column(db.Integer, default=95000)
+    
+    # Room statistics
+    label_total_rooms = db.Column(db.String(50), default="Total Rooms")
+    value_total_rooms = db.Column(db.Integer, default=250)
+    label_group_rooms = db.Column(db.String(50), default="Group Rooms")
+    value_group_rooms = db.Column(db.Integer, default=150)
+    label_transient_rooms = db.Column(db.String(50), default="Transient Rooms")
+    value_transient_rooms = db.Column(db.Integer, default=100)
+    chart_rooms_title = db.Column(db.String(100), default="Room Statistics")
+    
+    # --- RFP PIPELINE CARD ---
+    visible_rfp_pipeline = db.Column(db.Boolean, default=True)
+    card_rfp_pipeline_title = db.Column(db.String(100), default="RFP Pipeline")
+    
+    # Left side - Numeric metrics
+    label_rfp_pursuits = db.Column(db.String(50), default="Total RFP Pursuits")
+    value_rfp_pursuits = db.Column(db.Integer, default=45)
+    label_rfp_won = db.Column(db.String(50), default="Total RFP Won")
+    value_rfp_won = db.Column(db.Integer, default=12)
+    label_rfp_prospects = db.Column(db.String(50), default="RFP Prospects")
+    value_rfp_prospects = db.Column(db.Integer, default=28)
+    label_rfp_lost = db.Column(db.String(50), default="RFP Lost")
+    value_rfp_lost = db.Column(db.Integer, default=5)
+    label_rfp_upcoming = db.Column(db.String(50), default="Upcoming RFP Volume")
+    value_rfp_upcoming = db.Column(db.Integer, default=18)
+    
+    # Right side - Event status
+    label_event_win = db.Column(db.String(50), default="RFP Win")
+    value_event_win = db.Column(db.Integer, default=3)
+    label_event_in_process = db.Column(db.String(50), default="In Process")
+    value_event_in_process = db.Column(db.Integer, default=22)
+    label_event_loss = db.Column(db.String(50), default="RFP Loss")
+    value_event_loss = db.Column(db.Integer, default=2)
+    
+    # Strategic Continuous Plan Progress Bar
+    label_plan_progress = db.Column(db.String(50), default="Overall Progress")
+    value_plan_progress = db.Column(db.Integer, default=0)
+    
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
 class CallLog(db.Model):
@@ -485,6 +538,49 @@ def get_data():
         'segment_4_label': record.segment_4_label,
         'segment_4_value': record.segment_4_value,
         
+        # --- HOTEL STATISTICS ---
+        'visible_hotel_stats': record.visible_hotel_stats,
+        'card_hotel_stats_title': record.card_hotel_stats_title,
+        'label_ytd_business_ly': record.label_ytd_business_ly,
+        'value_ytd_business_ly': record.value_ytd_business_ly,
+        'label_ytd_business_current': record.label_ytd_business_current,
+        'value_ytd_business_current': record.value_ytd_business_current,
+        'label_mtd_business_ly': record.label_mtd_business_ly,
+        'value_mtd_business_ly': record.value_mtd_business_ly,
+        'label_mtd_business_current': record.label_mtd_business_current,
+        'value_mtd_business_current': record.value_mtd_business_current,
+        'label_future_mtd_forecast': record.label_future_mtd_forecast,
+        'value_future_mtd_forecast': record.value_future_mtd_forecast,
+        'label_total_rooms': record.label_total_rooms,
+        'value_total_rooms': record.value_total_rooms,
+        'label_group_rooms': record.label_group_rooms,
+        'value_group_rooms': record.value_group_rooms,
+        'label_transient_rooms': record.label_transient_rooms,
+        'value_transient_rooms': record.value_transient_rooms,
+        'chart_rooms_title': record.chart_rooms_title,
+        
+        # --- RFP PIPELINE ---
+        'visible_rfp_pipeline': record.visible_rfp_pipeline,
+        'card_rfp_pipeline_title': record.card_rfp_pipeline_title,
+        'label_rfp_pursuits': record.label_rfp_pursuits,
+        'value_rfp_pursuits': record.value_rfp_pursuits,
+        'label_rfp_won': record.label_rfp_won,
+        'value_rfp_won': record.value_rfp_won,
+        'label_rfp_prospects': record.label_rfp_prospects,
+        'value_rfp_prospects': record.value_rfp_prospects,
+        'label_rfp_lost': record.label_rfp_lost,
+        'value_rfp_lost': record.value_rfp_lost,
+        'label_rfp_upcoming': record.label_rfp_upcoming,
+        'value_rfp_upcoming': record.value_rfp_upcoming,
+        'label_event_win': record.label_event_win,
+        'value_event_win': record.value_event_win,
+        'label_event_in_process': record.label_event_in_process,
+        'value_event_in_process': record.value_event_in_process,
+        'label_event_loss': record.label_event_loss,
+        'value_event_loss': record.value_event_loss,
+        'label_plan_progress': record.label_plan_progress,
+        'value_plan_progress': record.value_plan_progress,
+        
         'logs': log_list
     })
 
@@ -687,6 +783,49 @@ def update_data():
     record.segment_4_name = request.form.get('segment_4_name') or record.segment_4_name
     record.segment_4_label = request.form.get('segment_4_label') or record.segment_4_label
     record.segment_4_value = request.form.get('segment_4_value') or 0
+    
+    # --- HOTEL STATISTICS ---
+    record.visible_hotel_stats = request.form.get('visible_hotel_stats') == 'true'
+    record.card_hotel_stats_title = request.form.get('card_hotel_stats_title') or record.card_hotel_stats_title
+    record.label_ytd_business_ly = request.form.get('label_ytd_business_ly') or record.label_ytd_business_ly
+    record.value_ytd_business_ly = request.form.get('value_ytd_business_ly') or 0
+    record.label_ytd_business_current = request.form.get('label_ytd_business_current') or record.label_ytd_business_current
+    record.value_ytd_business_current = request.form.get('value_ytd_business_current') or 0
+    record.label_mtd_business_ly = request.form.get('label_mtd_business_ly') or record.label_mtd_business_ly
+    record.value_mtd_business_ly = request.form.get('value_mtd_business_ly') or 0
+    record.label_mtd_business_current = request.form.get('label_mtd_business_current') or record.label_mtd_business_current
+    record.value_mtd_business_current = request.form.get('value_mtd_business_current') or 0
+    record.label_future_mtd_forecast = request.form.get('label_future_mtd_forecast') or record.label_future_mtd_forecast
+    record.value_future_mtd_forecast = request.form.get('value_future_mtd_forecast') or 0
+    record.label_total_rooms = request.form.get('label_total_rooms') or record.label_total_rooms
+    record.value_total_rooms = request.form.get('value_total_rooms') or 0
+    record.label_group_rooms = request.form.get('label_group_rooms') or record.label_group_rooms
+    record.value_group_rooms = request.form.get('value_group_rooms') or 0
+    record.label_transient_rooms = request.form.get('label_transient_rooms') or record.label_transient_rooms
+    record.value_transient_rooms = request.form.get('value_transient_rooms') or 0
+    record.chart_rooms_title = request.form.get('chart_rooms_title') or record.chart_rooms_title
+    
+    # --- RFP PIPELINE ---
+    record.visible_rfp_pipeline = request.form.get('visible_rfp_pipeline') == 'true'
+    record.card_rfp_pipeline_title = request.form.get('card_rfp_pipeline_title') or record.card_rfp_pipeline_title
+    record.label_rfp_pursuits = request.form.get('label_rfp_pursuits') or record.label_rfp_pursuits
+    record.value_rfp_pursuits = request.form.get('value_rfp_pursuits') or 0
+    record.label_rfp_won = request.form.get('label_rfp_won') or record.label_rfp_won
+    record.value_rfp_won = request.form.get('value_rfp_won') or 0
+    record.label_rfp_prospects = request.form.get('label_rfp_prospects') or record.label_rfp_prospects
+    record.value_rfp_prospects = request.form.get('value_rfp_prospects') or 0
+    record.label_rfp_lost = request.form.get('label_rfp_lost') or record.label_rfp_lost
+    record.value_rfp_lost = request.form.get('value_rfp_lost') or 0
+    record.label_rfp_upcoming = request.form.get('label_rfp_upcoming') or record.label_rfp_upcoming
+    record.value_rfp_upcoming = request.form.get('value_rfp_upcoming') or 0
+    record.label_event_win = request.form.get('label_event_win') or record.label_event_win
+    record.value_event_win = request.form.get('value_event_win') or 0
+    record.label_event_in_process = request.form.get('label_event_in_process') or record.label_event_in_process
+    record.value_event_in_process = request.form.get('value_event_in_process') or 0
+    record.label_event_loss = request.form.get('label_event_loss') or record.label_event_loss
+    record.value_event_loss = request.form.get('value_event_loss') or 0
+    record.label_plan_progress = request.form.get('label_plan_progress') or record.label_plan_progress
+    record.value_plan_progress = request.form.get('value_plan_progress') or 0
 
     # EXCEL PARSING RESTORED
     if 'excel_file' in request.files:
@@ -766,4 +905,4 @@ def share_report():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=1200)
+    app.run(debug=True, host='0.0.0.0', port=1400)
