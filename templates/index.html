@@ -826,6 +826,17 @@
                 </div>
             </div>
             
+            <!-- Hotel Performance Progress Bar -->
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="font-size: 12px; font-weight: 600; color: #888;" id="lbl-hotel-performance">Hotel Performance Target</div>
+                    <div style="font-size: 12px; font-weight: 700; color: var(--accent-blue);" id="disp-hotel-performance-pct">0%</div>
+                </div>
+                <div style="width: 100%; height: 8px; background: #1C1C1E; border-radius: 4px; overflow: hidden;">
+                    <div id="bar-hotel-performance" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-orange) 0%, #FF9500 100%); transition: width 0.3s ease;"></div>
+                </div>
+            </div>
+            
             <!-- Room Statistics Chart -->
             <div style="margin-top: 30px; height: 250px;">
                 <canvas id="chartRooms" style="max-height: 250px;"></canvas>
@@ -1327,7 +1338,7 @@
             <!-- FINANCIAL SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Financial Report (Top Card)</h3>
+                    <h3>Card 1: Financial Report</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1350,7 +1361,7 @@
             <!-- PROPERTY PERFORMANCE SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Property Performance (2nd Card)</h3>
+                    <h3>Card 2: Property Performance</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1380,7 +1391,7 @@
             <!-- PIPELINE SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Pipeline Pulse</h3>
+                    <h3>Card 3: Pipeline Pulse</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1397,7 +1408,7 @@
             <!-- ACTIVITY & BUSINESS SOURCE SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Activity & Business Source</h3>
+                    <h3>Card 4: Activity & Business Source</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1433,7 +1444,7 @@
             <!-- FINANCIAL METRICS DIALS -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Financial Metrics Dials</h3>
+                    <h3>Card 5: Financial Metrics Dials</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1477,7 +1488,7 @@
             <!-- COMPARISON CARD SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>YTD & MTD Comparison Cards</h3>
+                    <h3>Card 6: YTD & MTD Comparison Cards</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1541,7 +1552,7 @@
             <!-- HOTEL STATISTICS SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Hotel Statistics</h3>
+                    <h3>Card 7: Hotel Statistics</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1584,13 +1595,19 @@
                         <div class="input-group"><label>Transient Rooms Value</label><input type="number" id="inp-value-transient-rooms"></div>
                     </div>
                     <div class="input-group"><label>Room Chart Title</label><input type="text" id="inp-chart-rooms-title" placeholder="e.g., Room Statistics"></div>
+                    
+                    <div style="color: var(--accent-blue); font-size: 11px; font-weight: bold; margin-top: 20px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #444;">Performance Progress Bar</div>
+                    <div class="input-grid">
+                        <div class="input-group"><label>Progress Label</label><input type="text" id="inp-label-hotel-performance" placeholder="e.g., Hotel Performance Target"></div>
+                        <div class="input-group"><label>Progress Value (%)</label><input type="number" id="inp-value-hotel-performance" min="0" max="100" placeholder="0"></div>
+                    </div>
                 </div>
             </div>
 
             <!-- RFP PIPELINE SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>RFP Pipeline</h3>
+                    <h3>Card 8: RFP Pipeline</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1641,7 +1658,7 @@
             <!-- REVENUE SEGMENTS SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Revenue Segments (4 Parts)</h3>
+                    <h3>Card 9: Revenue Segments</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -1682,7 +1699,7 @@
             <!-- STRATEGIC CONTINUOUS PLAN SECTION -->
             <div class="collapsible-section">
                 <div class="collapsible-header" onclick="toggleSection(this)">
-                    <h3>Strategic Continuous Plan Cards</h3>
+                    <h3>Card 10: Strategic Continuous Plan</h3>
                     <span class="collapsible-toggle">▼</span>
                 </div>
                 <div class="collapsible-content">
@@ -2108,6 +2125,8 @@
             formData.append('label_transient_rooms', document.getElementById('inp-label-transient-rooms').value);
             formData.append('value_transient_rooms', document.getElementById('inp-value-transient-rooms').value);
             formData.append('chart_rooms_title', document.getElementById('inp-chart-rooms-title').value);
+            formData.append('label_hotel_performance', document.getElementById('inp-label-hotel-performance').value);
+            formData.append('value_hotel_performance', document.getElementById('inp-value-hotel-performance').value);
             
             // -- RFP PIPELINE --
             formData.append('visible_rfp_pipeline', document.getElementById('vis-rfp-pipeline').checked);
@@ -2343,6 +2362,11 @@
             document.getElementById('disp-group-rooms').innerText = num(data.value_group_rooms);
             document.getElementById('lbl-transient-rooms').innerText = data.label_transient_rooms;
             document.getElementById('disp-transient-rooms').innerText = num(data.value_transient_rooms);
+            
+            // Hotel Performance Progress Bar
+            document.getElementById('lbl-hotel-performance').innerText = data.label_hotel_performance;
+            document.getElementById('disp-hotel-performance-pct').innerText = (data.value_hotel_performance || 0) + '%';
+            document.getElementById('bar-hotel-performance').style.width = (data.value_hotel_performance || 0) + '%';
 
             // --- RFP PIPELINE SECTION ---
             document.getElementById('card-rfp-pipeline').style.display = data.visible_rfp_pipeline ? 'block' : 'none';
@@ -2644,6 +2668,8 @@
             document.getElementById('inp-label-transient-rooms').value = data.label_transient_rooms;
             document.getElementById('inp-value-transient-rooms').value = data.value_transient_rooms;
             document.getElementById('inp-chart-rooms-title').value = data.chart_rooms_title;
+            document.getElementById('inp-label-hotel-performance').value = data.label_hotel_performance;
+            document.getElementById('inp-value-hotel-performance').value = data.value_hotel_performance;
             
             // RFP Pipeline inputs
             document.getElementById('vis-rfp-pipeline').checked = data.visible_rfp_pipeline;

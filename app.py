@@ -237,6 +237,10 @@ class ReportData(db.Model):
     value_transient_rooms = db.Column(db.Integer, default=100)
     chart_rooms_title = db.Column(db.String(100), default="Room Statistics")
     
+    # Hotel performance progress bar
+    label_hotel_performance = db.Column(db.String(50), default="Hotel Performance Target")
+    value_hotel_performance = db.Column(db.Integer, default=0)
+    
     # --- RFP PIPELINE CARD ---
     visible_rfp_pipeline = db.Column(db.Boolean, default=True)
     card_rfp_pipeline_title = db.Column(db.String(100), default="RFP Pipeline")
@@ -546,6 +550,8 @@ def get_data():
         'label_transient_rooms': record.label_transient_rooms,
         'value_transient_rooms': record.value_transient_rooms,
         'chart_rooms_title': record.chart_rooms_title,
+        'label_hotel_performance': record.label_hotel_performance,
+        'value_hotel_performance': record.value_hotel_performance,
         
         # --- RFP PIPELINE ---
         'visible_rfp_pipeline': record.visible_rfp_pipeline,
@@ -786,6 +792,8 @@ def update_data():
     record.label_transient_rooms = request.form.get('label_transient_rooms') or record.label_transient_rooms
     record.value_transient_rooms = request.form.get('value_transient_rooms') or 0
     record.chart_rooms_title = request.form.get('chart_rooms_title') or record.chart_rooms_title
+    record.label_hotel_performance = request.form.get('label_hotel_performance') or record.label_hotel_performance
+    record.value_hotel_performance = request.form.get('value_hotel_performance') or 0
     
     # --- RFP PIPELINE ---
     record.visible_rfp_pipeline = request.form.get('visible_rfp_pipeline') == 'true'
