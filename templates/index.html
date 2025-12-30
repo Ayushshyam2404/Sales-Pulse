@@ -1055,58 +1055,64 @@
         <!-- RFP Pipeline Section -->
         <div class="card full" id="card-rfp-pipeline">
             <h2 id="title-rfp-pipeline">RFP Pipeline</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px;">
                 <!-- Left Side: RFP Metrics -->
-                <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 15px;">
-                    <!-- Total RFP Pursuits -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-pursuits">Total RFP Pursuits</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px;" id="disp-rfp-pursuits">0</div>
-                    </div>
+                <div>
+                    <div style="color: var(--accent-blue); font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #444;">RFP Pursuits</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        <!-- Total RFP Pursuits -->
+                        <div class="metric-card" style="padding: 16px;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="lbl-rfp-pursuits">Total Pursuits</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--accent-blue);" id="disp-rfp-pursuits">0</div>
+                        </div>
 
-                    <!-- Total RFP Won -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-won">Total RFP Won</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-green); margin-bottom: 4px;" id="disp-rfp-won">0</div>
-                    </div>
+                        <!-- Total RFP Won -->
+                        <div class="metric-card" style="padding: 16px;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="lbl-rfp-won">Won</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--accent-green);" id="disp-rfp-won">0</div>
+                        </div>
 
-                    <!-- RFP Prospects -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-prospects">RFP Prospects</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-orange); margin-bottom: 4px;" id="disp-rfp-prospects">0</div>
-                    </div>
+                        <!-- RFP Prospects -->
+                        <div class="metric-card" style="padding: 16px;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="lbl-rfp-prospects">Prospects</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--accent-orange);" id="disp-rfp-prospects">0</div>
+                        </div>
 
-                    <!-- RFP Lost -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-lost">RFP Lost</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-red); margin-bottom: 4px;" id="disp-rfp-lost">0</div>
+                        <!-- RFP Lost -->
+                        <div class="metric-card" style="padding: 16px;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="lbl-rfp-lost">Lost</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--accent-red);" id="disp-rfp-lost">0</div>
+                        </div>
                     </div>
 
                     <!-- Upcoming RFP Volume -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-rfp-upcoming">Upcoming RFP Volume</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-purple); margin-bottom: 4px;" id="disp-rfp-upcoming">0</div>
+                    <div class="metric-card" style="padding: 16px; margin-top: 15px;">
+                        <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;" id="lbl-rfp-upcoming">Upcoming RFP Volume</div>
+                        <div style="font-size: 26px; font-weight: 700; color: var(--accent-purple);" id="disp-rfp-upcoming">0</div>
                     </div>
                 </div>
 
-                <!-- Right Side: Event Status -->
-                <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 15px;">
-                    <!-- RFP Win Event -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-win">RFP Win</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-green); margin-bottom: 4px;" id="disp-event-win">0</div>
-                    </div>
+                <!-- Right Side: CVENT RFP Status -->
+                <div>
+                    <div style="color: var(--accent-orange); font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #444;">CVENT RFP Status</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                        <!-- RFP Win Event -->
+                        <div class="metric-card" style="padding: 16px; text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-win">Win</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--accent-green);" id="disp-event-win">0</div>
+                        </div>
 
-                    <!-- In Process Event -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-in-process">In Process</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px;" id="disp-event-in-process">0</div>
-                    </div>
+                        <!-- In Process Event -->
+                        <div class="metric-card" style="padding: 16px; text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-in-process">In Process</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--accent-blue);" id="disp-event-in-process">0</div>
+                        </div>
 
-                    <!-- RFP Loss Event -->
-                    <div class="metric-card">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-loss">RFP Loss</div>
-                        <div style="font-size: 28px; font-weight: 700; color: var(--accent-red); margin-bottom: 4px;" id="disp-event-loss">0</div>
+                        <!-- RFP Loss Event -->
+                        <div class="metric-card" style="padding: 16px; text-align: center;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-event-loss">Loss</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--accent-red);" id="disp-event-loss">0</div>
+                        </div>
                     </div>
                 </div>
             </div>
