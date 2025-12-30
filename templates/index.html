@@ -1023,24 +1023,6 @@
                     </div>
                 </div>
 
-                <!-- MTD Forecast (Current) -->
-                <div class="comparison-card" style="padding: 15px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 14px; border: 1px solid #333;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-mtd-forecast">MTD Forecast</div>
-                        <div style="font-size: 24px; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px;" id="disp-mtd-forecast">$0</div>
-                        <div style="font-size: 10px; color: var(--text-secondary);" id="desc-mtd-forecast">Current Report</div>
-                    </div>
-                </div>
-
-                <!-- MTD Forecast Last Report -->
-                <div class="comparison-card" style="padding: 15px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 14px; border: 1px solid #333;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;" id="lbl-mtd-forecast-last">Last Report</div>
-                        <div style="font-size: 24px; font-weight: 700; color: #666; margin-bottom: 4px;" id="disp-mtd-forecast-last">$0</div>
-                        <div style="font-size: 10px; color: var(--text-secondary);" id="desc-mtd-forecast-last">MTD Forecast</div>
-                    </div>
-                </div>
-
                 <!-- OTB Increase -->
                 <div class="comparison-card" style="padding: 15px; background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border-radius: 14px; border: 1px solid #333;">
                     <div style="text-align: center;">
@@ -1860,24 +1842,8 @@
                         <div class="input-group"><label>Value</label><input type="text" id="inp-value-secured-future" placeholder="Leave empty for auto"></div>
                     </div>
 
-                    <!-- Card 7: MTD Forecast -->
-                    <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 12px; margin-top: 15px; padding-bottom: 10px; border-bottom: 1px solid #444;">Card 7: MTD Forecast</div>
-                    <div class="input-grid">
-                        <div class="input-group"><label>Label</label><input type="text" id="inp-label-mtd-forecast" placeholder="e.g., MTD Forecast"></div>
-                        <div class="input-group"><label>Description</label><input type="text" id="inp-label-mtd-forecast-desc" placeholder="e.g., Current Report"></div>
-                        <div class="input-group"><label>Value</label><input type="text" id="inp-value-mtd-forecast" placeholder="Leave empty for auto"></div>
-                    </div>
-
-                    <!-- Card 8: MTD Forecast Last Report -->
-                    <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 12px; margin-top: 15px; padding-bottom: 10px; border-bottom: 1px solid #444;">Card 8: Last Report</div>
-                    <div class="input-grid">
-                        <div class="input-group"><label>Label</label><input type="text" id="inp-label-mtd-forecast-last" placeholder="e.g., Last Report"></div>
-                        <div class="input-group"><label>Description</label><input type="text" id="inp-label-mtd-forecast-last-desc" placeholder="e.g., MTD Forecast"></div>
-                        <div class="input-group"><label>Value</label><input type="text" id="inp-value-mtd-forecast-last" placeholder="Leave empty for auto"></div>
-                    </div>
-
-                    <!-- Card 9: OTB Increase -->
-                    <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 12px; margin-top: 15px; padding-bottom: 10px; border-bottom: 1px solid #444;">Card 9: OTB Increase</div>
+                    <!-- Card 7: OTB Increase -->
+                    <div style="color: var(--accent-orange); font-size: 11px; font-weight: bold; margin-bottom: 12px; margin-top: 15px; padding-bottom: 10px; border-bottom: 1px solid #444;">Card 7: OTB Increase</div>
                     <div class="input-grid">
                         <div class="input-group"><label>Label</label><input type="text" id="inp-label-otb-increase" placeholder="e.g., OTB Increase"></div>
                         <div class="input-group"><label>Description</label><input type="text" id="inp-label-otb-increase-desc" placeholder="e.g., vs Last Report"></div>
@@ -2197,12 +2163,6 @@
             formData.append('label_secured_future', document.getElementById('inp-label-secured-future').value);
             formData.append('label_secured_future_desc', document.getElementById('inp-label-secured-future-desc').value);
             formData.append('value_secured_future', document.getElementById('inp-value-secured-future').value);
-            formData.append('label_mtd_forecast', document.getElementById('inp-label-mtd-forecast').value);
-            formData.append('label_mtd_forecast_desc', document.getElementById('inp-label-mtd-forecast-desc').value);
-            formData.append('value_mtd_forecast', document.getElementById('inp-value-mtd-forecast').value);
-            formData.append('label_mtd_forecast_last', document.getElementById('inp-label-mtd-forecast-last').value);
-            formData.append('label_mtd_forecast_last_desc', document.getElementById('inp-label-mtd-forecast-last-desc').value);
-            formData.append('value_mtd_forecast_last', document.getElementById('inp-value-mtd-forecast-last').value);
             formData.append('label_otb_increase', document.getElementById('inp-label-otb-increase').value);
             formData.append('label_otb_increase_desc', document.getElementById('inp-label-otb-increase-desc').value);
             formData.append('value_otb_increase', document.getElementById('inp-value-otb-increase').value);
@@ -2439,17 +2399,7 @@
             document.getElementById('desc-secured-future').innerText = data.label_secured_future_desc || 'This Month';
             document.getElementById('disp-secured-future').innerText = data.value_secured_future || fmt(0);
             
-            // Card 7: MTD Forecast
-            document.getElementById('lbl-mtd-forecast').innerText = data.label_mtd_forecast || 'MTD Forecast';
-            document.getElementById('desc-mtd-forecast').innerText = data.label_mtd_forecast_desc || 'Current Report';
-            document.getElementById('disp-mtd-forecast').innerText = data.value_mtd_forecast || fmt(0);
-            
-            // Card 8: MTD Forecast Last Report
-            document.getElementById('lbl-mtd-forecast-last').innerText = data.label_mtd_forecast_last || 'Last Report';
-            document.getElementById('desc-mtd-forecast-last').innerText = data.label_mtd_forecast_last_desc || 'MTD Forecast';
-            document.getElementById('disp-mtd-forecast-last').innerText = data.value_mtd_forecast_last || fmt(0);
-            
-            // Card 9: OTB Increase
+            // Card 7: OTB Increase
             document.getElementById('lbl-otb-increase').innerText = data.label_otb_increase || 'OTB Increase';
             document.getElementById('desc-otb-increase').innerText = data.label_otb_increase_desc || 'vs Last Report';
             document.getElementById('disp-otb-increase').innerText = data.value_otb_increase || '+' + fmt(0);
@@ -2633,12 +2583,6 @@
             document.getElementById('inp-label-secured-future').value = data.label_secured_future;
             document.getElementById('inp-label-secured-future-desc').value = data.label_secured_future_desc;
             document.getElementById('inp-value-secured-future').value = data.value_secured_future;
-            document.getElementById('inp-label-mtd-forecast').value = data.label_mtd_forecast;
-            document.getElementById('inp-label-mtd-forecast-desc').value = data.label_mtd_forecast_desc;
-            document.getElementById('inp-value-mtd-forecast').value = data.value_mtd_forecast;
-            document.getElementById('inp-label-mtd-forecast-last').value = data.label_mtd_forecast_last;
-            document.getElementById('inp-label-mtd-forecast-last-desc').value = data.label_mtd_forecast_last_desc;
-            document.getElementById('inp-value-mtd-forecast-last').value = data.value_mtd_forecast_last;
             document.getElementById('inp-label-otb-increase').value = data.label_otb_increase;
             document.getElementById('inp-label-otb-increase-desc').value = data.label_otb_increase_desc;
             document.getElementById('inp-value-otb-increase').value = data.value_otb_increase;

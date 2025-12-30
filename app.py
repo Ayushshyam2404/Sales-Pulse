@@ -157,10 +157,6 @@ class ReportData(db.Model):
     label_potential_revenue_desc = db.Column(db.String(50), default="From Prospects")
     label_secured_future = db.Column(db.String(50), default="Secured Future")
     label_secured_future_desc = db.Column(db.String(50), default="This Month")
-    label_mtd_forecast = db.Column(db.String(50), default="MTD Forecast")
-    label_mtd_forecast_desc = db.Column(db.String(50), default="Current Report")
-    label_mtd_forecast_last = db.Column(db.String(50), default="Last Report")
-    label_mtd_forecast_last_desc = db.Column(db.String(50), default="MTD Forecast")
     label_otb_increase = db.Column(db.String(50), default="OTB Increase")
     label_otb_increase_desc = db.Column(db.String(50), default="vs Last Report")
     
@@ -171,8 +167,6 @@ class ReportData(db.Model):
     value_prospects = db.Column(db.String(100), default="")
     value_potential_revenue = db.Column(db.String(100), default="")
     value_secured_future = db.Column(db.String(100), default="")
-    value_mtd_forecast = db.Column(db.String(100), default="")
-    value_mtd_forecast_last = db.Column(db.String(100), default="")
     value_otb_increase = db.Column(db.String(100), default="")
     
     # --- STRATEGIC CONTINUOUS PLAN SECTION ---
@@ -492,12 +486,6 @@ def get_data():
         'label_secured_future': record.label_secured_future,
         'label_secured_future_desc': record.label_secured_future_desc,
         'value_secured_future': record.value_secured_future,
-        'label_mtd_forecast': record.label_mtd_forecast,
-        'label_mtd_forecast_desc': record.label_mtd_forecast_desc,
-        'value_mtd_forecast': record.value_mtd_forecast,
-        'label_mtd_forecast_last': record.label_mtd_forecast_last,
-        'label_mtd_forecast_last_desc': record.label_mtd_forecast_last_desc,
-        'value_mtd_forecast_last': record.value_mtd_forecast_last,
         'label_otb_increase': record.label_otb_increase,
         'label_otb_increase_desc': record.label_otb_increase_desc,
         'value_otb_increase': record.value_otb_increase,
@@ -718,12 +706,6 @@ def update_data():
     record.label_secured_future = request.form.get('label_secured_future') or record.label_secured_future
     record.label_secured_future_desc = request.form.get('label_secured_future_desc') or record.label_secured_future_desc
     record.value_secured_future = request.form.get('value_secured_future') or ""
-    record.label_mtd_forecast = request.form.get('label_mtd_forecast') or record.label_mtd_forecast
-    record.label_mtd_forecast_desc = request.form.get('label_mtd_forecast_desc') or record.label_mtd_forecast_desc
-    record.value_mtd_forecast = request.form.get('value_mtd_forecast') or ""
-    record.label_mtd_forecast_last = request.form.get('label_mtd_forecast_last') or record.label_mtd_forecast_last
-    record.label_mtd_forecast_last_desc = request.form.get('label_mtd_forecast_last_desc') or record.label_mtd_forecast_last_desc
-    record.value_mtd_forecast_last = request.form.get('value_mtd_forecast_last') or ""
     record.label_otb_increase = request.form.get('label_otb_increase') or record.label_otb_increase
     record.label_otb_increase_desc = request.form.get('label_otb_increase_desc') or record.label_otb_increase_desc
     record.value_otb_increase = request.form.get('value_otb_increase') or ""
